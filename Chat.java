@@ -1,5 +1,5 @@
 import java.util.Scanner;
-
+//inserting random comment : Eduardo
 public class Chat {
 	
 	public int Factor;
