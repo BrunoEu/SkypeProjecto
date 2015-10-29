@@ -5,7 +5,7 @@ public class User {
 	public String NAME;
 	
 	public User(Scanner in){
-		getName(in);
+		insertName(in);
 	}
 	
 	public void insertName(Scanner in){
