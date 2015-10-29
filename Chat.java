@@ -13,8 +13,8 @@ public class Chat {
 		User user2 = new User(in);
 		while (user1.NAME == user2.NAME){
 			System.out.println("Nome já em utilização. "
-					+ "Por favor introduza um nome diferente.");
-			user2.getName(in);
+			+ "Por favor introduza um nome diferente.");
+			user2.insertName(in);
 		}
 	}
 
