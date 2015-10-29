@@ -1,4 +1,3 @@
-package randoms;
 
 import java.util.Scanner;
 
