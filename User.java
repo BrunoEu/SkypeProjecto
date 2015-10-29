@@ -8,7 +8,7 @@ public class User {
 		getName(in);
 	}
 	
-	public void getName(Scanner in){
+	public void insertName(Scanner in){
 		System.out.print("NOME > ");
 		NAME = in.nextLine();
 	}
