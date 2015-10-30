@@ -1,35 +1,33 @@
-import java.util.Scanner;
-//inserting random comment : Eduardo
 public class Chat {
 	
 	public int Factor;
+	public String AllMsgs; //BRUNO: Isto precisa de um nome melhor
+	public String user1Name;
+	public String user2Name;
+	public String lastMsg = "";
 	
-	public Chat(Scanner in){
-		startChat(in);
+	public Chat(String name1, String name2, int newFactor){
+		user1Name = name1;
+		user2Name = name2;
+		Factor = newFactor;
 	}
 	
-	public void startChat(Scanner in){
-		User user1 = new User(in);
-		User user2 = new User(in);
-		while (user1.NAME == user2.NAME){
-			System.out.println("Nome já em utilização. "
-			+ "Por favor introduza um nome diferente.");
-			user2.insertName(in);
-		}
+	public String showChat(){
+		return AllMsgs;
 	}
-
-	public void getChatFactor(Scanner in){
-		boolean erro = false;
+	
+	public void addMsg(String msg){
+		AllMsgs.concat(lastMsg);
+		lastMsg = msg;
+	}
+	
+	public void addEncMsg(String msg){
 		
-		do {
-			if (erro == true)
-				System.out.println("Factor introduzido incorrecto ([0;26]).");
-			System.out.print("Factor de Encriptação > ");
-			Factor = in.nextInt();
-			in.nextLine();
-			erro = true;
-		}while(Factor > 26 || Factor < 0)
 	}
 	
+	public boolean checkUser(String userTest){
+		return (userTest.equals(user1Name) || userTest.equals(user2Name));
+	}
+		
 }
 
