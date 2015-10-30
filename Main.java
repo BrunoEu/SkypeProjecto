@@ -64,7 +64,7 @@ public class Main {
 				default: System.out.println("\n\nComando introduzido invalido.");
 			}
 		}while(cmd != EXIT);
-		
+		System.out.println("Aplicacao terminada. Ate a proxima.");
 	}
 	
 	public static String processCmd(Scanner in){
@@ -97,5 +97,15 @@ public class Main {
 		System.out.print("\nMensagem: ");
 		String msg = in.nextLine();
 		return msg;
+	}
+	
+	public static void processHelp() {
+		System.out.println("VCP - Ver a conversa em progresso\n"+
+						   "PNM - Publicar nova mensagem\n"+
+						   "PME - Publicar mensagem encriptada\n"+
+						   "CMA - Corrigir mensagem anterior\n"+
+						   "ECP - Encerrar converssa em progresso\n"+
+						   "A - Ajuda\n"+
+						   "S - Sair");
 	}
 }
