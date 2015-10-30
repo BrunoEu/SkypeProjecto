@@ -25,7 +25,7 @@ public class Chat {
 		//incrementar antes pois está inicializada a 0 mas começa na mensagem 1 e para facilitar o edditLastMessage()
 		msgNumber++;
 		AllMsgs.concat(lastMsg);
-		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + msg;
+		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + msg +"\n";
 	}
 	
 	public void addEncMsg(String msg){
