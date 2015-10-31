@@ -8,7 +8,7 @@ public class Chat {
 	public String user1Name;
 	public String user2Name;
 	public String lastMsg = "";
-	public int lastUser;
+	public int lastUser = 0;
 	
 	
 	public Chat(String name1, String name2, int newFactor){
@@ -47,6 +47,10 @@ public class Chat {
 			i++;
 		}
 		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + msgEnc +"\n";
+	}
+	
+	public void encMsg(String msg){
+		
 	}
 	
 	public void editLastMessage(int user, String message){
