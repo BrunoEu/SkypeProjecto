@@ -2,7 +2,7 @@ public class Chat {
 	
 	private static final int USER_NUMBER_POSITION = 5;
 	
-	public int Factor;
+	public int factor;
 	public int msgNumber;
 	public String AllMsgs; //BRUNO: Isto precisa de um nome melhor
 	public String user1Name;
@@ -13,18 +13,19 @@ public class Chat {
 	public Chat(String name1, String name2, int newFactor){
 		user1Name = name1;
 		user2Name = name2;
-		Factor = newFactor;
+		factor = newFactor;
 		msgNumber = 0;//EDUARDO: será necessário criar uma constante para o 0 ?
 	}
 	
 	public String showChat(){
-		return AllMsgs;
+		return AllMsgs + lastMsg;
 	}
 	
 	public void addMsg(int user,String msg){
 		//incrementar antes pois está inicializada a 0 mas começa na mensagem 1 e para facilitar o edditLastMessage()
 		msgNumber++;
-		AllMsgs.concat(lastMsg);
+		//AllMsgs.concat(lastMsg); // EDUARDO: esta forma de escrita está me a dar erros de complicação
+		AllMsgs += lastMsg;
 		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + msg +"\n";
 	}
 	
@@ -36,17 +37,16 @@ public class Chat {
 		return (userTest.equals(user1Name) || userTest.equals(user2Name));
 	}
 	
-		public void editLastMessage(int user, String message)
-	{
+		public void editLastMessage(int user, String message){
 		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + message;		
 	}
 	
 	/*
 	O metodo que se segue devolve o numero do utilizador que envia a ultima mensagem
 	será util para confirmar se um dado utilizador porde alterar a ultima mensagem
+	NOT WORKING 
 	*/
-	public int getUserLastMessage()
-	{
-		return (int)lastMsg.charAt(USER_NUMBER_POSITION);
+	public int getUserLastMessage()	{
+		//return (int)lastMsg.charAt(USER_NUMBER_POSITION);
 	}	
 }
