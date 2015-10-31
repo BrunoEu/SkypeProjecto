@@ -4,24 +4,22 @@ public class Chat {
 	
 	public int factor;
 	public int msgNumber;
-	public String AllMsgs; //BRUNO: Isto precisa de um nome melhor
+	public String allMsgs;
 	public String user1Name;
 	public String user2Name;
-	public String lastMsg = "";
-	public int lastUser = 0;
+	public String lastMsg;
+	public int lastUser;
 	
 	
 	public Chat(String name1, String name2, int newFactor){
 		user1Name = name1;
 		user2Name = name2;
 		factor = newFactor;
-		msgNumber = 0;//EDUARDO: será necessário criar uma constante para o 0 ?
-					//BRUNO: Não. Não faz sentido. Assim tas a fazer reset da variavél.
-					//Está correcto assim.
+		reset();
 	}
 	
 	public String showChat(){
-		return AllMsgs + lastMsg;
+		return allMsgs + lastMsg;
 	}
 	
 	public void addMsg(int user,String msg){
@@ -29,46 +27,52 @@ public class Chat {
 		msgNumber++;
 		lastUser = user;
 		//AllMsgs.concat(lastMsg); // EDUARDO: esta forma de escrita está me a dar erros de complicação
-		AllMsgs += lastMsg;
+		allMsgs += lastMsg;
 		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + msg +"\n";
 	}
 	
 	public void addEncMsg(int user, String msg){
-		msgNumber++;
-		lastUser = user;
-		AllMsgs.concat(lastMsg);
+		addMsg(user, encMsg(msg));
+	}
+	
+	public void closeChat(){
+		String log = allMsgs.concat(lastMsg);
+		addToLog(log);
+		reset();
+	}
+	
+	public String encMsg(String msg){
 		int i = 0;
 		String msgEnc = "";
 		char charEnc;
 		while(i < msg.length()){
 			charEnc = msg.charAt(i);
-			charEnc += factor;
+			if (charEnc >= 'a' && charEnc <= 'z' || charEnc >= 'A' && charEnc <= 'Z'){
+				charEnc += factor;
+			}
 			msgEnc += charEnc;
 			i++;
 		}
-		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + msgEnc +"\n";
-	}
-	
-	public void encMsg(String msg){
-		
+		return msgEnc;
 	}
 	
 	public void editLastMessage(int user, String message){
 		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + message;		
 	}
 	
-	
-	
 	public boolean checkUser(String userTest){
 		return (userTest.equals(user1Name) || userTest.equals(user2Name));
 	}
 	
-	/*
-	O metodo que se segue devolve o numero do utilizador que envia a ultima mensagem
-	será util para confirmar se um dado utilizador pode alterar a ultima mensagem
-	NOT WORKING 
-	*/
-	public boolean checkUserLastMessage()	{
-		return (lastUser == lastMsg.charAt(USER_NUMBER_POSITION));
-	}	
+	public boolean checkUserLastMessage(int user)	{
+		return (user == lastUser);
+	}
+	
+	public void reset (){
+		lastMsg = "";
+		allMsgs = "";
+		lastUser= 0;
+		msgNumber = 0;
+	}
+	
 }
