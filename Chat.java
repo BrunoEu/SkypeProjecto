@@ -8,7 +8,7 @@ public class Chat {
 	public String user1Name;
 	public String user2Name;
 	public String lastMsg = "";
-	public String lastUser;
+	public int lastUser;
 	
 	
 	public Chat(String name1, String name2, int newFactor){
@@ -27,14 +27,25 @@ public class Chat {
 	public void addMsg(int user,String msg){
 		//incrementar antes pois está inicializada a 0 mas começa na mensagem 1 e para facilitar o edditLastMessage()
 		msgNumber++;
-		lastUser = 
+		lastUser = user;
 		//AllMsgs.concat(lastMsg); // EDUARDO: esta forma de escrita está me a dar erros de complicação
 		AllMsgs += lastMsg;
 		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + msg +"\n";
 	}
 	
 	public void addEncMsg(int user, String msg){
-		
+		msgNumber++;
+		lastUser = user;
+		AllMsgs.concat(lastMsg);
+		int i = 0;
+		String msgEnc = "";
+		char charEnc;
+		while(i < msg.length()){
+			charEnc = msg.charAt(i);
+			charEnc += factor;
+			msgEnc += charEnc;
+		}
+		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + msgEnc +"\n";
 	}
 	
 	public boolean checkUser(String userTest){
