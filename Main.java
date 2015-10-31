@@ -55,8 +55,8 @@ public class Main {
 			switch(cmd){
 				case SHOW_CHAT: processShowChat(novaConversa); break;
 				case PUBLISH_MSG: processPubMsg(novaConversa, in); break;
-				case PUBLISH_ENC: processPubEnc(); break;
-				case CORRECT_MSG: processCorMsg(); break;
+				case PUBLISH_ENC: processPubEnc(novaConversa, in); break;
+				case CORRECT_MSG: processCorMsg(novaConversa, in); break;
 				case CLOSE_CHAT: processCloseChat(); break;
 				case SHOW_LOG: processShowLog(); break;
 				case HELP: processHelp(); break;
@@ -67,26 +67,36 @@ public class Main {
 		System.out.println("Aplicacao terminada. Ate a proxima.");
 	}
 	
-	public static String processCmd(Scanner in){
+	private static String processCmd(Scanner in){
 		System.out.print("\n> ");
 		//ler o que foi introduzido passar a letra maiuscula e tirar espacos no inicio e fim da string
 		return in.nextLine().toUpperCase().trim();
 	}
 	
-	public static void processShowChat(Chat conversa){
+	private static void processShowChat(Chat conversa){
 		System.out.println(conversa.showChat());
 	}
 	
-	public static void processPubMsg(Chat conversa, Scanner in){
+	private static void processPubMsg(Chat conversa, Scanner in){
 		conversa.addMsg(getUser(in), getMsg(in));
 	}
 	
 	
-	public static void processPubEnc(Chat conversa, Scanner in){
+	private static void processPubEnc(Chat conversa, Scanner in){
 		conversa.addEncMsg(getUser(in), getMsg(in));
 	}
 	
-	public static String getMsg(Scanner in){
+	private static void processCorMsg(Chat conversa, Scanner in){
+		if (conversa.checkUser(getUser(in))){
+			conversa.editLastMessage(user, getMsg(in));
+		}
+	}
+	
+	private static void processCloseChat(){
+		
+	}
+	
+	private static String getMsg(Scanner in){
 		System.out.print("\nMensagem: ");
 		String msg = in.nextLine();
 		return msg;
@@ -102,7 +112,7 @@ public class Main {
 		return user;
 	}
 	
-	public static void processHelp() {
+	private static void processHelp() {
 		System.out.println("VCP - Ver a conversa em progresso\n"+
 						   "PNM - Publicar nova mensagem\n"+
 						   "PME - Publicar mensagem encriptada\n"+
