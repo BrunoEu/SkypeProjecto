@@ -1,114 +1,56 @@
-
-import java.util.Scanner;
-
-public class Main {
-
-	private static final String EXIT = "S";
-	private static final String HELP = "A";
-	private static final String SHOW_LOG = "MCA";
-	private static final String CLOSE_CHAT = "ECP";
-	private static final String CORRECT_MSG = "CMA";
-	private static final String PUBLISH_ENC = "PME";
-	private static final String PUBLISH_MSG = "PNM";
-	private static final String SHOW_CHAT = "VCP";
-
-	public static void main(String[] args) {
-		
-		Scanner in = new Scanner(System.in);
-		
-		String name1;
-		String name2;
-		
-		System.out.print("Nome do Utilizador 1: ");
-		name1 = in.nextLine();
-		
-		do{	//BRUNO: No enunciado eles dizem que se 
-			//forem iguais so tens de pedir o 2º outra vez
-			System.out.print("\nNome do Utilizador 2: ");
-			name2 = in.nextLine();
-			if(name1 == name2){
-				System.out.println("\nNome já em utilização. "
-				+ "Por favor introduza um nome diferente.");
-			}
-		}while (name1.equalsIgnoreCase(name2));
-		//BRUNO: Na linha de cima temos que ponderar se pomos IgnoreCase ou nao
-		
-		int factor;
-		
-		do{
-			System.out.print("\nInsira um factor de translaçao: ");
-			factor = in.nextInt();
-			in.nextLine();
-			if (factor <0 || factor > 26)
-				System.out.println("Factor invalido. [0, 26]");
-		}while(factor < 0 || factor > 26);
-		
-		//BRUNO: Só cria a conversa quando tudo é aceitável
-		Chat novaConversa = new Chat(name1, name2, factor);
-		//BRUNO: Confirma a criação
-		System.out.println("\nChat criado com sucesso.");
-		
-		String cmd;
-		
-		do{
-			cmd = processCmd(in);
-			switch(cmd){
-				case SHOW_CHAT: processShowChat(novaConversa); break;
-				case PUBLISH_MSG: processPubMsg(novaConversa, in); break;
-				case PUBLISH_ENC: processPubEnc(); break;
-				case CORRECT_MSG: processCorMsg(); break;
-				case CLOSE_CHAT: processCloseChat(); break;
-				case SHOW_LOG: processShowLog(); break;
-				case HELP: processHelp(); break;
-				case EXIT: break;
-				default: System.out.println("\n\nComando introduzido invalido.");
-			}
-		}while(cmd != EXIT);
-		System.out.println("Aplicacao terminada. Ate a proxima.");
-	}
+public class Chat {
 	
-	public static String processCmd(Scanner in){
-		System.out.print("\n> ");
-		//ler o que foi introduzido passar a letra maiuscula e tirar espacos no inicio e fim da string
-		return in.nextLine().toUpperCase().trim();
-	}
+	private static final int USER_NUMBER_POSITION = 5;
 	
-	public static void processShowChat(Chat conversa){
-		System.out.println(conversa.showChat());
-	}
-	
-	public static void processPubMsg(Chat conversa, Scanner in){
-		conversa.addMsg(getUser(in), getMsg(in));
-	}
+	public int factor;
+	public int msgNumber;
+	public String AllMsgs; //BRUNO: Isto precisa de um nome melhor
+	public String user1Name;
+	public String user2Name;
+	public String lastMsg = "";
+	public String lastUser;
 	
 	
-	public static void processPubEnc(Chat conversa, Scanner in){
-		conversa.addEncMsg(getUser(in), getMsg(in));
+	public Chat(String name1, String name2, int newFactor){
+		user1Name = name1;
+		user2Name = name2;
+		factor = newFactor;
+		msgNumber = 0;//EDUARDO: será necessário criar uma constante para o 0 ?
+					//BRUNO: Não. Não faz sentido. Assim tas a fazer reset da variavél.
+					//Está correcto assim.
 	}
 	
-	public static String getMsg(Scanner in){
-		System.out.print("\nMensagem: ");
-		String msg = in.nextLine();
-		return msg;
+	public String showChat(){
+		return AllMsgs + lastMsg;
 	}
 	
-	private static int getUser(Scanner in){
-		int user;
-		do{
-			System.out.print("Utilizador: ");
-			user = in.nextInt();
-			in.nextLine();
-		}while(user != 1 && user != 2);
-		return user;
+	public void addMsg(int user,String msg){
+		//incrementar antes pois está inicializada a 0 mas começa na mensagem 1 e para facilitar o edditLastMessage()
+		msgNumber++;
+		lastUser = 
+		//AllMsgs.concat(lastMsg); // EDUARDO: esta forma de escrita está me a dar erros de complicação
+		AllMsgs += lastMsg;
+		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + msg +"\n";
 	}
 	
-	public static void processHelp() {
-		System.out.println("VCP - Ver a conversa em progresso\n"+
-						   "PNM - Publicar nova mensagem\n"+
-						   "PME - Publicar mensagem encriptada\n"+
-						   "CMA - Corrigir mensagem anterior\n"+
-						   "ECP - Encerrar converssa em progresso\n"+
-						   "A - Ajuda\n"+
-						   "S - Sair");
+	public void addEncMsg(int user, String msg){
+		
 	}
+	
+	public boolean checkUser(String userTest){
+		return (userTest.equals(user1Name) || userTest.equals(user2Name));
+	}
+	
+		public void editLastMessage(int user, String message){
+		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + message;		
+	}
+	
+	/*
+	O metodo que se segue devolve o numero do utilizador que envia a ultima mensagem
+	será util para confirmar se um dado utilizador porde alterar a ultima mensagem
+	NOT WORKING 
+	*/
+	public int getUserLastMessage()	{
+		//return (int)lastMsg.charAt(USER_NUMBER_POSITION);
+	}	
 }
