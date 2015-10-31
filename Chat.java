@@ -44,6 +44,7 @@ public class Chat {
 			charEnc = msg.charAt(i);
 			charEnc += factor;
 			msgEnc += charEnc;
+			i++;
 		}
 		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + msgEnc +"\n";
 	}
