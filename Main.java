@@ -78,25 +78,28 @@ public class Main {
 	}
 	
 	public static void processPubMsg(Chat conversa, Scanner in){
-		String msg = getMsg(conversa, in);
-		conversa.addMsg(msg);
+		conversa.addMsg(getUser(in), getMsg(in));
 	}
 	
 	
 	public static void processPubEnc(Chat conversa, Scanner in){
-		String msg = getMsg(conversa, in);
-		conversa.addEncMsg(msg);
+		conversa.addEncMsg(getUser(in), getMsg(in));
 	}
 	
-	public static String getMsg(Chat conversa, Scanner in){
-		System.out.print("Utilizador: ");
-		String user;
-		do{
-			user = in.nextLine();
-		}while(!conversa.checkUser(user));
+	public static String getMsg(Scanner in){
 		System.out.print("\nMensagem: ");
 		String msg = in.nextLine();
 		return msg;
+	}
+	
+	private static int getUser(Scanner in){
+		int user;
+		do{
+			System.out.print("Utilizador: ");
+			user = in.nextInt();
+			in.nextLine();
+		}while(user != 1 && user != 2);
+		return user;
 	}
 	
 	public static void processHelp() {
