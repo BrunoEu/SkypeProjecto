@@ -57,7 +57,7 @@ public class Main {
 				case PUBLISH_MSG: processPubMsg(novaConversa, in); break;
 				case PUBLISH_ENC: processPubEnc(novaConversa, in); break;
 				case CORRECT_MSG: processCorMsg(novaConversa, in); break;
-				case CLOSE_CHAT: processCloseChat(); break;
+				case CLOSE_CHAT: processCloseChat(novaConversa); break;
 				case SHOW_LOG: processShowLog(); break;
 				case HELP: processHelp(); break;
 				case EXIT: break;
@@ -81,8 +81,10 @@ public class Main {
 	}
 	
 	private static void processPubMsg(Chat conversa, Scanner in){
-		conversa.addMsg(getUser(in), getMsg(in));
-		System.out.println();
+		int user = getUser(in);
+		String msg = getMsg(in);
+		conversa.addMsg(user, msg);
+		System.out.println("USER[" + user + "]MSG[" + conversa.msgNumber+"]: Publicada\n");
 	}
 	
 	
@@ -92,16 +94,18 @@ public class Main {
 	
 	private static void processCorMsg(Chat conversa, Scanner in){
 		int user = getUser(in);
-		if (conversa.checkUserLastMessage(user))
+		if (conversa.checkUserLastMessage(user)){
 			conversa.editLastMessage(user, getMsg(in));
+		}
 		else{
 			System.out.println("Utilizador "+user+" não pode editar.");
 		}
 			
 	}
 	
-	private static void processCloseChat(Chat conversa,){
-		
+	private static void processCloseChat(Chat conversa){
+		conversa.closeChat();
+		System.out.println("Conversa terminada.");
 	}
 	
 	private static String getMsg(Scanner in){
