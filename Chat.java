@@ -1,6 +1,6 @@
 public class Chat {
 	
-	private static final int USER_NUMBER_POSITION = 5;
+	ALPHABEL_LENGHT = 26;
 	
 	public int factor;
 	public int msgNumber;
@@ -49,6 +49,8 @@ public class Chat {
 			charEnc = msg.charAt(i);
 			if (charEnc >= 'a' && charEnc <= 'z' || charEnc >= 'A' && charEnc <= 'Z'){
 				charEnc += factor;
+				if (charEnc > 'z' || charEnc > 'Z'))//se passar de Z ou z
+					charEnc -= ALPHABEL_LENGHT; // retira o comprimento do alfabeto 
 			}
 			msgEnc += charEnc;
 			i++;
@@ -57,7 +59,7 @@ public class Chat {
 	}
 	
 	public void editLastMessage(int user, String message){
-		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + message;		
+		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + message + "\n";		
 	}
 	
 	public boolean checkUser(String userTest){
