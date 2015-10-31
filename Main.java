@@ -61,7 +61,7 @@ public class Main {
 				case SHOW_LOG: processShowLog(); break;
 				case HELP: processHelp(); break;
 				case EXIT: break;
-				default: System.out.println("\n\nComando introduzido invalido.");
+				default: System.out.println("Opção inexistente.");
 			}
 		}while(cmd != EXIT);
 		System.out.println("Aplicacao terminada. Ate a proxima.");
@@ -74,11 +74,15 @@ public class Main {
 	}
 	
 	private static void processShowChat(Chat conversa){
-		System.out.println(conversa.showChat());
+		if (conversa.showChat().isEmpty())
+			System.out.println("Conversa vazia.");
+		else
+			System.out.println(conversa.showChat());
 	}
 	
 	private static void processPubMsg(Chat conversa, Scanner in){
 		conversa.addMsg(getUser(in), getMsg(in));
+		System.out.println();
 	}
 	
 	
@@ -87,12 +91,16 @@ public class Main {
 	}
 	
 	private static void processCorMsg(Chat conversa, Scanner in){
-		if (conversa.checkUser(getUser(in))){
+		int user = getUser(in);
+		if (conversa.checkUserLastMessage(user))
 			conversa.editLastMessage(user, getMsg(in));
+		else{
+			System.out.println("Utilizador "+user+" não pode editar.");
 		}
+			
 	}
 	
-	private static void processCloseChat(){
+	private static void processCloseChat(Chat conversa,){
 		
 	}
 	
@@ -108,6 +116,8 @@ public class Main {
 			System.out.print("Utilizador: ");
 			user = in.nextInt();
 			in.nextLine();
+			if (user != 1 && user != 2)
+				System.out.println("Utilizador introduzido invalido.");
 		}while(user != 1 && user != 2);
 		return user;
 	}
