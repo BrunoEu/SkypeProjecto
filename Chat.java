@@ -49,20 +49,22 @@ public class Chat {
 		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + msgEnc +"\n";
 	}
 	
+	public void editLastMessage(int user, String message){
+		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + message;		
+	}
+	
+	
+	
 	public boolean checkUser(String userTest){
 		return (userTest.equals(user1Name) || userTest.equals(user2Name));
 	}
 	
-		public void editLastMessage(int user, String message){
-		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + message;		
-	}
-	
 	/*
 	O metodo que se segue devolve o numero do utilizador que envia a ultima mensagem
-	será util para confirmar se um dado utilizador porde alterar a ultima mensagem
+	será util para confirmar se um dado utilizador pode alterar a ultima mensagem
 	NOT WORKING 
 	*/
-	public int getUserLastMessage()	{
-		//return (int)lastMsg.charAt(USER_NUMBER_POSITION);
+	public boolean checkUserLastMessage()	{
+		return (lastUser == lastMsg.charAt(USER_NUMBER_POSITION));
 	}	
 }
