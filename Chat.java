@@ -1,6 +1,10 @@
 public class Chat {
 	
-	private static final int USER_NUMBER_POSITION = 5;
+	private static final int MAX_FACTOR = 25;
+	private static final int MIN_FACTOR = 1;
+	private static final int USER_NOBODY = 0;
+	private static final int USER1 = 1;
+	private static final int USER2 = 2;
 	private static final int ALPHABET_LENGTH = 26;
 	
 	public int factor;
@@ -13,8 +17,8 @@ public class Chat {
 	
 	
 	public Chat(String name1, String name2, int newFactor){
-		user1Name = name1;
-		user2Name = name2;
+		//user1Name = name1;
+		//user2Name = name2;
 		factor = newFactor;
 		reset();
 	}
@@ -24,12 +28,12 @@ public class Chat {
 	}
 	
 	public void addMsg(int user,String msg){
-		//incrementar antes pois está inicializada a 0 mas começa na mensagem 1 e para facilitar o edditLastMessage()
+		//incrementar antes pois estÃ¡ inicializada a 0 mas comeÃ§a na mensagem 1 e para facilitar o edditLastMessage()
 		msgNumber++;
 		lastUser = user;
-		//AllMsgs.concat(lastMsg); // EDUARDO: esta forma de escrita está me a dar erros de complicação
+		//allMsgs.concat(lastMsg); // EDUARDO: esta forma de escrita estÃ¡ me a dar erros de complicaÃ§Ã£o
 		allMsgs += lastMsg;
-		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + msg+"\n";
+		lastMsg = formatMessage(user, msg);	
 	}
 	
 	public void addEncMsg(int user, String msg){
@@ -37,51 +41,93 @@ public class Chat {
 	}
 	
 	public void closeChat(){
-		String log = allMsgs.concat(lastMsg);
+		String log = showChat();
 		//addToLog(log);
 		reset();
 	}
 	
 	public String encMsg(String msg){
-		int i = 0;
+		int index = 0;
 		String msgEnc = "";
 		char charEnc;
-		while(i < msg.length()){
-			charEnc = msg.charAt(i);
-			if (validChar(charEnc)){
+		while(index < msg.length()){
+			charEnc = msg.charAt(index);
+			/*if (validChar(charEnc)){
 				charEnc += factor;
 				if(!(validChar(charEnc)))
 					charEnc -= ALPHABET_LENGTH;
+			}*/
+			if (validLowerCaseChar(charEnc)){
+				charEnc += factor;
+				if(lowerCaseOverflow(charEnc)){
+					charEnc -= ALPHABET_LENGTH;
+				}
+			}else{ 
+				if (validUpperCaseChar(charEnc)){
+				charEnc += factor;
+					if(upperCaseOverflow(charEnc)){
+						charEnc -= ALPHABET_LENGTH;
+					}
+				}
 			}
 			msgEnc += charEnc;
-			i++;
+			index++;
 		}
+		
 		return msgEnc;
 	}
 	
 	public void editLastMessage(int user, String message){
-		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + message;		
+		lastMsg = formatMessage(user, message);	
 	}
 	
+	//EDUARDO: este metodo tá a ser usado ??
 	public boolean checkUser(String userTest){
 		return (userTest.equals(user1Name) || userTest.equals(user2Name));
 	}
 	
-	public boolean checkUserLastMessage(int user)	{
+	public String formatMessage(int user,String message){
+		return "USER[" + user + "]MSG[" + msgNumber +"]: " + message +"\n";
+	}
+	
+	public boolean canEdditLastMessage(int user)	{
 		return (user == lastUser);
 	}
 	
-	public boolean validChar(char a){
-		if (a >= 'a' && a <= 'z' || a >= 'A' && a <= 'Z')
-			return true;
-		else
-			return false;
+	public static boolean validUser(int user){
+		return user == USER1 || user == USER2;
+	}
+	
+	public static boolean validFactor(int factor){
+		return factor >= MIN_FACTOR && factor <= MAX_FACTOR;
+	}
+	
+	//EDUARDO: pensso que se torna um metodo irrelevante
+	private boolean validChar(char a){
+		return (a >= 'a' && a <= 'z' || a >= 'A' && a <= 'Z');
+
+	}
+	
+	private boolean validLowerCaseChar(char a){
+		return a >= 'a' && a <= 'z' ;
+	}
+	
+	private boolean validUpperCaseChar(char a){
+		return a >= 'A' && a <= 'Z' ;
+	}
+	
+	private boolean lowerCaseOverflow(char a){
+		return a > 'z';
+	}
+	
+	private boolean upperCaseOverflow(char a){
+		return a > 'Z';
 	}
 	
 	public void reset (){
 		lastMsg = "";
 		allMsgs = "";
-		lastUser= 0;
+		lastUser= USER_NOBODY;
 		msgNumber = 0;
 	}
 	
