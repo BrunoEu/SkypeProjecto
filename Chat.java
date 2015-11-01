@@ -1,6 +1,7 @@
 public class Chat {
 	
-	ALPHABEL_LENGHT = 26;
+	private static final int USER_NUMBER_POSITION = 5;
+	private static final int ALPHABET_LENGTH = 26;
 	
 	public int factor;
 	public int msgNumber;
@@ -28,7 +29,7 @@ public class Chat {
 		lastUser = user;
 		//AllMsgs.concat(lastMsg); // EDUARDO: esta forma de escrita está me a dar erros de complicação
 		allMsgs += lastMsg;
-		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + msg +"\n";
+		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + msg+"\n";
 	}
 	
 	public void addEncMsg(int user, String msg){
@@ -37,7 +38,7 @@ public class Chat {
 	
 	public void closeChat(){
 		String log = allMsgs.concat(lastMsg);
-		addToLog(log);
+		//addToLog(log);
 		reset();
 	}
 	
@@ -47,10 +48,10 @@ public class Chat {
 		char charEnc;
 		while(i < msg.length()){
 			charEnc = msg.charAt(i);
-			if (charEnc >= 'a' && charEnc <= 'z' || charEnc >= 'A' && charEnc <= 'Z'){
+			if (validChar(charEnc)){
 				charEnc += factor;
-				if (charEnc > 'z' || charEnc > 'Z'))//se passar de Z ou z
-					charEnc -= ALPHABEL_LENGHT; // retira o comprimento do alfabeto 
+				if(!(validChar(charEnc)))
+					charEnc -= ALPHABET_LENGTH;
 			}
 			msgEnc += charEnc;
 			i++;
@@ -59,7 +60,7 @@ public class Chat {
 	}
 	
 	public void editLastMessage(int user, String message){
-		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + message + "\n";		
+		lastMsg = "USER[" + user + "]MSG[" + msgNumber +"]: " + message;		
 	}
 	
 	public boolean checkUser(String userTest){
@@ -68,6 +69,13 @@ public class Chat {
 	
 	public boolean checkUserLastMessage(int user)	{
 		return (user == lastUser);
+	}
+	
+	public boolean validChar(char a){
+		if (a >= 'a' && a <= 'z' || a >= 'A' && a <= 'Z')
+			return true;
+		else
+			return false;
 	}
 	
 	public void reset (){
