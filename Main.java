@@ -24,10 +24,10 @@ public class Main {
 		
 		do{	//BRUNO: No enunciado eles dizem que se 
 			//forem iguais so tens de pedir o 2º outra vez
-			System.out.print("\nNome do Utilizador 2: ");
+			System.out.print("Nome do Utilizador 2: ");
 			name2 = in.nextLine();
 			if(name1 == name2){
-				System.out.println("\nNome já em utilização. "
+				System.out.println("Nome já em utilização. "
 				+ "Por favor introduza um nome diferente.");
 			}
 		}while (name1.equalsIgnoreCase(name2));
@@ -36,12 +36,12 @@ public class Main {
 		int factor;
 		
 		do{
-			System.out.print("\nInsira um factor de translaçao: ");
+			System.out.print("Insira um factor de translaçao: ");
 			factor = in.nextInt();
 			in.nextLine();
-			if (factor <0 || factor > 26)
-				System.out.println("Factor invalido. [0, 26]");
-		}while(factor < 0 || factor > 26);
+			if (factor <0 || factor > 25)
+				System.out.println("Factor invalido. [0, 25]");
+		}while(factor < 0 || factor > 25);
 		
 		//BRUNO: Só cria a conversa quando tudo é aceitável
 		Chat novaConversa = new Chat(name1, name2, factor);
@@ -58,7 +58,7 @@ public class Main {
 				case PUBLISH_ENC: processPubEnc(novaConversa, in); break;
 				case CORRECT_MSG: processCorMsg(novaConversa, in); break;
 				case CLOSE_CHAT: processCloseChat(novaConversa); break;
-				case SHOW_LOG: processShowLog(); break;
+				//case SHOW_LOG: processShowLog(); break;
 				case HELP: processHelp(); break;
 				case EXIT: break;
 				default: System.out.println("Opção inexistente.");
@@ -68,7 +68,7 @@ public class Main {
 	}
 	
 	private static String processCmd(Scanner in){
-		System.out.print("\n> ");
+		System.out.print("> ");
 		//ler o que foi introduzido passar a letra maiuscula e tirar espacos no inicio e fim da string
 		return in.nextLine().toUpperCase().trim();
 	}
@@ -84,7 +84,7 @@ public class Main {
 		int user = getUser(in);
 		String msg = getMsg(in);
 		conversa.addMsg(user, msg);
-		System.out.println("USER[" + user + "]MSG[" + conversa.msgNumber+"]: Publicada\n");
+		System.out.println("USER[" + user + "]MSG[" + conversa.msgNumber+"]: Publicada");
 	}
 	
 	
@@ -109,7 +109,7 @@ public class Main {
 	}
 	
 	private static String getMsg(Scanner in){
-		System.out.print("\nMensagem: ");
+		System.out.print("Mensagem: ");
 		String msg = in.nextLine();
 		return msg;
 	}
