@@ -20,36 +20,14 @@ public class Main {
 		String name2;//string que ira conter o nome do utilixador 2
 		String cmd;//string que ira conter o comando introduzido pelo utilizador
 		
-		int factor;//int que ira conter o factor de encriptação
-		
-		// pedir nome do primeiro utilizador
 		System.out.print("Nome do Utilizador 1: ");
 		name1 = in.nextLine();
 		
-		//pedir o nome do user 2 que seja != do nome do user1
-		do{	//BRUNO: No enunciado eles dizem que se 
-			//forem iguais so tens de pedir o 2Âº outra vez
-			System.out.print("Nome do Utilizador 2: ");
-			name2 = in.nextLine();
-			if(name1.equalsIgnoreCase(name2)){
-				System.out.println("Nome ja em utilizacao. "
-				+ "Por favor introduza um nome diferente.");
-			}
-		}while (name1.equalsIgnoreCase(name2));
-		//BRUNO: Na linha de cima temos que ponderar se pomos IgnoreCase ou nao
+		name2 = getUsername(in, name1);
 		
-		//EDUARDO:que tal mover isto para um metodo a parte ?
-		do{
-			System.out.print("Insira um factor de translacao: ");
-			factor = in.nextInt();
-			in.nextLine();
-			if (!Chat.validFactor(factor))
-				System.out.println("Factor invalido. [0, 25]");
-		}while(!Chat.validFactor(factor));
+		int factor = getFactor(in);
 		
-		//BRUNO: SÃ³ cria a conversa quando tudo Ã© aceitÃ¡vel
 		Chat novaConversa = new Chat(name1, name2, factor);
-		//BRUNO: Confirma a criaÃ§Ã£o
 		System.out.println("\nChat criado com sucesso.");
 		
 		//Menu principal que interpreta comandos do utilizador
@@ -86,7 +64,7 @@ public class Main {
 	private static void processPubMsg(Chat conversa, Scanner in){
 		int user = getUser(in);
 		conversa.addMsg(user , getMsg(in));
-		System.out.println("USER[" + user + "]MSG[" + conversa.msgNumber+"]: Publicada");
+		System.out.println("USER[" + user + "]MSG[" + conversa.getMsgNumber()+"]: Publicada");
 	}
 	
 	
@@ -96,7 +74,7 @@ public class Main {
 	
 	private static void processCorMsg(Chat conversa, Scanner in){
 		int user = getUser(in);
-		if (conversa.canEdditLastMessage(user)){
+		if (conversa.canEditLastMessage(user)){
 			conversa.editLastMessage(user, getMsg(in));
 		}
 		else{
@@ -106,7 +84,7 @@ public class Main {
 	}
 	
 	private static void processCloseChat(Chat conversa){
-		conversa.closeChat();
+		conversa.closeConversation();
 		System.out.println("Conversa terminada.");
 	}
 	
@@ -137,4 +115,31 @@ public class Main {
 						   "A - Ajuda\n"+
 						   "S - Sair");
 	}
+	
+	private static String getUsername(Scanner in, String name1){
+		String name2;
+		do{	
+			System.out.print("Nome do Utilizador 2: ");
+			name2 = in.nextLine();
+			if(name1.equalsIgnoreCase(name2)){
+				System.out.println("Nome já em utilização. "
+				+ "Por favor introduza um nome diferente.");
+			}
+		}while (name1.equalsIgnoreCase(name2));
+		return name2;
+	}
+	
+	private static int getFactor(Scanner in){
+		int factor;
+		
+		do{
+			System.out.print("Insira um factor de translaçao: ");
+			factor = in.nextInt();
+			in.nextLine();
+			if (factor <0 || factor > 25)
+				System.out.println("Factor invalido. [0, 25]");
+		}while(factor < 0 || factor > 25);
+		return factor;
+	}
+	
 }
