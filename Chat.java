@@ -1,59 +1,73 @@
 public class Chat {
 	
-	private static final int MAX_FACTOR = 25;
-	private static final int MIN_FACTOR = 1;
+	private static final int MAX_FACTOR = 26;
+	private static final int MIN_FACTOR = 0;
 	
-	public int factor;
+	private int factor;
+	public static User user1, user2;
+	private Log log;
 	
 	public Conversation currentConversation;
 	
-	public Chat(String name1, String name2, int factor){
-		User user1 = new User(name1, 1);
-		User user2 = new User(name2, 2);
-		currentConversation = new Conversation(user1, user2, factor);
+	public Chat(String name1, String name2, int newFactor){
+		user1 = new User(name1, 1);
+		user2 = new User(name2, 2);
+		factor = newFactor;
+		log = new Log(user1, user2);
+		currentConversation = new Conversation(user1, user2);
 	}
 	
 	public String showChat(){
 		return currentConversation.showConversation();
 	}
 	
+	public String showLog(){
+		return log.showLog();
+	}
+	
 	public void addMsg(int user,String msg){
-		currentConversation.addMsg(currentConversation.intToUser(user), msg);
+		currentConversation.addMsg(intToUser(user), msg);
 	}
 	
 	public void addEncMsg(int user, String msg){
-		currentConversation.addEncMsg(currentConversation.intToUser(user), msg, factor);
+		currentConversation.addEncMsg(intToUser(user), msg, factor);
 	}
 	
 	public void closeConversation(){
-		String log = currentConversation.showConversation();
-		//addToLog(log);
+		String conversation = currentConversation.showConversation();
+		log.addToLog(conversation);
 		currentConversation.reset();
 	}
 	
 	public boolean canEditLastMessage(int user){
-		return currentConversation.canEditLastMessage(currentConversation.intToUser(user));
+		return currentConversation.canEditLastMessage(intToUser(user));
 	}
 	
 	public void editLastMessage(int user, String msg){
-		currentConversation.editLastMessage(currentConversation.intToUser(user), msg);
+		currentConversation.editLastMessage(intToUser(user), msg, factor);
+	}
+	
+	public String getLastMsg(){
+		return currentConversation.getLastMsg();
 	}
 	
 	public int getMsgNumber(){
 		return currentConversation.getMsgNumber();
 	}
 	
-	//EDUARDO: este metodo tá a ser usado ??
-	/*public boolean checkUser(String userTest){
-		return (userTest.equals(user1Name) || userTest.equals(user2Name));
-	}*/
-	
-	public static  boolean validUser(int user){
-		return currentConversation.validUser(currentConversation.intToUser(user));
+	public static boolean validUser(int user){
+		return (user == user1.getNumber() || user == user2.getNumber());
 	}
 	
 	public static boolean validFactor(int factor){
 		return factor >= MIN_FACTOR && factor <= MAX_FACTOR;
+	}
+	
+	public User intToUser(int user){
+		if (user == user1.getNumber())
+			return user1;
+		else
+			return user2;
 	}
 	
 }
