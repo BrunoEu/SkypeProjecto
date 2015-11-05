@@ -4,16 +4,18 @@ public class Conversation {
 	private static final int ALPHABET_LENGTH = 26;
 	private static final User NOBODY = new User ("", 0);
 	
-	public int msgNumber;
-	public User user1;
-	public User user2;
-	public String allMsgs;
-	public String lastMsg;
-	public User lastUser;
+	private Counter msgNumber;
+	public static User user1;
+	public static User user2;
+	private String allMsgs;
+	private String lastMsg;
+	private boolean lastMsgEnc;
+	private User lastUser;
 	
-	public Conversation(User newUser1, User newUser2, int newFactor){
+	public Conversation(User newUser1, User newUser2){
 		user1 = newUser1;
 		user2 = newUser2;
+		msgNumber = new Counter();
 		reset();
 	}
 	
@@ -22,60 +24,62 @@ public class Conversation {
 	}
 	
 	public void addMsg(User user, String msg){
-		msgNumber++;
+		msgNumber.increment();
 		lastUser = user;
-		allMsgs.concat(lastMsg);
+		allMsgs = allMsgs.concat(lastMsg);
 		lastMsg = formatMessage(user, msg);
+		lastMsgEnc = false;
 	}
 	
 	public void addEncMsg(User user, String msg, int factor){
 		addMsg(user, encMsg(msg, factor));
+		lastMsgEnc = true;
 	}
 	
 	public String encMsg(String msg, int factor){
 		int index = 0;
 		String msgEnc = "";
-		char charEnc;
+		char charToEncrypt, charEncrypted;
 		while(index < msg.length()){
-			charEnc = msg.charAt(index);
-			if (validLowerCaseChar(charEnc)){
-				charEnc += factor;
-				if(lowerCaseOverflow(charEnc)){
-					charEnc -= ALPHABET_LENGTH;
-				}
-			}else{ 
-				if (validUpperCaseChar(charEnc)){
-				charEnc += factor;
-					if(upperCaseOverflow(charEnc)){
-						charEnc -= ALPHABET_LENGTH;
-					}
-				}
-			}
-			msgEnc += charEnc;
+			charToEncrypt = msg.charAt(index);
+			charEncrypted = encryptChar(charToEncrypt, factor);
+			msgEnc += charEncrypted;
 			index++;
 		}
 		return msgEnc;
 	}
 	
+	public char encryptChar(char charToEncrypt, int factor){
+		if (validLowerCaseChar(charToEncrypt)){
+			charToEncrypt += factor;
+			if(lowerCaseOverflow(charToEncrypt)){
+				charToEncrypt -= ALPHABET_LENGTH;
+			}
+		}else{ 
+			if (validUpperCaseChar(charToEncrypt)){
+			charToEncrypt += factor;
+				if(upperCaseOverflow(charToEncrypt)){
+					charToEncrypt -= ALPHABET_LENGTH;
+				}
+			}
+		}
+		return charToEncrypt;
+	}
+	
 	public String formatMessage(User user,String message){
-		return "USER[" + user.getNumber() + "]MSG[" + msgNumber +"]: " + message +"\n";
+		return "USER[" + user.getNumber() + "]MSG[" + getMsgNumber() +"]: " + message +"\n";
 	}
 	
 	public boolean canEditLastMessage(User user){
 		return lastUser.getNumber() == user.getNumber();
 	}
 	
-	public void editLastMessage(User user, String message){
-		lastMsg = formatMessage(user, message);	
+	public void editLastMessage(User user, String message, int factor){
+		if (lastMsgEnc)
+			lastMsg = formatMessage(user, encMsg(message, factor));
+		else
+			lastMsg = formatMessage(user, message);	
 	}
-	
-	public static boolean validUser(User user){
-		return (user.getNumber() == user1.getNumber() || user.getNumber() == user2.getNumber());
-	}
-	
-	/*public User getLastUser(){
-		return lastUser;
-	}*/
 	
 	private boolean validLowerCaseChar(char a){
 		return a >= 'a' && a <= 'z' ;
@@ -94,21 +98,19 @@ public class Conversation {
 	}
 	
 	public int getMsgNumber(){
-		return msgNumber;
+		return msgNumber.getCounter();
 	}
 	
-	public static User intToUser(int user){
-		if (user == user1.getNumber())
-			return user1;
-		else
-			return user2;
+	public String getLastMsg(){
+		return lastMsg;
 	}
 	
 	public void reset (){
 		lastMsg = "";
+		lastMsgEnc = false;
 		allMsgs = "";
 		lastUser = NOBODY;
-		msgNumber = 0;
+		msgNumber.reset();
 	}
 	
 }
