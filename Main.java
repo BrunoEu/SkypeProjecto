@@ -20,15 +20,17 @@ public class Main {
 		String name2;//string que ira conter o nome do utilixador 2
 		String cmd;//string que ira conter o comando introduzido pelo utilizador
 		
-		System.out.print("Nome do Utilizador 1: ");
-		name1 = in.nextLine();
-		
-		name2 = getUsername(in, name1);
-		
+		name1 = getUsername(1, in);
+		do{
+			name2 = getUsername(2, in);
+		}while(compareName(name1, name2));
+			
 		int factor = getFactor(in);
 		
 		Chat novaConversa = new Chat(name1, name2, factor);
-		System.out.println("\nChat criado com sucesso.");
+		System.out.println("\nConversa\n");
+		
+		processHelp();
 		
 		//Menu principal que interpreta comandos do utilizador
 		do{
@@ -39,7 +41,7 @@ public class Main {
 				case PUBLISH_ENC: processPubEnc(novaConversa, in); break;
 				case CORRECT_MSG: processCorMsg(novaConversa, in); break;
 				case CLOSE_CHAT: processCloseChat(novaConversa); break;
-				//case SHOW_LOG: processShowLog(); break;
+				case SHOW_LOG: processShowLog(novaConversa); break;
 				case HELP: processHelp(); break;
 				case EXIT: System.out.println("Aplicacao terminada. Ate a proxima.");break;
 				default: System.out.println("Opcao inexistente.");
@@ -47,7 +49,7 @@ public class Main {
 		}while(cmd != EXIT);
 		
 	}
-	
+
 	private static String processCmd(Scanner in){
 		System.out.print("> ");
 		//ler o que foi introduzido passar a letra maiuscula e tirar espacos no inicio e fim da string
@@ -58,29 +60,37 @@ public class Main {
 		if (conversa.showChat().isEmpty())
 			System.out.println("Conversa vazia.");
 		else
-			System.out.println(conversa.showChat());
+			System.out.print(conversa.showChat());
 	}
 	
 	private static void processPubMsg(Chat conversa, Scanner in){
-		int user = getUser(in);
+		int user = getUserInt(in);
 		conversa.addMsg(user , getMsg(in));
 		System.out.println("USER[" + user + "]MSG[" + conversa.getMsgNumber()+"]: Publicada");
 	}
 	
 	
 	private static void processPubEnc(Chat conversa, Scanner in){
-		conversa.addEncMsg(getUser(in), getMsg(in));
+		conversa.addEncMsg(getUserInt(in), getMsg(in));
 	}
 	
 	private static void processCorMsg(Chat conversa, Scanner in){
-		int user = getUser(in);
-		if (conversa.canEditLastMessage(user)){
-			conversa.editLastMessage(user, getMsg(in));
-		}
+		if(conversa.showChat().isEmpty())
+			System.out.println("Conversa Vazia.");
 		else{
-			System.out.println("Utilizador " + user + " nao pode editar.");
+			int user = getUserInt(in);
+			if (conversa.canEditLastMessage(user)){
+				conversa.editLastMessage(user, getMsg(in));
+				System.out.print("Mensagem Corrigida:\n"+conversa.getLastMsg());
+			}
+			else{
+				System.out.println("Utilizador " + user + " nao pode editar.");
+			}
 		}
-			
+	}
+	
+	private static void processShowLog(Chat conversa) {
+		System.out.print(conversa.showLog());
 	}
 	
 	private static void processCloseChat(Chat conversa){
@@ -94,14 +104,14 @@ public class Main {
 		return msg;
 	}
 	
-	private static int getUser(Scanner in){
+	private static int getUserInt(Scanner in){
 		int user;
 		do{
 			System.out.print("Utilizador: ");
 			user = in.nextInt();
 			in.nextLine();
 			if (!Chat.validUser(user))
-				System.out.println("Utilizador introduzido invalido.");
+				System.out.println("Utilizador desconhecido.");
 		}while(!Chat.validUser(user));
 		return user;
 	}
@@ -116,17 +126,19 @@ public class Main {
 						   "S - Sair");
 	}
 	
-	private static String getUsername(Scanner in, String name1){
-		String name2;
-		do{	
-			System.out.print("Nome do Utilizador 2: ");
-			name2 = in.nextLine();
-			if(name1.equalsIgnoreCase(name2)){
-				System.out.println("Nome já em utilização. "
-				+ "Por favor introduza um nome diferente.");
-			}
-		}while (name1.equalsIgnoreCase(name2));
-		return name2;
+	private static String getUsername(int i, Scanner in){
+		System.out.print("Nome do Utilizador "+i+": ");
+		return in.nextLine();
+	}
+	
+	private static boolean compareName(String name1, String name2){
+		if(name1.equalsIgnoreCase(name2)){
+			System.out.println("Nome já em utilização. "
+			+ "Por favor introduza um nome diferente.");
+			return true;
+		}
+		else
+			return false;
 	}
 	
 	private static int getFactor(Scanner in){
@@ -136,9 +148,10 @@ public class Main {
 			System.out.print("Insira um factor de translaçao: ");
 			factor = in.nextInt();
 			in.nextLine();
-			if (factor <0 || factor > 25)
-				System.out.println("Factor invalido. [0, 25]");
-		}while(factor < 0 || factor > 25);
+			if (!Chat.validFactor(factor))
+				System.out.println("Factor invalido. [0, 26]");
+		}while(!Chat.validFactor(factor));
+		
 		return factor;
 	}
 	
