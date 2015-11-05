@@ -1,8 +1,8 @@
 
 public class User {
 
-	public String userName;
-	public int userNumber;
+	private String userName;
+	private int userNumber;
 	
 	public User(String name, int number){
 		userName = name;
