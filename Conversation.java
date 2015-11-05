@@ -50,7 +50,7 @@ public class Conversation {
 	}
 	
 	public char encryptChar(char charToEncrypt, int factor){
-		if (validLowerCaseChar(charToEncrypt)){
+		/*if (validLowerCaseChar(charToEncrypt)){
 			charToEncrypt += factor;
 			if(lowerCaseOverflow(charToEncrypt)){
 				charToEncrypt -= ALPHABET_LENGTH;
@@ -64,6 +64,21 @@ public class Conversation {
 			}
 		}
 		return charToEncrypt;
+		*/
+		char charEncrypted;
+		
+		if (validLowerCaseChar(charToEncrypt)){
+			charEncrypted = (char) ((((charToEncrypt - 'a') + factor ) % ALPHABET_LENGTH) + 'a');
+		
+		}else if (validUpperCaseChar(charToEncrypt)){
+			charEncrypted = (char) ((((charToEncrypt - 'A') + factor ) % ALPHABET_LENGTH) + 'A');
+		
+			
+		}else{
+			charEncrypted = charToEncrypt;
+		}
+		
+		return charEncrypted;
 	}
 	
 	public String formatMessage(User user,String message){
