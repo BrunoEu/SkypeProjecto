@@ -4,8 +4,8 @@ public class Chat {
 	private static final int MIN_FACTOR = 0;
 	
 	private int factor;
-	public static User user1, user2;
-	private Log log;
+	public User user1, user2;
+	private String log;
 	
 	public Conversation currentConversation;
 	
@@ -13,7 +13,7 @@ public class Chat {
 		user1 = new User(name1, 1);
 		user2 = new User(name2, 2);
 		factor = newFactor;
-		log = new Log(user1, user2);
+		initLog();
 		currentConversation = new Conversation(user1, user2);
 	}
 	
@@ -22,7 +22,7 @@ public class Chat {
 	}
 	
 	public String showLog(){
-		return log.showLog();
+		return log;
 	}
 	
 	public void addMsg(int user,String msg){
@@ -35,7 +35,7 @@ public class Chat {
 	
 	public void closeConversation(){
 		String conversation = currentConversation.showConversation();
-		log.addToLog(conversation);
+		addToLog(conversation);
 		currentConversation.reset();
 	}
 	
@@ -55,7 +55,7 @@ public class Chat {
 		return currentConversation.getMsgNumber();
 	}
 	
-	public static boolean validUser(int user){
+	public boolean validUser(int user){
 		return (user == user1.getNumber() || user == user2.getNumber());
 	}
 	
@@ -68,6 +68,14 @@ public class Chat {
 			return user1;
 		else
 			return user2;
+	}
+	
+	public void initLog(){
+		log = "Utilizador 1: "+user1.getName()+"\nUtilizador 2: "+user2.getName()+"\n\n";
+	}
+	
+	public void addToLog(String msg){
+		log = log.concat(msg);
 	}
 	
 }
