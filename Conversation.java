@@ -1,20 +1,20 @@
 
 public class Conversation {
 
-	private static final int ALPHABET_LENGTH = 26;
+	private static final char ALPHABET_LENGTH = 26;
 	private static final User NOBODY = new User ("", 0);
 	
 	private int msgNumber;
-	public User user1;
-	public User user2;
+//	private User user1;
+//	private User user2;
 	private String allMsgs;
 	private String lastMsg;
 	private boolean lastMsgEnc;
 	private User lastUser;
 	
 	public Conversation(User newUser1, User newUser2){
-		user1 = newUser1;
-		user2 = newUser2;
+//		user1 = newUser1;
+//		user2 = newUser2;
 		reset();
 	}
 	
@@ -64,13 +64,14 @@ public class Conversation {
 		}
 		return charToEncrypt;
 		*/
+		char charFactor = (char)factor;
 		char charEncrypted;
 		
 		if (validLowerCaseChar(charToEncrypt)){
-			charEncrypted = (char) ((((charToEncrypt - 'a') + factor ) % ALPHABET_LENGTH) + 'a');
+			charEncrypted = ((((charToEncrypt - 'a') + charFactor ) + ALPHABET_LENGTH) + 'a');
 		
 		}else if (validUpperCaseChar(charToEncrypt)){
-			charEncrypted = (char) ((((charToEncrypt - 'A') + factor ) % ALPHABET_LENGTH) + 'A');
+			charEncrypted = ((((charToEncrypt - 'A') + charFactor ) + ALPHABET_LENGTH) + 'A');
 		
 			
 		}else{
@@ -101,14 +102,6 @@ public class Conversation {
 	
 	private boolean validUpperCaseChar(char a){
 		return a >= 'A' && a <= 'Z' ;
-	}
-	
-	private boolean lowerCaseOverflow(char a){
-		return a > 'z';
-	}
-	
-	private boolean upperCaseOverflow(char a){
-		return a > 'Z';
 	}
 	
 	public int getMsgNumber(){
