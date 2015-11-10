@@ -1,4 +1,5 @@
-
+//CODIGO INUTIL
+/*
 public class Counter {
 
 	private int counter;
@@ -20,3 +21,4 @@ public class Counter {
 	}
 	
 }
+*/
