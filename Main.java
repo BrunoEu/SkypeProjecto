@@ -64,21 +64,21 @@ public class Main {
 	}
 	
 	private static void processPubMsg(Chat conversa, Scanner in){
-		int user = getUserInt(in);
+		int user = getUserInt(conversa, in);
 		conversa.addMsg(user , getMsg(in));
 		System.out.println("USER[" + user + "]MSG[" + conversa.getMsgNumber()+"]: Publicada");
 	}
 	
 	
 	private static void processPubEnc(Chat conversa, Scanner in){
-		conversa.addEncMsg(getUserInt(in), getMsg(in));
+		conversa.addEncMsg(getUserInt(conversa, in), getMsg(in));
 	}
 	
 	private static void processCorMsg(Chat conversa, Scanner in){
 		if(conversa.showChat().isEmpty())
 			System.out.println("Conversa Vazia.");
 		else{
-			int user = getUserInt(in);
+			int user = getUserInt(conversa, in);
 			if (conversa.canEditLastMessage(user)){
 				conversa.editLastMessage(user, getMsg(in));
 				System.out.print("Mensagem Corrigida:\n"+conversa.getLastMsg());
@@ -104,15 +104,15 @@ public class Main {
 		return msg;
 	}
 	
-	private static int getUserInt(Scanner in){
+	private static int getUserInt(Chat conversa, Scanner in){
 		int user;
 		do{
 			System.out.print("Utilizador: ");
 			user = in.nextInt();
 			in.nextLine();
-			if (!Chat.validUser(user))
+			if (!conversa.validUser(user))
 				System.out.println("Utilizador desconhecido.");
-		}while(!Chat.validUser(user));
+		}while(!conversa.validUser(user));
 		return user;
 	}
 	
