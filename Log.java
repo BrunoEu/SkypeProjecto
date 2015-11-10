@@ -1,4 +1,5 @@
-
+// CODIGO INUTIL
+/*
 public class Log {
 
 	private String log;
@@ -16,3 +17,4 @@ public class Log {
 	}
 	
 }
+*/
