@@ -4,9 +4,9 @@ public class Conversation {
 	private static final int ALPHABET_LENGTH = 26;
 	private static final User NOBODY = new User ("", 0);
 	
-	private Counter msgNumber;
-	public static User user1;
-	public static User user2;
+	private int msgNumber;
+	public User user1;
+	public User user2;
 	private String allMsgs;
 	private String lastMsg;
 	private boolean lastMsgEnc;
@@ -15,7 +15,6 @@ public class Conversation {
 	public Conversation(User newUser1, User newUser2){
 		user1 = newUser1;
 		user2 = newUser2;
-		msgNumber = new Counter();
 		reset();
 	}
 	
@@ -24,7 +23,7 @@ public class Conversation {
 	}
 	
 	public void addMsg(User user, String msg){
-		msgNumber.increment();
+		msgNumber++;
 		lastUser = user;
 		allMsgs = allMsgs.concat(lastMsg);
 		lastMsg = formatMessage(user, msg);
@@ -113,7 +112,7 @@ public class Conversation {
 	}
 	
 	public int getMsgNumber(){
-		return msgNumber.getCounter();
+		return msgNumber;
 	}
 	
 	public String getLastMsg(){
@@ -125,7 +124,7 @@ public class Conversation {
 		lastMsgEnc = false;
 		allMsgs = "";
 		lastUser = NOBODY;
-		msgNumber.reset();
+		msgNumber = 0;
 	}
 	
 }
