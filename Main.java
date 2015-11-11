@@ -18,9 +18,54 @@ public class Main {
 	/************************************************/
 	
 	
+	/********** MÉTODO MAIN **********/
 	
-	
-	/**********************************/
+	public static void main(String[] args) {
+		
+		Scanner in = new Scanner(System.in);
+		
+		int factor;		//Factor de Translação
+		
+		String name1;	//Nome do utilizador 1
+		String name2;	//Nome do utilizador 2
+		String cmd;		//Comando introduzido pelo utilizador
+		
+		//Pede o nome do utilizadores, garantindo
+		//que o do segundo não é igual ao do primeiro
+		name1 = getUsername(1, in); 
+		do{
+			name2 = getUsername(2, in);
+		}while(compareName(name1, name2));
+		
+		//Pede o factor de translação
+		factor = getFactor(in);
+		
+		//Cria um novo objecto Chat
+		Chat novaConversa = new Chat(name1, name2, factor);
+		
+		//Apresenta os comandos disponíveis
+		processHelp();
+		
+		//Menu principal que interpreta comandos do utilizador
+		do{
+			cmd = processCmd(in);
+			switch(cmd){
+				case SHOW_CHAT: processShowChat(novaConversa); break;
+				case PUBLISH_MSG: processPubMsg(novaConversa, in); break;
+				case PUBLISH_ENC: processPubEnc(novaConversa, in); break;
+				case CORRECT_MSG: processCorMsg(novaConversa, in); break;
+				case CLOSE_CHAT: processCloseChat(novaConversa); break;
+				case SHOW_LOG: processShowLog(novaConversa); break;
+				case HELP: processHelp(); break;
+				default: System.out.println("Opcao inexistente.");
+			}
+		}while(cmd != EXIT);
+		
+		System.out.println("Aplicacao terminada. Ate a proxima.");
+		
+	}
+
+	/*******************************/
 	
 	
 	/*** ITERADOR DE COMANDOS ***/
@@ -66,7 +111,9 @@ public class Main {
 	private static void processPubEnc(Chat conversa, Scanner in){
 		if (conversa.showChat().isEmpty())
 			System.out.println("Nova conversa iniciada");
-		conversa.addEncMsg(getUserNumber(conversa, in), getMsg(in));
+		int user = getUserNumber(conversa, in);
+		conversa.addEncMsg(user, getMsg(in));
+		System.out.println("USER[" + user + "]MSG[" + conversa.getMsgNumber()+"]: Publicada");
 	}
 	
 	/************************************/
@@ -197,53 +244,6 @@ public class Main {
 		}while(!Chat.validFactor(factor));
 		
 		return factor;
-	}
-
-	/********** MÉTODO MAIN **********/
-	
-	public static void main(String[] args) {
-		
-		Scanner in = new Scanner(System.in);
-		
-		int factor;		//Factor de Translação
-		
-		String name1;	//Nome do utilizador 1
-		String name2;	//Nome do utilizador 2
-		String cmd;		//Comando introduzido pelo utilizador
-		
-		//Pede o nome do utilizadores, garantindo
-		//que o do segundo não é igual ao do primeiro
-		name1 = getUsername(1, in); 
-		do{
-			name2 = getUsername(2, in);
-		}while(compareName(name1, name2));
-		
-		//Pede o factor de translação
-		factor = getFactor(in);
-		
-		//Cria um novo objecto Chat
-		Chat novaConversa = new Chat(name1, name2, factor);
-		
-		//Apresenta os comandos disponíveis
-		processHelp();
-		
-		//Menu principal que interpreta comandos do utilizador
-		do{
-			cmd = processCmd(in);
-			switch(cmd){
-				case SHOW_CHAT: processShowChat(novaConversa); break;
-				case PUBLISH_MSG: processPubMsg(novaConversa, in); break;
-				case PUBLISH_ENC: processPubEnc(novaConversa, in); break;
-				case CORRECT_MSG: processCorMsg(novaConversa, in); break;
-				case CLOSE_CHAT: processCloseChat(novaConversa); break;
-				case SHOW_LOG: processShowLog(novaConversa); break;
-				case HELP: processHelp(); break;
-				default: System.out.println("Opcao inexistente.");
-			}
-		}while(cmd != EXIT);
-		
-		System.out.println("Aplicacao terminada. Ate a proxima.");
-		
 	}
 	
 	/************************************/
