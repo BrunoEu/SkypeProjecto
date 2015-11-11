@@ -1,7 +1,7 @@
 
 public class Conversation {
 
-	private static final char ALPHABET_LENGTH = 26;
+	private static final int ALPHABET_LENGTH = 26;
 	private static final User NOBODY = new User ("", 0);
 	
 	private int msgNumber;
@@ -64,15 +64,13 @@ public class Conversation {
 		}
 		return charToEncrypt;
 		*/
-		char charFactor = (char)factor;
 		char charEncrypted;
 		
 		if (validLowerCaseChar(charToEncrypt)){
-			charEncrypted = ((((charToEncrypt - 'a') + charFactor ) + ALPHABET_LENGTH) + 'a');
-		
+			charEncrypted = (char)((charToEncrypt - 'a' + factor) % ALPHABET_LENGTH + 'a');
+			
 		}else if (validUpperCaseChar(charToEncrypt)){
-			charEncrypted = ((((charToEncrypt - 'A') + charFactor ) + ALPHABET_LENGTH) + 'A');
-		
+			charEncrypted = (char)((charToEncrypt - 'A' + factor ) % ALPHABET_LENGTH + 'A');
 			
 		}else{
 			charEncrypted = charToEncrypt;
