@@ -1,4 +1,3 @@
-// IMPORTAR O SCANNER //
 import java.util.Scanner;
 
 
@@ -6,16 +5,14 @@ public class Main {
 	
 	/***************** CONSTANTES *****************/
 
-	private static final String EXIT = "S";
-	private static final String HELP = "A";
-	private static final String SHOW_LOG = "MCA";
-	private static final String CLOSE_CHAT = "ECP";
-	private static final String CORRECT_MSG = "CMA";
-	private static final String PUBLISH_ENC = "PME";
-	private static final String PUBLISH_MSG = "PNM";
 	private static final String SHOW_CHAT = "VCP";
-
-	/************************************************/
+	private static final String PUBLISH_MSG = "PNM";
+	private static final String PUBLISH_ENC = "PME";
+	private static final String CORRECT_MSG = "CMA";
+	private static final String CLOSE_CHAT = "ECP";
+	private static final String SHOW_LOG = "MCA";
+	private static final String HELP = "A";
+	private static final String EXIT = "S";
 	
 	
 	/********** MÉTODO MAIN **********/
@@ -35,7 +32,10 @@ public class Main {
 		name1 = getUsername(1, in); 
 		do{
 			name2 = getUsername(2, in);
-		}while(compareName(name1, name2));
+			if (name2.trim().equalsIgnoreCase(name1.trim()))
+				System.out.println("Nome já em utilização. "
+				+ "Por favor introduza um nome diferente.");
+		}while(name2.trim().equalsIgnoreCase(name1.trim()));
 		
 		//Pede o factor de translação
 		factor = getFactor(in);
@@ -53,7 +53,7 @@ public class Main {
 				case SHOW_CHAT: processShowChat(novaConversa); break;
 				case PUBLISH_MSG: processPubMsg(novaConversa, in); break;
 				case PUBLISH_ENC: processPubEnc(novaConversa, in); break;
-				case CORRECT_MSG: processCorMsg(novaConversa, in); break;
+				case CORRECT_MSG: processCorrectMsg(novaConversa, in); break;
 				case CLOSE_CHAT: processCloseChat(novaConversa); break;
 				case SHOW_LOG: processShowLog(novaConversa); break;
 				case HELP: processHelp(); break;
@@ -62,10 +62,9 @@ public class Main {
 		}while(cmd != EXIT);
 		
 		System.out.println("Aplicacao terminada. Ate a proxima.");
+		//Final do programa
 		
 	}
-
-	/*******************************/
 	
 	
 	/*** ITERADOR DE COMANDOS ***/
@@ -77,8 +76,6 @@ public class Main {
 		return in.nextLine().toUpperCase().trim();
 	}
 	
-	/****************************/
-	
 	
 	/*** APRESENTAR CONVERSA EM PROGRESSO ***/
 	
@@ -88,8 +85,6 @@ public class Main {
 		else
 			System.out.print(conversa.showChat());
 	}
-	
-	/****************************************/
 	
 	
 	/*** PUBLICAR MENSAGEM ***/
@@ -103,25 +98,22 @@ public class Main {
 		System.out.println("USER[" + user + "]MSG[" + conversa.getMsgNumber()+"]: Publicada");
 	}
 	
-	/************************/
-	
 	
 	/*** PUBLICAR MENSAGEM ENCRIPTADA ***/
 	
 	private static void processPubEnc(Chat conversa, Scanner in){
 		if (conversa.showChat().isEmpty())
 			System.out.println("Nova conversa iniciada");
+		
 		int user = getUserNumber(conversa, in);
 		conversa.addEncMsg(user, getMsg(in));
 		System.out.println("USER[" + user + "]MSG[" + conversa.getMsgNumber()+"]: Publicada");
 	}
 	
-	/************************************/
-	
 	
 	/*** CORRIGIR MENSAGEM ANTERIOR ***/
 	
-	private static void processCorMsg(Chat conversa, Scanner in){
+	private static void processCorrectMsg(Chat conversa, Scanner in){
 		if(conversa.showChat().isEmpty())
 			System.out.println("Conversa Vazia.");
 		else{
@@ -131,12 +123,10 @@ public class Main {
 				System.out.print("Mensagem Corrigida:\n"+conversa.getLastMsg());
 			}
 			else{
-				System.out.println("Utilizador " + user + " nao pode editar.");
+				System.out.println("Utilizador " + user + " nao e autor da mensagem mais recente.");
 			}
 		}
 	}
-	
-	/***********************************/
 	
 	
 	/*** ENCERRAR CONVERSA EM PROGRESSO ***/
@@ -145,8 +135,7 @@ public class Main {
 		conversa.closeConversation();
 		System.out.println("Conversa terminada.");
 	}
-	
-	/**************************************/
+
 	
 
 	/*** APRESENTAR HISTORICO DE CONVERSAS ***/
@@ -154,8 +143,6 @@ public class Main {
 	private static void processShowLog(Chat conversa) {
 		System.out.print(conversa.showLog());
 	}
-	
-	/*****************************************/
 	
 
 	/*** APRESENTAR COMANDOS DISPONIVEIS ***/
@@ -171,8 +158,6 @@ public class Main {
 						   "S - Sair");
 	}
 	
-	/***************************************/
-	
 	
 	/*** PEDIR MENSAGEM ***/
 	
@@ -181,8 +166,6 @@ public class Main {
 		String msg = in.nextLine();
 		return msg;
 	}
-	
-	/**********************/
 	
 	
 	/*** PEDIR NUMERO DE UTILIZADOR ***/
@@ -193,13 +176,11 @@ public class Main {
 			System.out.print("Utilizador: ");
 			user = in.nextInt();
 			in.nextLine();
-			if (!conversa.validUser(user))
+			if (!conversa.validUserNumber(user))
 				System.out.println("Utilizador desconhecido.");
-		}while(!conversa.validUser(user));
+		}while(!conversa.validUserNumber(user));
 		return user;
 	}
-	
-	/**********************************/
 
 	
 	/*** PEDIR NOME DE UTILIZADOR ***/
@@ -208,26 +189,6 @@ public class Main {
 		System.out.print("Nome do Utilizador "+number+": ");
 		return in.nextLine();
 	}
-	
-	/********************************/
-	
-	
-	/*** COMPARAR NOMES DOS UTILIZADORES ***/
-	
-	private static boolean compareName(String name1, String name2){
-		if(name1.equalsIgnoreCase(name2)){
-			System.out.println("Nome já em utilização. "
-			+ "Por favor introduza um nome diferente.");
-			return true;
-		}
-		else
-			return false;
-	}
-	
-	/***************************************/
-	
-	
-	/************************************************/
 	
 	
 	/*** PEDIR FACTOR DE ENCRIPTAÇÃO ***/
@@ -246,6 +207,5 @@ public class Main {
 		return factor;
 	}
 	
-	/************************************/
 	
 }
