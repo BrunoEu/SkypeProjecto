@@ -1,8 +1,11 @@
 
 public class Conversation {
-
+	
+	
 	/*** CONSTANTES ***/
 	
+	private static final char FIRST_UPPER_CASE_CHAR = 'A';
+	private static final char FIRST_LOWER_CASE_CHAR = 'a';
 	private static final int ALPHABET_LENGTH = 26;
 	private static final User NOBODY = new User ("", 0);
 	
@@ -10,7 +13,7 @@ public class Conversation {
 	/*** VARIÁVEIS DE INSTÂNCIA ***/
 	
 	private int msgNumber;
-	private String allMsgs;
+	private String conversation;
 	private String lastMsg;
 	private boolean lastMsgEncrypted;
 	private User lastUser;
@@ -26,7 +29,10 @@ public class Conversation {
 	/*** DEVOLVE A CONVERSA ATUAL ***/
 	
 	public String showConversation (){
-		return allMsgs + lastMsg;
+		if (conversation.isEmpty())
+			return "Conversa vazia\n";
+		else
+			return conversation + lastMsg;
 	}
 	
 	
@@ -35,23 +41,25 @@ public class Conversation {
 	public void addMsg(User user, String msg){
 		msgNumber++;
 		lastUser = user;
-		allMsgs = allMsgs.concat(lastMsg);
+		conversation = conversation.concat(lastMsg);
 		lastMsg = formatMessage(user, msg);
 		lastMsgEncrypted = false;
 	}
 	
 	
 	/*** ADICIONA MENSAGEM ENCRIPTADA ***/
+	//@pre factor > 0
 	
-	public void addEncMsg(User user, String msg, int factor){
-		addMsg(user, encMsg(msg, factor));
+	public void addEncryptedMsg(User user, String msg, int factor){
+		addMsg(user, encryptMsg(msg, factor));
 		lastMsgEncrypted = true;
 	}
 	
 	
 	/*** ENCRIPTA UMA MENSAGEM ***/
+	//@pre factor > 0
 	
-	private String encMsg(String msg, int factor){
+	private String encryptMsg(String msg, int factor){
 		int index = 0;
 		String msgEnc = "";
 		char charToEncrypt, charEncrypted;
@@ -66,17 +74,24 @@ public class Conversation {
 	
 	
 	/*** ENCRIPTA UM CARACTER ***/
+	//@pre factor > 0
 	
 	private char encryptChar(char charToEncrypt, int factor){
 		char charEncrypted;
+		char firstChar = 0;	//Caracter nulo
 		
-		if (validLowerCaseChar(charToEncrypt)){
-			charEncrypted = (char)((charToEncrypt - 'a' + factor) % ALPHABET_LENGTH + 'a');
+		if(validLowerCaseChar(charToEncrypt) || validUpperCaseChar(charToEncrypt)){
+			if (validLowerCaseChar(charToEncrypt)){
+				firstChar = FIRST_LOWER_CASE_CHAR;
+			}
+			else if(validUpperCaseChar(charToEncrypt)){
+				firstChar = FIRST_UPPER_CASE_CHAR;
+			}
 			
-		}else if (validUpperCaseChar(charToEncrypt)){
-			charEncrypted = (char)((charToEncrypt - 'A' + factor ) % ALPHABET_LENGTH + 'A');
-			
-		}else{
+			charEncrypted = (char)((charToEncrypt - firstChar + factor) % ALPHABET_LENGTH + firstChar);
+		}
+		
+		else{
 			charEncrypted = charToEncrypt;
 		}
 		
@@ -86,14 +101,14 @@ public class Conversation {
 	
 	/*** VERIFICA SE UM CARACTER É UMA LETRA MAIÚSCULA ***/
 	
-	private boolean validUpperCaseChar(char a){
+	private static boolean validUpperCaseChar(char a){
 		return a >= 'A' && a <= 'Z' ;
 	}
 	
 	
 	/*** VERIFICA SE UM CARACTER É UMA LETRA MINÚSCULA ***/
 
-	private boolean validLowerCaseChar(char a){
+	private static boolean validLowerCaseChar(char a){
 		return a >= 'a' && a <= 'z' ;
 	}
 	
@@ -109,7 +124,7 @@ public class Conversation {
 	
 	public void editLastMessage(User user, String message, int factor){
 		if (lastMsgEncrypted)
-			lastMsg = formatMessage(user, encMsg(message, factor));
+			lastMsg = formatMessage(user, encryptMsg(message, factor));
 		else
 			lastMsg = formatMessage(user, message);	
 	}
@@ -141,7 +156,7 @@ public class Conversation {
 	public void reset (){
 		lastMsg = "";
 		lastMsgEncrypted = false;
-		allMsgs = "";
+		conversation = "";
 		lastUser = NOBODY;
 		msgNumber = 0;
 	}
