@@ -2,28 +2,19 @@ public class Chat {
 	
 	/*** CONSTANTES ***/
 	
-	private static final int MAX_FACTOR = 26;
-	private static final int MIN_FACTOR = 0;
-	
-	/*****************/
+	private static final int MAX_FACTOR = 26;	//Factor máximo permitido
+	private static final int MIN_FACTOR = 0;	//Factor mínimo permitido
 	
 	
 	/*** VARIÁVEIS DE INSTÂNCIA ***/
 	
-	private int factor;
-	private User user1, user2;
-	private String log;
-	private Conversation currentConversation;
-
-	/*****************************/
+	private int factor;			//Factor de translação
+	private User user1, user2;	//Utilizadores 1 e 2
+	private String log;			//Histórico de conversas
+	private Conversation currentConversation;	//Conversa atual
 
 	
-	/*** CONSTRUTOR ***
-	 * 
-	 * @param name1 Nome do utilizador 1
-	 * @param name2 Nome do utilizador 2
-	 * @param newFactor Factor de Transaçao
-	 */
+	/*** CONSTRUTOR ***/
 	 
 	public Chat(String name1, String name2, int newFactor){
 		user1 = new User(name1, 1);
@@ -34,21 +25,14 @@ public class Chat {
 	}
 	
 	
-	/*** 
-	 * 
-	 * @return Devolve a string com a conversa atual
-	 */
+	/*** DEVOLVE A CONVERSA EM PROGRESSO ***/
 	
 	public String showChat(){
 		return currentConversation.showConversation();
 	}
 	
 	
-	/***
-	 * 
-	 * @return 	"Nao ha conversas anteriores" Se o log nao tiver conversas
-	 * 			log Se tiver conversas
-	 */
+	/*** DEVOLVE AS CONVERSAS ANTERIORES ***/
 	
 	public String showLog(){
 		if (log.equals(initLog()))
@@ -58,26 +42,14 @@ public class Chat {
 	}
 	
 	
-	/***
-	 * 
-	 * @param user 	Numero do utilizador
-	 * @param msg 	Mensagem
-	 * 
-	 * @pre validUser(user)
-	 */
+	/*** ADICIONA MENSAGEM ***/
 	
 	public void addMsg(int user,String msg){
 		currentConversation.addMsg(intToUser(user), msg);
 	}
 	
 	
-	/***
-	 * 
-	 * @param user 	Numero do utilizador
-	 * @param msg 	Mensagem
-	 * 
-	 * @pre validUser(user)
-	 */
+	/*** ADICIONA MENSAGEM ENCRIPTADA ***/
 	
 	public void addEncMsg(int user, String msg){
 		currentConversation.addEncMsg(intToUser(user), msg, factor);
@@ -93,68 +65,49 @@ public class Chat {
 	}
 	
 	
-	/**
-	 * 
-	 * @param user Numero do utilizador
-	 * @pre validUser(user)
-	 * 
-	 * @return 	true Se pode editar mensagem
-	 *			false Se nao pode editar mensagem
-	 */
+	/*** VERIFICA SE PODE EDITAR A ULTIMA MENSAGEM ***/
 	
 	public boolean canEditLastMessage(int user){
 		return currentConversation.canEditLastMessage(intToUser(user));
 	}
 	
 	
-	/***
-	 * 
-	 * @param user 	Numero do utilizador
-	 * @param msg 	Mensagem
-	 * 
-	 * @pre validUser(user)
-	 */
+	/*** EDITA ULTIMA MENSAGEM ***/
 	
 	public void editLastMessage(int user, String msg){
 		currentConversation.editLastMessage(intToUser(user), msg, factor);
 	}
 	
 	
-	/**
-	 * 
-	 * @return String da ultima mensagem da conversa atual
-	 */
+	/*** DEVOLVE A ULTIMA MENSAGEM ***/
 	
 	public String getLastMsg(){
 		return currentConversation.getLastMsg();
 	}
 	
 	
-	/**
-	 * 
-	 * @return Int numero da mensagem
-	 */
+	/*** DEVOLVE O NUMERO DA MENSAGEM A PUBLICAR ***/
 	
 	public int getMsgNumber(){
 		return currentConversation.getMsgNumber();
 	}
 	
 	
-	/**
-	 * 
-	 * @param user Numero do utilizador
-	 * @pre validUser(user)
-	 * 
-	 * @return 
-	 */
+	/*** VERIFICA SE O NUMERO DE UTILIZADOR É VÁLIDO ***/
 	
-	public boolean validUser(int user){
+	public boolean validUserNumber(int user){
 		return (user == user1.getNumber() || user == user2.getNumber());
 	}
+	
+	
+	/*** VERIFICA SE O FACTOR É VÁLIDO ***/
 	
 	public static boolean validFactor(int factor){
 		return factor >= MIN_FACTOR && factor <= MAX_FACTOR;
 	}
+	
+	
+	/*** DEVOLVE O OBJECTO UTILIZADOR CORRESPONDENTE AO NUMERO DE UTILIZADOR ***/
 	
 	public User intToUser(int user){
 		if (user == user1.getNumber())
@@ -163,9 +116,15 @@ public class Chat {
 			return user2;
 	}
 	
+	
+	/*** DEVOLVE A STRING INICIAL DO LOG ***/
+	
 	public String initLog(){
 		return "Utilizador 1: "+user1.getName()+"\nUtilizador 2: "+user2.getName();
 	}
+	
+	
+	/*** DEVOLVE A STRING FORMATADA DE ACORDO COM O LOG ***/
 	
 	public String formatToLog(String msg){
 		return log.concat("\n\n**** NOVA CONVERSA ****\n").concat(msg);
