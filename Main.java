@@ -25,7 +25,7 @@ public class Main {
 		
 		String name1;	//Nome do utilizador 1
 		String name2;	//Nome do utilizador 2
-		String cmd;		//Comando introduzido pelo utilizador
+		String command;		//Comando introduzido pelo utilizador
 		
 		//Pede o nome do utilizadores, garantindo
 		//que o do segundo não é igual ao do primeiro
@@ -41,25 +41,25 @@ public class Main {
 		factor = getFactor(in);
 		
 		//Cria um novo objecto Chat
-		Chat novaConversa = new Chat(name1, name2, factor);
+		Chat newChat = new Chat(name1, name2, factor);
 		
 		//Apresenta os comandos disponíveis
 		processHelp();
 		
 		//Menu principal que interpreta comandos do utilizador
 		do{
-			cmd = processCmd(in);
-			switch(cmd){
-				case SHOW_CHAT: processShowChat(novaConversa); break;
-				case PUBLISH_MSG: processPubMsg(novaConversa, in); break;
-				case PUBLISH_ENC: processPubEnc(novaConversa, in); break;
-				case CORRECT_MSG: processCorrectMsg(novaConversa, in); break;
-				case CLOSE_CHAT: processCloseChat(novaConversa); break;
-				case SHOW_LOG: processShowLog(novaConversa); break;
+			command = processCommand(in);
+			switch(command){
+				case SHOW_CHAT: processShowChat(newChat); break;
+				case PUBLISH_MSG: processPubMsg(newChat, in); break;
+				case PUBLISH_ENC: processPubEnc(newChat, in); break;
+				case CORRECT_MSG: processCorrectMsg(newChat, in); break;
+				case CLOSE_CHAT: processCloseChat(newChat); break;
+				case SHOW_LOG: processShowLog(newChat); break;
 				case HELP: processHelp(); break;
 				default: System.out.println("Opcao inexistente.");
 			}
-		}while(cmd != EXIT);
+		}while(command != EXIT);
 		
 		System.out.println("Aplicacao terminada. Ate a proxima.");
 		//Final do programa
@@ -67,9 +67,9 @@ public class Main {
 	}
 	
 	
-	/*** ITERADOR DE COMANDOS ***/
+	/*** interpretador de comandos ***/
 
-	private static String processCmd(Scanner in){
+	private static String processCommand(Scanner in){
 		System.out.print("> ");
 		//ler o que foi introduzido passar a letra maiuscula e 
 		//tirar espaços no inicio e fim da string
@@ -79,48 +79,45 @@ public class Main {
 	
 	/*** APRESENTAR CONVERSA EM PROGRESSO ***/
 	
-	private static void processShowChat(Chat conversa){
-		if (conversa.showChat().isEmpty())
-			System.out.println("Conversa vazia.");
-		else
-			System.out.print(conversa.showChat());
+	private static void processShowChat(Chat newChat){
+		System.out.print(newChat.showChat());
 	}
 	
 	
 	/*** PUBLICAR MENSAGEM ***/
 	
-	private static void processPubMsg(Chat conversa, Scanner in){
-		if (conversa.showChat().isEmpty())
+	private static void processPubMsg(Chat newChat, Scanner in){
+		if (newChat.showChat().isEmpty())
 			System.out.println("Nova conversa iniciada");
 		
-		int user = getUserNumber(conversa, in);
-		conversa.addMsg(user, getMsg(in));
-		System.out.println("USER[" + user + "]MSG[" + conversa.getMsgNumber()+"]: Publicada");
+		int user = getUserNumber(newChat, in);
+		newChat.addMsg(user, getMsg(in));
+		System.out.println("USER[" + user + "]MSG[" + newChat.getMsgNumber()+"]: Publicada");
 	}
 	
 	
 	/*** PUBLICAR MENSAGEM ENCRIPTADA ***/
 	
-	private static void processPubEnc(Chat conversa, Scanner in){
-		if (conversa.showChat().isEmpty())
+	private static void processPubEnc(Chat newChat, Scanner in){
+		if (newChat.showChat().isEmpty())
 			System.out.println("Nova conversa iniciada");
 		
-		int user = getUserNumber(conversa, in);
-		conversa.addEncMsg(user, getMsg(in));
-		System.out.println("USER[" + user + "]MSG[" + conversa.getMsgNumber()+"]: Publicada");
+		int user = getUserNumber(newChat, in);
+		newChat.addEncMsg(user, getMsg(in));
+		System.out.println("USER[" + user + "]MSG[" + newChat.getMsgNumber()+"]: Publicada");
 	}
 	
 	
 	/*** CORRIGIR MENSAGEM ANTERIOR ***/
 	
-	private static void processCorrectMsg(Chat conversa, Scanner in){
-		if(conversa.showChat().isEmpty())
+	private static void processCorrectMsg(Chat newChat, Scanner in){
+		if(newChat.showChat().isEmpty())
 			System.out.println("Conversa Vazia.");
 		else{
-			int user = getUserNumber(conversa, in);
-			if (conversa.canEditLastMessage(user)){
-				conversa.editLastMessage(user, getMsg(in));
-				System.out.print("Mensagem Corrigida:\n"+conversa.getLastMsg());
+			int user = getUserNumber(newChat, in);
+			if (newChat.canEditLastMessage(user)){
+				newChat.editLastMessage(user, getMsg(in));
+				System.out.print("Mensagem Corrigida:\n"+newChat.getLastMsg());
 			}
 			else{
 				System.out.println("Utilizador " + user + " nao e autor da mensagem mais recente.");
@@ -131,8 +128,8 @@ public class Main {
 	
 	/*** ENCERRAR CONVERSA EM PROGRESSO ***/
 	
-	private static void processCloseChat(Chat conversa){
-		conversa.closeConversation();
+	private static void processCloseChat(Chat newChat){
+		newChat.closeConversation();
 		System.out.println("Conversa terminada.");
 	}
 
@@ -140,8 +137,8 @@ public class Main {
 
 	/*** APRESENTAR HISTORICO DE CONVERSAS ***/
 	
-	private static void processShowLog(Chat conversa) {
-		System.out.print(conversa.showLog());
+	private static void processShowLog(Chat newChat) {
+		System.out.print(newChat.showLog());
 	}
 	
 
@@ -170,15 +167,15 @@ public class Main {
 	
 	/*** PEDIR NUMERO DE UTILIZADOR ***/
 	
-	private static int getUserNumber(Chat conversa, Scanner in){
+	private static int getUserNumber(Chat newChat, Scanner in){
 		int user;
 		do{
 			System.out.print("Utilizador: ");
 			user = in.nextInt();
 			in.nextLine();
-			if (!conversa.validUserNumber(user))
+			if (!newChat.validUserNumber(user))
 				System.out.println("Utilizador desconhecido.");
-		}while(!conversa.validUserNumber(user));
+		}while(!newChat.validUserNumber(user));
 		return user;
 	}
 
