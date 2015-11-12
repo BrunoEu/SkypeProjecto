@@ -2,8 +2,8 @@ public class Chat {
 	
 	/*** CONSTANTES ***/
 	
-	private static final int MAX_FACTOR = 26;	//Factor máximo permitido
-	private static final int MIN_FACTOR = 0;	//Factor mínimo permitido
+	private static final int MAX_FACTOR = 26;
+	private static final int MIN_FACTOR = -60;
 	
 	
 	/*** VARIÁVEIS DE INSTÂNCIA ***/
@@ -15,7 +15,8 @@ public class Chat {
 
 	
 	/*** CONSTRUTOR ***/
-	 
+	// @pre validFactor(newFactor)
+	
 	public Chat(String name1, String name2, int newFactor){
 		user1 = new User(name1, 1);
 		user2 = new User(name2, 2);
@@ -43,6 +44,7 @@ public class Chat {
 	
 	
 	/*** ADICIONA MENSAGEM ***/
+	//@pre validUser(user)
 	
 	public void addMsg(int user,String msg){
 		currentConversation.addMsg(intToUser(user), msg);
@@ -50,9 +52,10 @@ public class Chat {
 	
 	
 	/*** ADICIONA MENSAGEM ENCRIPTADA ***/
+	//@pre validUser(user)
 	
 	public void addEncMsg(int user, String msg){
-		currentConversation.addEncMsg(intToUser(user), msg, factor);
+		currentConversation.addEncryptedMsg(intToUser(user), msg, factor);
 	}
 	
 	
@@ -66,6 +69,7 @@ public class Chat {
 	
 	
 	/*** VERIFICA SE PODE EDITAR A ULTIMA MENSAGEM ***/
+	//@pre validUser(user)
 	
 	public boolean canEditLastMessage(int user){
 		return currentConversation.canEditLastMessage(intToUser(user));
@@ -73,6 +77,7 @@ public class Chat {
 	
 	
 	/*** EDITA ULTIMA MENSAGEM ***/
+	//@pre validUser(user)
 	
 	public void editLastMessage(int user, String msg){
 		currentConversation.editLastMessage(intToUser(user), msg, factor);
@@ -108,6 +113,7 @@ public class Chat {
 	
 	
 	/*** DEVOLVE O OBJECTO UTILIZADOR CORRESPONDENTE AO NUMERO DE UTILIZADOR ***/
+	//@pre validUser(user)
 	
 	public User intToUser(int user){
 		if (user == user1.getNumber())
