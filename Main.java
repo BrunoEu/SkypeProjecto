@@ -15,8 +15,8 @@ public class Main {
 	private static final String EXIT = "S";
 	
 	/*
-		Nota: o método trim() é chamado ao longo
-		da classe para retirar os espaços do inicio
+		Nota: o metodo trim() e chamado ao longo
+		da classe para retirar os espacos do inicio
 		e fim da String.
 	*/
 	
@@ -48,12 +48,12 @@ public class Main {
 		if (newChat.showChat().isEmpty())
 			System.out.println("Nova conversa iniciada");
 		
-		int user = getUserNumber(newChat, in);
+		int userNumber = getUserNumber(newChat, in);
 		if(encrypted)
-			newChat.addEncMsg(user, getMsg(in));
+			newChat.addEncMsg(userNumber, getMsg(in));
 		else
-			newChat.addMsg(user, getMsg(in));
-		System.out.print(newChat.formatMessage(user, "Publicada"));
+			newChat.addMsg(userNumber, getMsg(in));
+		System.out.print(newChat.formatMessage(userNumber, "Publicada"));
 	}
 	
 	
@@ -61,13 +61,13 @@ public class Main {
 		if(newChat.showChat().isEmpty())
 			System.out.println("Conversa Vazia.");
 		else{
-			int user = getUserNumber(newChat, in);
-			if (newChat.canEditLastMessage(user)){
-				newChat.editLastMessage(user, getMsg(in));
+			int userNumber = getUserNumber(newChat, in);
+			if (newChat.canEditLastMessage(userNumber)){
+				newChat.editLastMessage(userNumber, getMsg(in));
 				System.out.print("Mensagem Corrigida:\n"+newChat.getLastMsg());
 			}
 			else{
-				System.out.println("Utilizador " + user + " nao e autor da mensagem mais recente.");
+				System.out.println("Utilizador " + userNumber + " nao e autor da mensagem mais recente.");
 			}
 		}
 	}
@@ -107,20 +107,20 @@ public class Main {
 	
 	
 	private static int getUserNumber(Chat newChat, Scanner in){
-		int user;
+		int userNumber;
 		do{
 			System.out.print("Utilizador: ");
-			user = in.nextInt();
+			userNumber = in.nextInt();
 			in.nextLine();
-			if (!newChat.validUserNumber(user))
+			if (!newChat.validUserNumber(userNumber))
 				System.out.println("Utilizador desconhecido.");
-		}while(!newChat.validUserNumber(user));
-		return user;
+		}while(!newChat.validUserNumber(userNumber));
+		return userNumber;
 	}
 
 	
-	private static String getUsername(int number, Scanner in){
-		System.out.print("Nome do Utilizador "+number+": ");
+	private static String getUsername(int userNumber, Scanner in){
+		System.out.print("Nome do Utilizador "+userNumber+": ");
 		return in.nextLine();
 	}
 	
@@ -155,7 +155,7 @@ public class Main {
 		do{
 			name2 = getUsername(2, in);
 			if (name2.trim().equalsIgnoreCase(name1.trim()))
-				System.out.println("Nome já em utilização. "
+				System.out.println("Nome ja em utilizacao. "
 				+ "Por favor introduza um nome diferente.");
 		}while(name2.trim().equalsIgnoreCase(name1.trim()));
 		
