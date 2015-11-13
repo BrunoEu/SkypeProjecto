@@ -10,7 +10,7 @@ public class Conversation {
 	private static final User NOBODY = new User ("", 0);
 	
 	
-	/*** variáveis de instância ***/
+	/*** variaveis de instancia ***/
 	
 	private int msgNumber;
 	private String conversation;
