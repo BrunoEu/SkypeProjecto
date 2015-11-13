@@ -3,10 +3,10 @@ public class Chat {
 	/*** constantes ***/
 	
 	private static final int MAX_FACTOR = 26;
-	private static final int MIN_FACTOR = -60;
+	private static final int MIN_FACTOR = 0;
 	
 	
-	/*** variáveis de instância ***/
+	/*** variaveis de instancia ***/
 	
 	private int factor;
 	private User user1, user2;
@@ -36,17 +36,17 @@ public class Chat {
 	}
 	
 	
-	//@pre validUser(user)
+	//@pre validUserNumber(userNumber)
 	
-	public void addMsg(int user,String msg){
-		currentConversation.addMsg(intToUser(user), msg);
+	public void addMsg(int userNumber,String msg){
+		currentConversation.addMsg(intToUser(userNumber), msg);
 	}
 	
 	
-	//@pre validUser(user)
+	//@pre validUserNumber(userNumber)
 	
-	public void addEncMsg(int user, String msg){
-		currentConversation.addEncryptedMsg(intToUser(user), msg, factor);
+	public void addEncMsg(int userNumber, String msg){
+		currentConversation.addEncryptedMsg(intToUser(userNumber), msg, factor);
 	}
 	
 	
@@ -57,22 +57,23 @@ public class Chat {
 	}
 	
 
-	//@pre validUser(user)
+	//@pre validUserNumber(userNumber)
 	
-	public boolean canEditLastMessage(int user){
-		return currentConversation.canEditLastMessage(intToUser(user));
+	public boolean canEditLastMessage(int userNumber){
+		return currentConversation.canEditLastMessage(intToUser(userNumber));
 	}
 	
 	
-	//@pre validUser(user)
+	//@pre validUserNumber(userNumber)
 	
-	public void editLastMessage(int user, String msg){
-		currentConversation.editLastMessage(intToUser(user), msg, factor);
+	public void editLastMessage(int useNumber, String msg){
+		currentConversation.editLastMessage(intToUser(useNumber), msg, factor);
 	}
 	
+	//@pre validUserNumber(userNumber)
 	
-	public String formatMessage(int user, String msg){
-		return currentConversation.formatMessage(intToUser(user), msg);
+	public String formatMessage(int userNumber, String msg){
+		return currentConversation.formatMessage(intToUser(userNumber), msg);
 	}
 	
 	
@@ -80,14 +81,15 @@ public class Chat {
 		return currentConversation.getLastMsg();
 	}
 	
-	
+	// Metodo inutil ?
+	/*
 	public int getMsgNumber(){
 		return currentConversation.getMsgNumber();
 	}
+	*/
 	
-	
-	public boolean validUserNumber(int user){
-		return (user == user1.getNumber() || user == user2.getNumber());
+	public boolean validUserNumber(int userNumber){
+		return (userNumber == user1.getNumber() || userNumber == user2.getNumber());
 	}
 	
 	
@@ -96,10 +98,10 @@ public class Chat {
 	}
 	
 
-	//@pre validUser(user)
+	//@pre validUserNumber(userNumber)
 	
-	public User intToUser(int user){
-		if (user == user1.getNumber())
+	public User intToUser(int userNumber){
+		if (userNumber == user1.getNumber())
 			return user1;
 		else
 			return user2;
@@ -111,8 +113,9 @@ public class Chat {
 	}
 	
 	
-	public String formatToLog(String msg){
-		return log.concat("\n\n**** NOVA CONVERSA ****\n").concat(msg);
+	public String formatToLog(String msgs){
+		return log.concat("\n\n**** NOVA CONVERSA ****\n").concat(msgs);
 	}
+	
 	
 }
