@@ -1,13 +1,13 @@
 
 public class User {
 
-	/*** VARIÁVEIS DE INSTÂNCIA ***/
+	/*** variáveis de instância ***/
 	
-	private String userName;	//Nome do utilizador
-	private int userNumber;		//Numero do utilizador
+	private String userName;
+	private int userNumber;
 	
 	
-	/*** CONSTRUTOR ***/
+	/*** construtor ***/
 	
 	public User(String name, int number){
 		userName = name;
@@ -15,14 +15,10 @@ public class User {
 	}
 	
 	
-	/*** DEVOLVE O NOME DO UTILIZADOR ***/
-	
 	public String getName(){
 		return userName;
 	}
 	
-	
-	/*** DEVOLVE O NUMERO DO UTILIZADOR ***/
 	
 	public int getNumber(){
 		return userNumber;
