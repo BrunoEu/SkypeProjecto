@@ -1,6 +1,6 @@
 
 public class User {
-//teste cenas
+
 	/*** variáveis de instância ***/
 	
 	private String userName;
