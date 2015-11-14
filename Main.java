@@ -175,9 +175,10 @@ public class Main {
 				case CLOSE_CHAT: processCloseChat(newChat); break;
 				case SHOW_LOG: processShowLog(newChat); break;
 				case HELP: processHelp(); break;
+				case EXIT: break;
 				default: System.out.println("Opcao inexistente.");
 			}
-		}while(command != EXIT);
+		}while(!command.equals(EXIT));
 		
 		System.out.println("Aplicacao terminada. Ate a proxima.");
 	
