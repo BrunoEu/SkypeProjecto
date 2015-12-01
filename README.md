@@ -1,4 +1,115 @@
 # SkypeProjecto
+
+Mestrado Integrado em Engenharia Informatica
+Introdução à Programação
+Trabalho Prático 2015/2016
+1 Introdução
+Este documento descreve a segunda fase do trabalho prático da disciplina de Introdução à
+Programação do 1º ano do Mestrado Integrado em Engenharia Informatica.
+Reiterase
+que o trabalho deve ser realizado em grupos de 2 alunos. Excepções têm que ser
+explicitamente autorizadas pelo regente da cadeira.
+Os alunos podem e devem tirar todas as dúvidas com os docentes da disciplina, bem como
+conversar com os colegas e discutir soluções, sempre respeitando os princípios do Código de
+Ética (disponível em http://di.fct.unl.pt/mei/codigoEticaDIv1.0MEI.pdf ).
+2 Descrição do Problema
+Pretendese
+agora estender o emulador de c hat ou t alk , permitindo não limitar o número de
+utilizadores. Nesta versão do projecto, podemse
+criar tantos utilizadores quantos o utilizador
+final (quem usa a aplicação) quiser. Os utilizadores são identificados por meio dum simples
+número inteiro, que começa em um e é incrementado em uma unidade quando se cria mais um
+utilizador. Além desse número, o sistema guarda o nome de cada utilizador (uma sequência de
+letras) que deve também ser único. A criação dos utilizadores já não é feita no início, mas sim
+através de um comando específico.
+O sistema continua a guardar conversas entre apenas dois utilizadores. Cada conversa
+(sempre só entre dois utilizadores) tem agora que ser explicitamente iniciada, através de um
+comando (onde se identificam os utilizadores envolvidos pelo
+seu i d inteiro e
+o fator de
+translação). Note que não se quer distinguir a conversa entre o utilizador 2 e 5 da entre o 5 e o
+2 (i.e., a ordem não é relevante).
+Todos os comandos anteriores (excepto Ajuda e Sair) passam a identificar explicitamente os
+dois utilizadores envolvidos, através dos seus i ds . Pretendese
+também validar os argumentos
+fornecidos, permitindo ao utilizador da aplicação corrigir argumentos incorrectos ou terminar o
+comando.
+Nas novas funcionalidades, está a possibilidade de listar todos os utilizadores com quem dado
+utilizador já conversou e a de listar todos os utilizadores do sistema.
+Deve ainda ser possível gravar o estado do sistema para um ficheiro (o que acontecerá sempre
+que se sair da aplicação) e carregar um estado previamente gravado para o sistema
+(substituindo o estado corrente). Entendese
+por estado o conjunto dos utilizadores e conversas
+mantidas entre eles.
+3 Comandos
+Além dos comandos referidos na fase anterior, pretendese
+que sejam implementados os
+seguintes comandos adicionais.
+CNU Criar
+Novo Utilizador
+INC Iniciar
+Nova Conversa
+LUC Listar
+Utilizadores Contactados
+LTU Listar
+Todos os Utilizadores
+GEA Gravar
+Estado da Aplicação para ficheiro
+CAF Carregar
+Aplicação de Ficheiro
+3.1 CNU:Criar Novo Utilizador
+O comando tem como argumento o nome do utilizador a criar. Se o nome já existe, o sistema
+responde:
+Nome em utilização. Escolha um novo nome.
+Se o nome não existe, é criado o utilizador e a aplicação retorna o seu id :
+Utilizador nome com id id criado com sucesso.
+3.2 INC: Iniciar Nova Conversa
+> INC id1 id2 factor
+Este comando inclui três argumentos: (1) o i d do utilizador que inicia a conversa; (2) o i d do
+outro utilizador que participará na conversa e (3) o factor de translação a usar para encriptar
+mensagens na conversa.
+Se algum dos utilizadores não existe, voltase
+a pedir o seu i d (até ser dado um válido ou um
+caractér):
+O utilizador id não existe. Dê por favor um identificador válido.
+Se for então dado um carácter (ou o espaço em branco) em vez de um inteiro, o comando não
+tem efeito e voltase
+a apresentar o menú de comandos. Este é o comportamento de todos os
+comandos com argumentos.
+O factor de translação deve também ser validado, pois tem que ser um natural não nulo menor
+que 27.
+Quando são identificados dois utilizadores existentes e um factor válido, verificase
+uma de
+duas situações: ou não há conversa em progresso entre esses dois utilizadores, e o sistema
+emite uma mensagem de sucesso, ou já há uma conversa em progresso entre esses dois
+utilizadores, e o sistema emite uma mensagem de insucesso e termina.
+3.3 LUC:Listar Utilizadores Contactados
+O comando tem como argumento o id dum utilizador. Se o id não existe, o sistema responde:
+Utilizador desconhecido. Escolha um novo id.
+Se o utilizador introduzir um algarismo, o comando termina. Se o i d existe, a aplicação retorna
+os nomes e ids dos utilizadores com quem falou o utilizador dado em argumento do comando:
+Utilizadores contactados por nome (id) : nome1 id1, …, nomek idk .
+3.4 LTU: Listar Todos os Utilizadores
+O comando devolve a lista dos nomes dos utilizadores do sistema, Se não houver utilizadores,
+o sistema emite uma mensagem a dizêlo
+explicitamente.
+4 A Entrega
+Devem ser entregues todos os ficheiros .java, num único arquivo ZIP, e a listagem completa
+desses ficheiros em papel. O arquivo ZIP deve ser entregue através do moodle. O arquivo
+deverá ter um nome com o seguinte formato T urnoPrático_NAluno1_NAluno2 ou
+TurnoPrático_NAluno1_TurnoPrático_NAluno2 .
+Por exemplo dois alunos do turno teóricoprático
+TP2, com os números 12345 e 13456 deverão
+entregar no moodle um zip com o nome TP2_12345_13456. Se os alunos forem de turnos
+diferentes, por exemplo do TP1 o 12345 e do TP2 o 13456, o ficheiro tem o nome
+TP1_12345_TP2_13456, devendo os turnos e os números dos alunos figurar no nome do ZIP
+por ordem crescente.
+Data Limite de Entrega: O trabalho deverá ser entregue via moodle até às 0h do dia 14 de
+Dezembro de 2015 (de domingo para segunda).
+A entrega em papel, na secretaria do DI, deverá ser realizada durante o dia 14 de Dezembro de
+2015 (segundafeira),
+até às 16:30.
+
 1º Projecto de IP
 
 
