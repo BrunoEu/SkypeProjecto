@@ -21,7 +21,7 @@ public class Conversation {
 	
 	/*** construtor ***/
 	
-	public Conversation(User newUser1, User newUser2){
+	public Conversation(){
 		reset();
 	}
 	
