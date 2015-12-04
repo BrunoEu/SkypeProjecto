@@ -21,8 +21,8 @@ public class Chat {
 		user1 = new User(name1, 1);
 		user2 = new User(name2, 2);
 		factor = newFactor;
-		log = initLog();
-		currentConversation = new Conversation(user1, user2);
+		log = initializeLog();
+		currentConversation = new Conversation();
 	}
 	
 	
@@ -45,7 +45,7 @@ public class Chat {
 	
 	//@pre validUserNumber(userNumber)
 	
-	public void addEncMsg(int userNumber, String msg){
+	public void addEncryptedMsg(int userNumber, String msg){
 		currentConversation.addEncryptedMsg(intToUser(userNumber), msg, factor);
 	}
 	
@@ -70,23 +70,11 @@ public class Chat {
 		currentConversation.editLastMessage(intToUser(useNumber), msg, factor);
 	}
 	
-	//@pre validUserNumber(userNumber)
-	
-	public String formatMessage(int userNumber, String msg){
-		return currentConversation.formatMessage(intToUser(userNumber), msg);
-	}
-	
 	
 	public String getLastMsg(){
 		return currentConversation.getLastMsg();
 	}
 	
-	// Metodo inutil ?
-	/*
-	public int getMsgNumber(){
-		return currentConversation.getMsgNumber();
-	}
-	*/
 	
 	public boolean validUserNumber(int userNumber){
 		return (userNumber == user1.getNumber() || userNumber == user2.getNumber());
@@ -108,11 +96,18 @@ public class Chat {
 	}
 	
 	
-	public String initLog(){
+	public String initializeLog(){
 		return "Utilizador 1: "+ user1.getName() +"\nUtilizador 2: "+ user2.getName();
 	}
 	
 	
+	//@pre validUserNumber(userNumber)
+	
+	public String formatMessage(int userNumber, String msg){
+		return currentConversation.formatMessage(intToUser(userNumber), msg);
+	}
+
+
 	public String formatToLog(String msgs){
 		return log.concat("\n\n**** NOVA CONVERSA ****\n").concat(msgs);
 	}
