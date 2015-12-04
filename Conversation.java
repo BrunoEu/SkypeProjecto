@@ -7,7 +7,6 @@ public class Conversation {
 	private static final char FIRST_UPPER_CASE_CHAR = 'A';
 	private static final char FIRST_LOWER_CASE_CHAR = 'a';
 	private static final int ALPHABET_LENGTH = 26;
-	private static final User NOBODY = new User ("", 0);
 	
 	
 	/*** variaveis de instancia ***/
@@ -134,7 +133,7 @@ public class Conversation {
 	public void reset (){
 		lastMsg = "";
 		lastMsgEncrypted = false;
-		lastUser = NOBODY;
+		lastUser = User.NOBODY;
 		conversation = "";
 		msgNumber = 0;
 	}
