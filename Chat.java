@@ -9,8 +9,6 @@ public class Chat {
 	/*** variaveis de instancia ***/
 	
 	private int factor;
-	private User[][] UserArray;
-	
 	private User user1, user2;
 	private String log;
 	private Conversation currentConversation;
