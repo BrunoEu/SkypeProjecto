@@ -24,7 +24,6 @@ public class Main {
 		return in.nextLine().toUpperCase().trim();
 	}
 	
-	
 	private static void processShowChat(Chat newChat){
 		if(newChat.showChat().isEmpty())
 			System.out.println("Conversa Vazia.");
