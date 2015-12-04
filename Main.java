@@ -1,6 +1,5 @@
 import java.util.Scanner;
 
-
 public class Main {
 	
 	/***************** constantes *****************/
@@ -31,18 +30,15 @@ public class Main {
 			System.out.println("Conversa Vazia.");
 		else
 			System.out.print(newChat.showChat());
-	}
-	
+	}	
 	
 	private static void processPlainMsg(Chat newChat, Scanner in){
 		publishMsg(newChat, in, false);
-	}
-	
+	}	
 	
 	private static void processEncryptedMsg(Chat newChat, Scanner in){
 		publishMsg(newChat, in, true);
-	}
-	
+	}	
 
 	private static void publishMsg(Chat newChat, Scanner in, boolean encrypted){
 		if (newChat.showChat().isEmpty())
@@ -50,12 +46,11 @@ public class Main {
 		
 		int userNumber = getUserNumber(newChat, in);
 		if(encrypted)
-			newChat.addEncMsg(userNumber, getMsg(in));
+			newChat.addEncryptedMsg(userNumber, getMsg(in));
 		else
 			newChat.addMsg(userNumber, getMsg(in));
 		System.out.print(newChat.formatMessage(userNumber, "Publicada"));
-	}
-	
+	}	
 	
 	private static void processCorrectMsg(Chat newChat, Scanner in){
 		if(newChat.showChat().isEmpty())
@@ -70,8 +65,7 @@ public class Main {
 				System.out.println("Utilizador " + userNumber + " nao e autor da mensagem mais recente.");
 			}
 		}
-	}
-	
+	}	
 	
 	private static void processCloseChat(Chat newChat){
 		newChat.closeConversation();
@@ -80,7 +74,7 @@ public class Main {
 
 	
 	private static void processShowLog(Chat newChat) {
-		if (newChat.showLog().equals(newChat.initLog()))
+		if (newChat.showLog().equals(newChat.initializeLog()))
 			System.out.println("Nao ha conversas anteriores");
 		else
 			System.out.print(newChat.showLog());
@@ -183,7 +177,6 @@ public class Main {
 		System.out.println("Aplicacao terminada. Ate a proxima.");
 	
 		in.close();
-	}
-	
+	}	
 	
 }
