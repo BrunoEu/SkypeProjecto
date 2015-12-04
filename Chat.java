@@ -1,140 +1,131 @@
-public class Conversation {
-	
+
+public class Chat {
 	
 	/*** constantes ***/
 	
-	private static final char FIRST_UPPER_CASE_CHAR = 'A';
-	private static final char FIRST_LOWER_CASE_CHAR = 'a';
-	private static final int ALPHABET_LENGTH = 26;
+	private static final int MAX_FACTOR = 26;
+	private static final int MIN_FACTOR = 0;
 	
 	
 	/*** variaveis de instancia ***/
 	
-	private int msgNumber;
-	private String conversation;
-	private String lastMsg;
-	private boolean lastMsgEncrypted;
-	private User lastUser;
+	private int factor;
+	private UserGroup users;
 	
+	private String log;
+	private Conversation currentConversation;
+
 	
 	/*** construtor ***/
+	// @pre validFactor(newFactor)
 	
-	public Conversation(){
-		reset();
+	public Chat(String name1, String name2, int newFactor){
+		users = new UserGroup();
+		users.addUser(new User(name1, 1));
+		users.addUser(new User(name2, 2));
+		factor = newFactor;
+		log = initializeLog();
+		currentConversation = new Conversation();
+	}
+	
+	public Chat(UserGroup users, int newFactor){
+		this.users = users;
+		factor = newFactor;
+		log = initializeLog();
+		currentConversation = new Conversation();
+	}
+	
+	public String showChat(){
+		return currentConversation.showConversation();
 	}
 	
 	
-	public String showConversation (){
-		return conversation + lastMsg;
+	public String showLog(){
+		return log;
 	}
 	
 	
-	public void addMsg(User user, String msg){
-		msgNumber++;
-		lastUser = user;
-		conversation = conversation.concat(lastMsg);
-		lastMsg = formatMessage(user, msg);
-		lastMsgEncrypted = false;
+	//@pre validUserNumber(userNumber)
+	
+	public void addMsg(int userNumber,String msg){
+		currentConversation.addMsg(intToUser(userNumber), msg);
 	}
 	
 	
-	//@pre factor > 0
+	//@pre validUserNumber(userNumber)
 	
-	public void addEncryptedMsg(User user, String msg, int factor){
-		addMsg(user, encryptMsg(msg, factor));
-		lastMsgEncrypted = true;
+	public void addEncryptedMsg(int userNumber, String msg){
+		currentConversation.addEncryptedMsg(intToUser(userNumber), msg, factor);
 	}
 	
 	
-	//@pre factor > 0
-	
-	private String encryptMsg(String msg, int factor){
-		int index = 0;
-		String msgEnc = "";
-		char charToEncrypt, charEncrypted;
-		
-		while(index < msg.length()){
-			charToEncrypt = msg.charAt(index);
-			charEncrypted = encryptChar(charToEncrypt, factor);
-			msgEnc += charEncrypted;
-			index++;
-		}
-		
-		return msgEnc;
-	}
-	
-	
-	//@pre factor > 0
-	
-	private char encryptChar(char charToEncrypt, int factor){
-		char charEncrypted;
-		char firstChar;
-		
-		if(validLowerCaseChar(charToEncrypt) || validUpperCaseChar(charToEncrypt)){
-			if (validLowerCaseChar(charToEncrypt)){
-				firstChar = FIRST_LOWER_CASE_CHAR;
-			}
-			else {
-				firstChar = FIRST_UPPER_CASE_CHAR;
-			}
-			
-			charEncrypted = (char)((charToEncrypt - firstChar + factor) % ALPHABET_LENGTH + firstChar);
-		}
-		
-		else{
-			charEncrypted = charToEncrypt;
-		}
-		
-		return charEncrypted;
-	}
-	
-	
-	private static boolean validUpperCaseChar(char a){
-		return a >= 'A' && a <= 'Z' ;
+	public void closeConversation(){
+		String conversation = currentConversation.showConversation();
+		log = formatToLog(conversation);
+		currentConversation.reset();
 	}
 	
 
-	private static boolean validLowerCaseChar(char a){
-		return a >= 'a' && a <= 'z' ;
-	}
+	//@pre validUserNumber(userNumber)
 	
-
-	public String formatMessage(User user,String message){
-		return "USER[" + user.getNumber() + "]MSG[" + getMsgNumber() +"]: " + message +"\n";
+	public boolean canEditLastMessage(int userNumber){
+		return currentConversation.canEditLastMessage(intToUser(userNumber));
 	}
 	
 	
-	//@pre canEditLastMessage(user)
+	//@pre validUserNumber(userNumber)
 	
-	public void editLastMessage(User user, String message, int factor){
-		if (lastMsgEncrypted)
-			lastMsg = formatMessage(user, encryptMsg(message, factor));
-		else
-			lastMsg = formatMessage(user, message);	
-	}
-	
-
-	public boolean canEditLastMessage(User user){
-		return lastUser.getNumber() == user.getNumber();
-	}
-	
-	
-	public int getMsgNumber(){
-		return msgNumber;
+	public void editLastMessage(int useNumber, String msg){
+		currentConversation.editLastMessage(intToUser(useNumber), msg, factor);
 	}
 	
 	
 	public String getLastMsg(){
-		return lastMsg;
+		return currentConversation.getLastMsg();
 	}
 	
 	
-	public void reset (){
-		lastMsg = "";
-		lastMsgEncrypted = false;
-		lastUser = User.NOBODY;
-		conversation = "";
-		msgNumber = 0;
+	public boolean validUserNumber(int userNumber){
+		return users.hasUser(userNumber);
 	}
+	
+	
+	public static boolean validFactor(int factor){
+		return factor >= MIN_FACTOR && factor <= MAX_FACTOR;
+	}
+	
+
+	//@pre validUserNumber(userNumber)
+	
+	public User intToUser(int userNumber){
+		return users.getUser(userNumber);
+	}
+	
+	
+	public String initializeLog(){
+		String result = "";
+		User user;
+		users.initializIterator();
+		
+		while(users.hasNext()){
+			user = users.next();
+			result += "Utilizador "+ user.getNumber() +": "+ user.getName() +"\n";
+		}
+		
+		return result;
+	}
+	
+	
+	//@pre validUserNumber(userNumber)
+	
+	public String formatMessage(int userNumber, String msg){
+		return currentConversation.formatMessage(intToUser(userNumber), msg);
+	}
+
+
+	public String formatToLog(String msgs){
+		return log.concat("\n**** NOVA CONVERSA ****\n").concat(msgs);
+	}
+	
 	
 }
