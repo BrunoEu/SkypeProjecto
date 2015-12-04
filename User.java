@@ -1,8 +1,8 @@
-
 public class User {
 
-	/*** variáveis de instância ***/
+	public static User NOBODY = new User("",0);
 	
+	/*** varaveis de instancia ***/
 	private String userName;
 	private int userNumber;
 	
@@ -22,6 +22,10 @@ public class User {
 	
 	public int getNumber(){
 		return userNumber;
+	}
+	
+	public boolean equals(User other){
+		return getNumber() == other.getNumber();
 	}
 	
 }
