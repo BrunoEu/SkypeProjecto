@@ -1,7 +1,7 @@
 
 public class User {
 
-	/*** variáveis de instância ***/
+	/*** varaveis de instancia ***/
 	
 	private String userName;
 	private int userNumber;
