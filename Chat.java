@@ -19,10 +19,10 @@ public class Chat {
 	/*** construtor ***/
 	// @pre validFactor(newFactor)
 	
-	public Chat(String name1, String name2, int newFactor){
+	public Chat(String name1, String name2, int id1, int id2, int newFactor){
 		users = new UserGroup();
-		users.addUser(new User(name1, 1));
-		users.addUser(new User(name2, 2));
+		users.addUser(new User(name1, id1));
+		users.addUser(new User(name2, id2));
 		factor = newFactor;
 		log = initializeLog();
 		currentConversation = new Conversation();
