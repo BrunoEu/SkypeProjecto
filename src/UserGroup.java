@@ -86,7 +86,6 @@ public class UserGroup {
 	
 	public boolean hasUsers(int[] userNumbers){
 		for(int i = 0; i < userNumbers.length; i++){
-			//sera melhor fazer assim a preguiçoso ou usar uma flag ?
 			if(!hasUser(userNumbers[i])){
 				return false;
 			}
@@ -144,5 +143,17 @@ public class UserGroup {
 		return group[currentUser++];
 	}
 
+	public boolean equals(UserGroup groupToCompare){
+		
+		if(this.getNumberUsers() == groupToCompare.getNumberUsers()){
+			for(int i = 0; i < groupCounter; i++)
+				if(!groupToCompare.hasUser(group[i]))
+					return false;
+			return true;
+		}
+		
+		return false;
+	}
+	
 	
 }

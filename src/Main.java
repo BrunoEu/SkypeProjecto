@@ -19,6 +19,38 @@ public class Main {
 		e fim da String.
 	*/
 	
+	public static void main(String[] args) {
+		
+		Scanner in = new Scanner(System.in);
+
+		Facade facade = new Facade();
+		
+		String command;
+		
+		processHelp();
+		
+		do{
+			command = processCommand(in);
+			switch(command){
+				case "CNU": processCreateUser(in); break;
+				case "INC": processNewChat(in); break;
+				case SHOW_CHAT: processShowChat(newChat); break;
+				case PUBLISH_MSG: processPlainMsg(newChat, in); break;
+				case PUBLISH_ENC: processEncryptedMsg(newChat, in); break;
+				case CORRECT_MSG: processCorrectMsg(newChat, in); break;
+				case CLOSE_CHAT: processCloseChat(newChat); break;
+				case SHOW_LOG: processShowLog(newChat); break;
+				case HELP: processHelp(); break;
+				case EXIT: break;
+				default: System.out.println("Opcao inexistente.");
+			}
+		}while(!command.equals(EXIT));
+		
+		System.out.println("Aplicacao terminada. Ate a proxima.");
+	
+		in.close();
+	}
+
 	private static String processCommand(Scanner in){
 		System.out.print("> ");
 		return in.nextLine().toUpperCase().trim();
@@ -130,52 +162,6 @@ public class Main {
 		}while(!Chat.validFactor(factor));
 		
 		return factor;
-	}
-
-
-	public static void main(String[] args) {
-		
-		Scanner in = new Scanner(System.in);
-		
-		int factor;
-		
-		String name1;
-		String name2;
-		String command;
-	
-		name1 = getUsername(1, in);
-		
-		do{
-			name2 = getUsername(2, in);
-			if (name2.trim().equalsIgnoreCase(name1.trim()))
-				System.out.println("Nome ja em utilizacao. "
-				+ "Por favor introduza um nome diferente.");
-		}while(name2.trim().equalsIgnoreCase(name1.trim()));
-		
-		factor = getFactor(in);
-		
-		Chat newChat = new Chat(name1, name2, factor);
-		
-		processHelp();
-		
-		do{
-			command = processCommand(in);
-			switch(command){
-				case SHOW_CHAT: processShowChat(newChat); break;
-				case PUBLISH_MSG: processPlainMsg(newChat, in); break;
-				case PUBLISH_ENC: processEncryptedMsg(newChat, in); break;
-				case CORRECT_MSG: processCorrectMsg(newChat, in); break;
-				case CLOSE_CHAT: processCloseChat(newChat); break;
-				case SHOW_LOG: processShowLog(newChat); break;
-				case HELP: processHelp(); break;
-				case EXIT: break;
-				default: System.out.println("Opcao inexistente.");
-			}
-		}while(!command.equals(EXIT));
-		
-		System.out.println("Aplicacao terminada. Ate a proxima.");
-	
-		in.close();
 	}	
 	
 }

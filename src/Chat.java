@@ -101,6 +101,9 @@ public class Chat {
 		return users.getUser(userNumber);
 	}
 	
+	public boolean userGroupEquals(UserGroup userGroup){
+		return(users.equals(userGroup));
+	}
 	
 	public String initializeLog(){
 		String result = "";
