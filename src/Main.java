@@ -1,9 +1,15 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
 	
+	
 	/***************** constantes *****************/
-
+	
+	private static final String CREATE_USER = "CNU";
+	private static final String NEW_CHAT = "INC";
+	private static final String SHOW_CONTACTED_USERS = "LUC";
+	private static final String SHOW_ALL_USERS = "LTU";
 	private static final String SHOW_CHAT = "VCP";
 	private static final String PUBLISH_MSG = "PNM";
 	private static final String PUBLISH_ENC = "PME";
@@ -27,22 +33,29 @@ public class Main {
 		
 		String command;
 		
+		
 		processHelp();
 		
 		do{
 			command = processCommand(in);
-			switch(command){
-				case "CNU": processCreateUser(in); break;
-				case "INC": processNewChat(in); break;
-				case SHOW_CHAT: processShowChat(newChat); break;
-				case PUBLISH_MSG: processPlainMsg(newChat, in); break;
-				case PUBLISH_ENC: processEncryptedMsg(newChat, in); break;
-				case CORRECT_MSG: processCorrectMsg(newChat, in); break;
-				case CLOSE_CHAT: processCloseChat(newChat); break;
-				case SHOW_LOG: processShowLog(newChat); break;
-				case HELP: processHelp(); break;
-				case EXIT: break;
-				default: System.out.println("Opcao inexistente.");
+			try{
+				switch(command){
+					case CREATE_USER: processCreateUser(facade, in); break;
+					case NEW_CHAT: processNewChat(facade, in); break;
+					case SHOW_CONTACTED_USERS: processShowContactedUsers(facade, in); break;
+					case SHOW_ALL_USERS: processShowAllUsers(facade); break;
+					case SHOW_CHAT: processShowChat(facade); break;
+					case PUBLISH_MSG: processPlainMsg(facade, in); break;
+					case PUBLISH_ENC: processEncryptedMsg(facade, in); break;
+					case CORRECT_MSG: processCorrectMsg(facade, in); break;
+					case CLOSE_CHAT: processCloseConversation(facade); break;
+					case SHOW_LOG: processShowLog(facade); break;
+					case HELP: processHelp(); break;
+					case EXIT: break;
+					default: System.out.println("Opcao inexistente.");
+				}
+			} catch(InputMismatchException exception){
+				System.out.println("ERRO: Input Invalido.");
 			}
 		}while(!command.equals(EXIT));
 		
@@ -56,41 +69,55 @@ public class Main {
 		return in.nextLine().toUpperCase().trim();
 	}
 	
-	private static void processShowChat(Chat newChat){
-		if(newChat.showChat().isEmpty())
+	private static void processCreateUser(Facade facade, Scanner in){
+		facade.creatUser(getUsername(facade, in));
+	}
+	
+	private static void processNewChat(Facade facade, Scanner in)throws InputMismatchException{
+		int[] userIds = getUsersIds(facade, in);
+		
+		if(facade.hasChat(userIds))
+			System.out.println("Chat existente.");
+		
+		else
+			facade.createChat(getUsersIds(facade, in), getFactor(in));
+	}
+	
+	private static void processShowChat(Facade facade, Scanner in)throws InputMismatchException{
+		if(facade.showChat().isEmpty())
 			System.out.println("Conversa Vazia.");
 		else
-			System.out.print(newChat.showChat());
+			System.out.print(facade.showChat());
 	}	
 	
-	private static void processPlainMsg(Chat newChat, Scanner in){
-		publishMsg(newChat, in, false);
+	private static void processPlainMsg(Chat facade, Scanner in)throws InputMismatchException{
+		publishMsg(facade, in, false);
 	}	
 	
-	private static void processEncryptedMsg(Chat newChat, Scanner in){
-		publishMsg(newChat, in, true);
+	private static void processEncryptedMsg(Chat facade, Scanner in)throws InputMismatchException{
+		publishMsg(facade, in, true);
 	}	
 
-	private static void publishMsg(Chat newChat, Scanner in, boolean encrypted){
-		if (newChat.showChat().isEmpty())
+	/*private static void publishMsg(Chat facade, Scanner in, boolean encrypted)throws InputMismatchException{
+		if (facade.showChat().isEmpty())
 			System.out.println("Nova conversa iniciada");
 		
-		int userNumber = getUserNumber(newChat, in);
+		int userNumber = getUserNumber(facade, in);
 		if(encrypted)
-			newChat.addEncryptedMsg(userNumber, getMsg(in));
+			facade.addEncryptedMsg(userNumber, getMsg(in));
 		else
-			newChat.addMsg(userNumber, getMsg(in));
-		System.out.print(newChat.formatMessage(userNumber, "Publicada"));
-	}	
+			facade.addMsg(userNumber, getMsg(in));
+		System.out.print(facade.formatMessage(userNumber, "Publicada"));
+	}*/	
 	
-	private static void processCorrectMsg(Chat newChat, Scanner in){
-		if(newChat.showChat().isEmpty())
+	private static void processCorrectMsg(Chat facade, Scanner in)throws InputMismatchException{
+		if(facade.showChat().isEmpty())
 			System.out.println("Conversa Vazia.");
 		else{
-			int userNumber = getUserNumber(newChat, in);
-			if (newChat.canEditLastMessage(userNumber)){
-				newChat.editLastMessage(userNumber, getMsg(in));
-				System.out.print("Mensagem Corrigida:\n"+newChat.getLastMsg());
+			int userNumber = getUserNumber(facade, in);
+			if (facade.canEditLastMessage(userNumber)){
+				facade.editLastMessage(userNumber, getMsg(in));
+				System.out.print("Mensagem Corrigida:\n"+facade.getLastMsg());
 			}
 			else{
 				System.out.println("Utilizador " + userNumber + " nao e autor da mensagem mais recente.");
@@ -98,21 +125,21 @@ public class Main {
 		}
 	}	
 	
-	private static void processCloseChat(Chat newChat){
-		newChat.closeConversation();
+	private static void processCloseConversation(Facade facade, Scanner in)throws InputMismatchException{
+		facade.closeConversation(getUsersIds(facade, in));
 		System.out.println("Conversa terminada.");
 	}
 
 	
-	private static void processShowLog(Chat newChat) {
-		if (newChat.showLog().equals(newChat.initializeLog()))
+	private static void processShowLog(Chat facade)throws InputMismatchException{
+		if (facade.showLog().equals(facade.initializeLog()))
 			System.out.println("Nao ha conversas anteriores");
 		else
-			System.out.print(newChat.showLog());
+			System.out.print(facade.showLog());
 	}
 
 	
-	private static void processHelp() {
+	private static void processHelp(){
 		System.out.println("\nVCP - Ver a conversa em progresso\n"+
 						   "PNM - Publicar nova mensagem\n"+
 						   "PME - Publicar mensagem encriptada\n"+
@@ -130,38 +157,56 @@ public class Main {
 		return msg;
 	}
 	
+	private static int[] getUsersIds(Facade facade, Scanner in)throws InputMismatchException{
+		int[] ids = new int[2];
+		
+		ids[0] = getId(facade, in, 1);
+		ids[1] = getId(facade, in, 2);
+		
+		return ids;
+	}
 	
-	private static int getUserNumber(Chat newChat, Scanner in){
+	private static int getId(Facade facade, Scanner in, int number)throws InputMismatchException{
 		int userNumber;
+		
 		do{
-			System.out.print("Utilizador: ");
+			System.out.print("Id "+number+": ");
 			userNumber = in.nextInt();
 			in.nextLine();
-			if (!newChat.validUserNumber(userNumber))
-				System.out.println("Utilizador desconhecido.");
-		}while(!newChat.validUserNumber(userNumber));
+			if (!facade.validUserNumber(userNumber))
+				System.out.println("O utilizador "+userNumber+" não existe. Dê por favor um identificador válido.");
+		}while(!facade.validUserNumber(userNumber));
+		
 		return userNumber;
 	}
-
 	
-	private static String getUsername(int userNumber, Scanner in){
-		System.out.print("Nome do Utilizador "+userNumber+": ");
-		return in.nextLine();
+	
+	private static String getUsername(Facade facade, Scanner in){
+		String name;
+		
+		do{
+		System.out.print("Nome do Utilizador: ");
+		name = in.nextLine();
+		if(facade.nameTaken(name))
+			System.out.println("Nome em utilização. Escolha um novo nome.");
+		}while(facade.nameTaken(name));
+			
+		return name;
 	}
 	
 	
-	private static int getFactor(Scanner in){
+	private static int getFactor(Scanner in)throws InputMismatchException{
 		int factor;
 		
 		do{
 			System.out.print("Insira um factor de translacao: ");
 			factor = in.nextInt();
 			in.nextLine();
-			if (!Chat.validFactor(factor))
-				System.out.println("Factor invalido. [0, 26]");
-		}while(!Chat.validFactor(factor));
+			if (!Facade.validFactor(factor))
+				System.out.println("Factor invalido. [1, 26]");
+		}while(!Facade.validFactor(factor));
 		
 		return factor;
-	}	
+	}
 	
 }

@@ -16,6 +16,18 @@ public class ChatsCollection {
 		chats[chatCounter++] = new Chat(users, newFactor);
 	}
 	
+	//@pre hasChat(users)
+	public Chat getChat(UserGroup users){
+		Chat chat = null;
+		
+		for(int i = 0; i < chatCounter; i++){
+			if(chats[i].userGroupEquals(users))
+				chat = chats[i];
+		}
+		
+		return chat;
+	}
+	
 	public void publishMsg(UserGroup userGroup, User user, String msg, boolean encrypted){
 		Chat chat = userGroupToChat(userGroup);
 		
@@ -47,5 +59,10 @@ public class ChatsCollection {
 		return chat;
 		
 	}
+	
+	public void closeConversation(UserGroup userGroup){
+		userGroupToChat(userGroup).closeConversation();
+	}
+	
 	
 }

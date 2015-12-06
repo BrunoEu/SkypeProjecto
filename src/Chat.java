@@ -4,7 +4,7 @@ public class Chat {
 	/*** constantes ***/
 	
 	private static final int MAX_FACTOR = 26;
-	private static final int MIN_FACTOR = 0;
+	private static final int MIN_FACTOR = 1;
 	
 	
 	/*** variaveis de instancia ***/

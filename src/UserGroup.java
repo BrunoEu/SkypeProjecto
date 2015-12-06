@@ -3,7 +3,7 @@ public class UserGroup {
 	
 	private static final int INDEX_ERROR = -1;
 	private static final int GROWTH_RATE = 2;
-	private static final int DEFAULT_SIZE = 32;
+	private static final int DEFAULT_SIZE = 2;
 	
 	private User[] group;
 	private int groupCounter;
