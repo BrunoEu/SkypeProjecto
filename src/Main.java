@@ -46,11 +46,11 @@ public class Main {
 					case SHOW_CONTACTED_USERS: processShowContactedUsers(facade, in); break;
 					case SHOW_ALL_USERS: processShowAllUsers(facade); break;
 					case SHOW_CHAT: processShowChat(facade, in); break;
-					case PUBLISH_MSG: processPlainMsg(facade, in); break;
-					case PUBLISH_ENC: processEncryptedMsg(facade, in); break;
-					case CORRECT_MSG: processCorrectMsg(facade, in); break;
-					case CLOSE_CHAT: processCloseConversation(facade); break;
-					case SHOW_LOG: processShowLog(facade); break;
+					//case PUBLISH_MSG: processPlainMsg(facade, in); break;
+					//case PUBLISH_ENC: processEncryptedMsg(facade, in); break;
+					//case CORRECT_MSG: processCorrectMsg(facade, in); break;
+					//case CLOSE_CHAT: processCloseConversation(facade); break;
+					//case SHOW_LOG: processShowLog(facade); break;
 					case HELP: processHelp(); break;
 					case EXIT: break;
 					default: System.out.println("Opcao inexistente.");
@@ -134,7 +134,7 @@ public class Main {
 	private static void processEncryptedMsg(Facade facade, Scanner in)throws InputMismatchException{
 		publishMsg(facade, in, true);
 	}	
-
+	
 	private static void publishMsg(Facade facade, Scanner in, boolean encrypted)throws InputMismatchException{
 		int[] userIds = getUsersIds(facade, in);
 		int senderId = getSender(facade, in);
@@ -211,7 +211,7 @@ public class Main {
 			userNumber = in.nextInt();
 			in.nextLine();
 			if (!facade.validUserNumber(userNumber))
-				System.out.println("O utilizador "+userNumber+" não existe. Dê por favor um identificador válido.");
+				System.out.println("O utilizador "+userNumber+" nÃ£o existe. DÃª por favor um identificador vÃ¡lido.");
 		}while(!facade.validUserNumber(userNumber));
 		
 		return userNumber;
@@ -225,7 +225,7 @@ public class Main {
 			userNumber = in.nextInt();
 			in.nextLine();
 			if (!facade.validUserNumber(userNumber))
-				System.out.println("O utilizador "+userNumber+" não existe. Dê por favor um identificador válido.");
+				System.out.println("O utilizador "+userNumber+" nÃ£o existe. DÃª por favor um identificador vÃ¡lido.");
 		}while(!facade.validUserNumber(userNumber));
 		
 		return userNumber;
@@ -240,7 +240,7 @@ public class Main {
 			userNumber = in.nextInt();
 			in.nextLine();
 			if (!facade.validUserNumber(userNumber))
-				System.out.println("O utilizador "+userNumber+" não existe. Dê por favor um identificador válido.");
+				System.out.println("O utilizador "+userNumber+" nÃ£o existe. DÃª por favor um identificador vÃ¡lido.");
 		}while(!facade.validUserNumber(userNumber));
 		
 		return userNumber;
@@ -254,7 +254,7 @@ public class Main {
 		System.out.print("Nome do Utilizador: ");
 		name = in.nextLine();
 		if(facade.nameTaken(name))
-			System.out.println("Nome em utilização. Escolha um novo nome.");
+			System.out.println("Nome em utilizaÃ§Ã£o. Escolha um novo nome.");
 		}while(facade.nameTaken(name));
 			
 		return name;
