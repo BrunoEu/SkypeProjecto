@@ -1,3 +1,4 @@
+import java.time.chrono.IsoEra;
 
 public class UserGroup {
 	
@@ -25,7 +26,7 @@ public class UserGroup {
 	
 	//@pre hasUser(user)
 	//não mantem ordem
-	public void removeUser(User user){
+	public void removeUser(int user){
 		group[getIndex(user)] = group[groupCounter--];
 	}
 
@@ -127,9 +128,47 @@ public class UserGroup {
 		return subUserGroup;
 	}
 	
+	public int[] userGroupToArrayInt(){
+		int[] users = new int[groupCounter];
+		
+		for (int i = 0; i < groupCounter; i++)
+			users[i] = group[i].getNumber();
+		
+		return users;
+	}
+	
+	public String[] userGroupToArrayName(){
+		String[] users = new String[groupCounter];
+		
+		for(int i = 0; i < groupCounter; i++)
+			users[i] = group[i].getName();
+		
+		return users;
+	}
+	
+	public static UserGroup mergeGroups(UserGroup userGroup1, UserGroup userGroup2){
+		UserGroup mergedUserGroup = new UserGroup();
+		
+		userGroup1.initializeIterator();
+		
+		while(userGroup1.hasNext())
+			mergedUserGroup.addUser(userGroup1.next());
+		
+		userGroup2.initializeIterator();
+		
+		while(userGroup2.hasNext()){
+			User user = userGroup2.next();
+			if(!mergedUserGroup.hasUser(user))
+				mergedUserGroup.addUser(user);
+		}
+		
+		return mergedUserGroup;
+		
+	}
+	
 	//Iterator
 	
-	public void initializIterator(){
+	public void initializeIterator(){
 		currentUser = 0;
 	}
 	

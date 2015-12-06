@@ -19,7 +19,57 @@ public class Facade {
 	}
 	
 	public String showChat(int[] userIds){
-		chats.
+		return chats.getChat(usersList.getSubGroup(userIds)).showChat();
+	}
+	
+	public int[] showContactedIds(int userId){
+		UserGroup contactedUsers = getContactedUserGroup(userId);
+		
+		return contactedUsers.userGroupToArrayInt();
+	}
+	
+	public String[] showContactedNames(int userId){
+		UserGroup contactedUsers = getContactedUserGroup(userId);
+		
+		return contactedUsers.userGroupToArrayName();
+	}
+	
+	public String[] showAllNames(){
+		return usersList.userGroupToArrayName();
+	}
+	
+	public int[] showAllIds(){
+		return usersList.userGroupToArrayInt();
+	}
+	
+	public void addMsg(int[] userIds, int senderId, String msg, boolean encrypted){
+		Chat chat = chats.getChat(usersList.getSubGroup(userIds));
+		
+		if(!encrypted)
+			chat.addMsg(senderId, msg);
+		else
+			chat.addEncryptedMsg(senderId, msg);
+	}
+	
+	public String getName(int userId){
+		return usersList.getUser(userId).getName();
+	}
+	
+	private UserGroup getContactedUserGroup(int userId){
+		UserGroup contactedUsers = new UserGroup();
+		Chat chat = null;
+		
+		chats.initializeIterator();
+		
+		while(chats.hasNext()){
+			chat = chats.next();
+			if(chat.validUserNumber(userId))
+				contactedUsers = UserGroup.mergeGroups(contactedUsers, chat.getUsers());
+		}
+		
+		contactedUsers.removeUser(userId);
+		
+		return contactedUsers;
 	}
 	
 	//@pre validUserNumbers(userIds)
@@ -49,7 +99,7 @@ public class Facade {
 	}
 	
 	public boolean nameTaken(String name){
-		usersList.initializIterator();
+		usersList.initializeIterator();
 		
 		while(usersList.hasNext()){
 			if(usersList.next().getName().equals(name))

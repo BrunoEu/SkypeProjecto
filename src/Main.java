@@ -1,3 +1,4 @@
+import java.time.chrono.IsoEra;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -44,7 +45,7 @@ public class Main {
 					case NEW_CHAT: processNewChat(facade, in); break;
 					case SHOW_CONTACTED_USERS: processShowContactedUsers(facade, in); break;
 					case SHOW_ALL_USERS: processShowAllUsers(facade); break;
-					case SHOW_CHAT: processShowChat(facade); break;
+					case SHOW_CHAT: processShowChat(facade, in); break;
 					case PUBLISH_MSG: processPlainMsg(facade, in); break;
 					case PUBLISH_ENC: processEncryptedMsg(facade, in); break;
 					case CORRECT_MSG: processCorrectMsg(facade, in); break;
@@ -83,32 +84,68 @@ public class Main {
 			facade.createChat(getUsersIds(facade, in), getFactor(in));
 	}
 	
+	private static void processShowContactedUsers(Facade facade, Scanner in){
+		int userId = getId(facade, in);
+		int[] contactedUsersIds = facade.showContactedIds(userId);
+		String[] contactedUsersNames = facade.showContactedNames(userId);
+		
+		if(contactedUsersIds.length == 0)
+			System.out.println("Nao ha utilizadores contactados.");
+		
+		else{
+			System.out.println("Utilizadores contactados por"+facade.getName(userId)+" ("+userId+"): ");
+			
+			for (int i = 0; i < contactedUsersIds.length; i++)
+				System.out.print(contactedUsersNames[i]+" "+contactedUsersIds[i]+", ");
+		}
+	}
+	
+	private static void processShowAllUsers(Facade facade){
+		int[] usersIds = facade.showAllIds();
+		String[] usersNames = facade.showAllNames();
+		
+		if(usersIds.length == 0)
+			System.out.println("Nao ha utilizadores.");
+		
+		else{
+		
+			System.out.println("Utilizadores: ");
+		
+			for(int i = 0; i < usersIds.length; i++)
+				System.out.print(usersNames[i]+" "+usersIds[i]+", ");
+			
+		}
+	
+	}
+	
 	private static void processShowChat(Facade facade, Scanner in)throws InputMismatchException{
-		if(facade.showChat().isEmpty())
+		int[] userIds = getUsersIds(facade, in);
+		
+		if(facade.showChat(userIds).isEmpty())
 			System.out.println("Conversa Vazia.");
 		else
-			System.out.print(facade.showChat());
-	}	
+			System.out.print(facade.showChat(userIds));
+	}
 	
-	private static void processPlainMsg(Chat facade, Scanner in)throws InputMismatchException{
+	private static void processPlainMsg(Facade facade, Scanner in)throws InputMismatchException{
 		publishMsg(facade, in, false);
 	}	
 	
-	private static void processEncryptedMsg(Chat facade, Scanner in)throws InputMismatchException{
+	private static void processEncryptedMsg(Facade facade, Scanner in)throws InputMismatchException{
 		publishMsg(facade, in, true);
 	}	
 
-	/*private static void publishMsg(Chat facade, Scanner in, boolean encrypted)throws InputMismatchException{
-		if (facade.showChat().isEmpty())
-			System.out.println("Nova conversa iniciada");
+	private static void publishMsg(Facade facade, Scanner in, boolean encrypted)throws InputMismatchException{
+		int[] userIds = getUsersIds(facade, in);
+		int senderId = getSender(facade, in);
 		
-		int userNumber = getUserNumber(facade, in);
-		if(encrypted)
-			facade.addEncryptedMsg(userNumber, getMsg(in));
-		else
-			facade.addMsg(userNumber, getMsg(in));
-		System.out.print(facade.formatMessage(userNumber, "Publicada"));
-	}*/	
+		if(!facade.hasChat(userIds))
+			System.out.println("Conversa inexistente.");
+
+		facade.addMsg(userIds, senderId, getMsg(in), encrypted);
+
+		System.out.print(facade.formatMessage(senderId, "Publicada"));
+	}
 	
 	private static void processCorrectMsg(Chat facade, Scanner in)throws InputMismatchException{
 		if(facade.showChat().isEmpty())
@@ -171,6 +208,35 @@ public class Main {
 		
 		do{
 			System.out.print("Id "+number+": ");
+			userNumber = in.nextInt();
+			in.nextLine();
+			if (!facade.validUserNumber(userNumber))
+				System.out.println("O utilizador "+userNumber+" não existe. Dê por favor um identificador válido.");
+		}while(!facade.validUserNumber(userNumber));
+		
+		return userNumber;
+	}
+	
+	private static int getId(Facade facade, Scanner in)throws InputMismatchException{
+		int userNumber;
+		
+		do{
+			System.out.print("Id: ");
+			userNumber = in.nextInt();
+			in.nextLine();
+			if (!facade.validUserNumber(userNumber))
+				System.out.println("O utilizador "+userNumber+" não existe. Dê por favor um identificador válido.");
+		}while(!facade.validUserNumber(userNumber));
+		
+		return userNumber;
+	}
+	
+	
+	private static int getSender(Facade facade, Scanner in){
+		int userNumber;
+		
+		do{
+			System.out.print("Id do remetente: ");
 			userNumber = in.nextInt();
 			in.nextLine();
 			if (!facade.validUserNumber(userNumber))

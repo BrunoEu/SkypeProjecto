@@ -5,6 +5,7 @@ public class ChatsCollection {
 	
 	private Chat[] chats;
 	private int chatCounter;
+	private int currentChat;
 	
 	
 	public ChatsCollection(){
@@ -62,6 +63,19 @@ public class ChatsCollection {
 	
 	public void closeConversation(UserGroup userGroup){
 		userGroupToChat(userGroup).closeConversation();
+	}
+	
+	public void initializeIterator(){
+		currentChat = 0;
+	}
+	
+	public boolean hasNext(){
+		return ( currentChat >= 0) && (currentChat < chatCounter);
+	}
+	
+	//@pre: hasNext()	
+	public Chat next(){
+		return chats[currentChat++];
 	}
 	
 	

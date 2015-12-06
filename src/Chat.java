@@ -79,6 +79,9 @@ public class Chat {
 		currentConversation.editLastMessage(intToUser(useNumber), msg, factor);
 	}
 	
+	public UserGroup getUsers(){
+		return users;
+	}
 	
 	public String getLastMsg(){
 		return currentConversation.getLastMsg();
@@ -108,7 +111,7 @@ public class Chat {
 	public String initializeLog(){
 		String result = "";
 		User user;
-		users.initializIterator();
+		users.initializeIterator();
 		
 		while(users.hasNext()){
 			user = users.next();
