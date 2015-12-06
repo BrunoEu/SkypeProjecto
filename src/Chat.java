@@ -1,127 +1,138 @@
 
-public class Facade {
+public class Chat {
+	
+	/*** constantes ***/
+	
+	private static final int MAX_FACTOR = 26;
+	private static final int MIN_FACTOR = 1;
+	
+	
+	/*** variaveis de instancia ***/
+	
+	private int factor;
+	private UserGroup users;
+	
+	private String log;
+	private Conversation currentConversation;
 
-	ChatsCollection chats;
-	UserGroup usersList;
 	
-	public Facade(){
-		chats = new ChatsCollection();
-		usersList = new UserGroup();
+	/*** construtor ***/
+	// @pre validFactor(newFactor)
+	// Eliminar
+	public Chat(String name1, String name2, int id1, int id2, int newFactor){
+		users = new UserGroup();
+		users.addUser(new User(name1, id1));
+		users.addUser(new User(name2, id2));
+		factor = newFactor;
+		log = initializeLog();
+		currentConversation = new Conversation();
 	}
 	
-	public void creatUser(String name){
-		usersList.addUser(new User(name, getNextId()));
+	public Chat(UserGroup users, int newFactor){
+		this.users = users;
+		factor = newFactor;
+		log = initializeLog();
+		currentConversation = new Conversation();
 	}
 	
-	//@pre validUserNumbers(userIds)
-	//@pre validFactor(factor)
-	//garantir que o chat não existe
-	
-	public void createChat(int[] userIds, int factor){
-		chats.addChat(usersList.getSubGroup(userIds), factor);
+	public String showChat(){
+		return currentConversation.showConversation();
 	}
 	
-	//@pre garantir que o chat existe
-	public String showChat(int[] userIds){
-		return chats.getChat(usersList.getSubGroup(userIds)).showChat();
-	}
-	 
-	//@pre validUserNumber(userId)
-	public int[] showContactedIds(int userId){
-		UserGroup contactedUsers = getContactedUserGroup(userId);
-		
-		return contactedUsers.userGroupToArrayInt();
+	
+	public String showLog(){
+		return log;
 	}
 	
-	//@pre validUserNumber(userId)
-	public String[] showContactedNames(int userId){
-		UserGroup contactedUsers = getContactedUserGroup(userId);
-		
-		return contactedUsers.userGroupToArrayName();
+	
+	//@pre validUserNumber(userNumber)
+	
+	public void addMsg(int userNumber,String msg){
+		currentConversation.addMsg(intToUser(userNumber), msg);
 	}
 	
-	public String[] showAllNames(){
-		return usersList.userGroupToArrayName();
+	
+	//@pre validUserNumber(userNumber)
+	
+	public void addEncryptedMsg(int userNumber, String msg){
+		currentConversation.addEncryptedMsg(intToUser(userNumber), msg, factor);
 	}
 	
-	public int[] showAllIds(){
-		return usersList.userGroupToArrayInt();
+	
+	public void closeConversation(){
+		String conversation = currentConversation.showConversation();
+		log = formatToLog(conversation);
+		currentConversation.reset();
 	}
 	
-	//@pre validUserNumbers(userIds)
-	//@pre validUserNumber(senderId)
-	public void addMsg(int[] userIds, int senderId, String msg, boolean encrypted){
-		Chat chat = chats.getChat(usersList.getSubGroup(userIds));
-		
-		if(!encrypted)
-			chat.addMsg(senderId, msg);
-		else
-			chat.addEncryptedMsg(senderId, msg);
+
+	//@pre validUserNumber(userNumber)
+	
+	public boolean canEditLastMessage(int userNumber){
+		return currentConversation.canEditLastMessage(intToUser(userNumber));
 	}
 	
-	//@pre validUserNumber(userId)
-	public String getName(int userId){
-		return usersList.getUser(userId).getName();
+	
+	//@pre validUserNumber(userNumber)
+	
+	public void editLastMessage(int useNumber, String msg){
+		currentConversation.editLastMessage(intToUser(useNumber), msg, factor);
 	}
 	
-	//@pre validUserNumber(userId)
-	private UserGroup getContactedUserGroup(int userId){
-		UserGroup contactedUsers = new UserGroup();
-		Chat chat = null;
-		
-		chats.initializeIterator();
-		
-		while(chats.hasNext()){
-			chat = chats.next();
-			if(chat.validUserNumber(userId))
-				contactedUsers = UserGroup.mergeGroups(contactedUsers, chat.getUsers());
-		}
-		
-		contactedUsers.removeUser(userId);
-		
-		return contactedUsers;
+	public UserGroup getUsers(){
+		return users;
 	}
 	
-	//@pre validUserNumbers(userIds)
-	public void closeConversation(int[] userIds){
-		chats.closeConversation(usersList.getSubGroup(userIds));
+	public String getLastMsg(){
+		return currentConversation.getLastMsg();
 	}
 	
-	//@pre validUserNumbers(userIds)
-	public boolean hasChat(int[] userIds){
-		return chats.hasChat(usersList.getSubGroup(userIds));
-	}
-	
-	public boolean validUserNumbers(int[] userIds){
-		for(int i = 0; i < userIds.length; i++){
-			if(!validUserNumber(userIds[i]))
-				return false;
-		}
-		return true;
-	}
 	
 	public boolean validUserNumber(int userNumber){
-		return usersList.hasUser(userNumber);
+		return users.hasUser(userNumber);
 	}
+	
 	
 	public static boolean validFactor(int factor){
-		return Chat.validFactor(factor);
+		return factor >= MIN_FACTOR && factor <= MAX_FACTOR;
 	}
 	
-	public boolean nameTaken(String name){
-		usersList.initializeIterator();
+
+	//@pre validUserNumber(userNumber)
+	
+	public User intToUser(int userNumber){
+		return users.getUser(userNumber);
+	}
+	
+	// será necessário ?
+	public boolean userGroupEquals(UserGroup userGroup){
+		return(users.equals(userGroup));
+	}
+	
+	public String initializeLog(){
+		String result = "";
+		User user;
+		users.initializeIterator();
 		
-		while(usersList.hasNext()){
-			if(usersList.next().getName().equals(name))
-				return true;
+		while(users.hasNext()){
+			user = users.next();
+			result += "Utilizador "+ user.getNumber() +": "+ user.getName() +"\n";
 		}
 		
-		return false;
-		
+		return result;
 	}
 	
-	private int getNextId(){
-		return usersList.getNumberUsers() + 1;
+	
+	//@pre validUserNumber(userNumber)
+	
+	public String formatMessage(int userNumber, String msg){
+		return currentConversation.formatMessage(intToUser(userNumber), msg);
 	}
+
+
+	public String formatToLog(String msgs){
+		return log.concat("\n**** NOVA CONVERSA ****\n").concat(msgs);
+	}
+	
 	
 }
