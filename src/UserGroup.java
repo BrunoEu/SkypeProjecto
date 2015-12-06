@@ -25,7 +25,7 @@ public class UserGroup {
 	}
 	
 	//@pre hasUser(user)
-	//não mantem ordem
+	//nÃ£o mantem ordem
 	public void removeUser(int user){
 		group[getIndex(user)] = group[groupCounter--];
 	}
@@ -63,6 +63,7 @@ public class UserGroup {
 		return index;
 	}
 
+	//Eliminar
 	private int getIndex(int userNumber){
 		int index = INDEX_ERROR;
 		boolean found = false;
@@ -77,14 +78,17 @@ public class UserGroup {
 		return index;
 	}
 	
+	//Eliminar
 	public boolean hasUser(User user){
 		return getIndex(user) != INDEX_ERROR;
 	}
 
+	
 	public boolean hasUser(int userNumber) {
 		return getIndex(userNumber) != INDEX_ERROR;
 	}
 	
+	//Rename hasUser ?
 	public boolean hasUsers(int[] userNumbers){
 		for(int i = 0; i < userNumbers.length; i++){
 			if(!hasUser(userNumbers[i])){
@@ -98,7 +102,7 @@ public class UserGroup {
 	
  	public User getUser(int userNumber){
 		int i = 0;
-		User user = User.NOBODY;//para que não de erro ao dizer que pode não ser inicializada
+		User user = User.NOBODY;//para que nÃ£o de erro ao dizer que pode nÃ£o ser inicializada
 		boolean found = false;
 		
 		for (;(i< groupCounter) && (!found); i++ ){
