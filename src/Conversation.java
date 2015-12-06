@@ -49,6 +49,7 @@ public class Conversation {
 	
 	//@pre factor > 0
 	
+	// Static ?
 	private String encryptMsg(String msg, int factor){
 		int index = 0;
 		String msgEnc = "";
@@ -67,6 +68,7 @@ public class Conversation {
 	
 	//@pre factor > 0
 	
+	//static ?
 	private char encryptChar(char charToEncrypt, int factor){
 		char charEncrypted;
 		char firstChar;
@@ -99,7 +101,7 @@ public class Conversation {
 		return a >= 'a' && a <= 'z' ;
 	}
 	
-
+	
 	public String formatMessage(User user,String message){
 		return "USER[" + user.getNumber() + "]MSG[" + getMsgNumber() +"]: " + message +"\n";
 	}
