@@ -14,20 +14,26 @@ public class Facade {
 	}
 	
 	//@pre validUserNumbers(userIds)
+	//@pre validFactor(factor)
+	//garantir que o chat não existe
+	
 	public void createChat(int[] userIds, int factor){
 		chats.addChat(usersList.getSubGroup(userIds), factor);
 	}
 	
+	//@pre garantir que o chat existe
 	public String showChat(int[] userIds){
 		return chats.getChat(usersList.getSubGroup(userIds)).showChat();
 	}
-	
+	 
+	//@pre validUserNumber(userId)
 	public int[] showContactedIds(int userId){
 		UserGroup contactedUsers = getContactedUserGroup(userId);
 		
 		return contactedUsers.userGroupToArrayInt();
 	}
 	
+	//@pre validUserNumber(userId)
 	public String[] showContactedNames(int userId){
 		UserGroup contactedUsers = getContactedUserGroup(userId);
 		
@@ -42,6 +48,8 @@ public class Facade {
 		return usersList.userGroupToArrayInt();
 	}
 	
+	//@pre validUserNumbers(userIds)
+	//@pre validUserNumber(senderId)
 	public void addMsg(int[] userIds, int senderId, String msg, boolean encrypted){
 		Chat chat = chats.getChat(usersList.getSubGroup(userIds));
 		
@@ -51,10 +59,12 @@ public class Facade {
 			chat.addEncryptedMsg(senderId, msg);
 	}
 	
+	//@pre validUserNumber(userId)
 	public String getName(int userId){
 		return usersList.getUser(userId).getName();
 	}
 	
+	//@pre validUserNumber(userId)
 	private UserGroup getContactedUserGroup(int userId){
 		UserGroup contactedUsers = new UserGroup();
 		Chat chat = null;
@@ -81,7 +91,7 @@ public class Facade {
 	public boolean hasChat(int[] userIds){
 		return chats.hasChat(usersList.getSubGroup(userIds));
 	}
-
+	
 	public boolean validUserNumbers(int[] userIds){
 		for(int i = 0; i < userIds.length; i++){
 			if(!validUserNumber(userIds[i]))
