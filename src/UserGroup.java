@@ -1,4 +1,3 @@
-import java.time.chrono.IsoEra;
 
 public class UserGroup {
 	
@@ -25,9 +24,9 @@ public class UserGroup {
 	}
 	
 	//@pre hasUser(user)
-	//nÃ£o mantem ordem
-	public void removeUser(int user){
-		group[getIndex(user)] = group[groupCounter--];
+	//nao mantem ordem
+	public void removeUser(int userNumber){
+		group[getIndex(getUser(userNumber))] = group[--groupCounter];
 	}
 
 	public int getNumberUsers(){
@@ -63,8 +62,8 @@ public class UserGroup {
 		return index;
 	}
 
-	//Eliminar
-	private int getIndex(int userNumber){
+	/***Eliminar***/
+	/*private int getIndex(int userNumber){
 		int index = INDEX_ERROR;
 		boolean found = false;
 		
@@ -76,16 +75,15 @@ public class UserGroup {
 		}
 		
 		return index;
-	}
+	}*/
 	
-	//Eliminar
-	public boolean hasUser(User user){
+	/***Eliminar***/
+	/*public boolean hasUser(User user){
 		return getIndex(user) != INDEX_ERROR;
-	}
+	}*/
 
-	
 	public boolean hasUser(int userNumber) {
-		return getIndex(userNumber) != INDEX_ERROR;
+		return getIndex(getUser(userNumber)) != INDEX_ERROR;
 	}
 	
 	//Rename hasUser ?
@@ -101,11 +99,10 @@ public class UserGroup {
 	//@pre: hasUser(userNumber) 
 	
  	public User getUser(int userNumber){
-		int i = 0;
-		User user = User.NOBODY;//para que nÃ£o de erro ao dizer que pode nÃ£o ser inicializada
+		User user = User.NOBODY;//para que nao de erro ao dizer que pode nao ser inicializada
 		boolean found = false;
 		
-		for (;(i< groupCounter) && (!found); i++ ){
+		for (int i = 0;(i< groupCounter) && (!found); i++ ){
 			if (userNumber == group[i].getNumber()){
 				found = true;
 				user = group[i];
@@ -162,7 +159,7 @@ public class UserGroup {
 		
 		while(userGroup2.hasNext()){
 			User user = userGroup2.next();
-			if(!mergedUserGroup.hasUser(user))
+			if(!mergedUserGroup.hasUser(user.getNumber()))
 				mergedUserGroup.addUser(user);
 		}
 		
@@ -190,7 +187,7 @@ public class UserGroup {
 		
 		if(this.getNumberUsers() == groupToCompare.getNumberUsers()){
 			for(int i = 0; i < groupCounter; i++)
-				if(!groupToCompare.hasUser(group[i]))
+				if(!groupToCompare.hasUser(group[i].getNumber()))
 					return false;
 			return true;
 		}

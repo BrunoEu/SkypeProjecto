@@ -125,8 +125,8 @@ public class Chat {
 	
 	//@pre validUserNumber(userNumber)
 	
-	public String formatMessage(int userNumber, String msg){
-		return currentConversation.formatMessage(intToUser(userNumber), msg);
+	public String formatMessage(User user, String msg){
+		return currentConversation.formatMessage(user, msg);
 	}
 
 
