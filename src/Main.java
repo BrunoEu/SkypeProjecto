@@ -127,6 +127,10 @@ public class Main {
 		
 		if(facade.showChat(userIds).isEmpty())
 			System.out.println("Conversa Vazia.");
+		
+		else if(!facade.hasChat(userIds))
+			System.out.println("Conversa inexistente");
+		
 		else
 			System.out.print(facade.showChat(userIds));
 	}
@@ -203,12 +207,18 @@ public class Main {
 
 	
 	private static void processHelp(){
-		System.out.println("\nVCP - Ver a conversa em progresso\n"+
+		System.out.println("\nCNU - Criar novo utilizador\n"+
+						   "INC - Iniciar nova conversa\n"+
+						   "VCP - Ver a conversa em progresso\n"+
 						   "PNM - Publicar nova mensagem\n"+
 						   "PME - Publicar mensagem encriptada\n"+
 						   "CMA - Corrigir mensagem anterior\n"+
+						   "LUC - Listar utilizadores contactados\n"+
+						   "LTU - Listar todos os utilizadores\n"+
 						   "ECP - Encerrar conversa em progresso\n"+
 						   "MCA - Mostrar conversas anteriores\n"+
+						   "GEA - Gravar estado da aplicaçao para ficheiro\n"+
+						   "CAF - Carregar aplicacao de ficheiro"+
 						   "A - Ajuda\n"+
 						   "S - Sair");
 	}
@@ -256,22 +266,6 @@ public class Main {
 		
 		return userNumber;
 	}
-	
-	
-	/*private static int getSender(Facade facade, Scanner in){
-		int userNumber;
-		
-		do{
-			System.out.print("Id do remetente: ");
-			userNumber = in.nextInt();
-			in.nextLine();
-			if (!facade.validUserNumber(userNumber))
-				System.out.println("O utilizador "+userNumber+" nao existe. De por favor um identificador valido.");
-		}while(!facade.validUserNumber(userNumber));
-		
-		return userNumber;
-	}*/
-	
 	
 	private static String getUsername(Facade facade, Scanner in){
 		String name;

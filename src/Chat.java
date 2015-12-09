@@ -47,15 +47,15 @@ public class Chat {
 	
 	//@pre validUserNumber(userNumber)
 	
-	public void addMsg(int userNumber,String msg){
-		currentConversation.addMsg(intToUser(userNumber), msg);
+	public void addMsg(User user,String msg){
+		currentConversation.addMsg(user, msg);
 	}
 	
 	
 	//@pre validUserNumber(userNumber)
 	
-	public void addEncryptedMsg(int userNumber, String msg){
-		currentConversation.addEncryptedMsg(intToUser(userNumber), msg, factor);
+	public void addEncryptedMsg(User user, String msg){
+		currentConversation.addEncryptedMsg(user, msg, factor);
 	}
 	
 	
@@ -68,15 +68,15 @@ public class Chat {
 
 	//@pre validUserNumber(userNumber)
 	
-	public boolean canEditLastMessage(int userNumber){
-		return currentConversation.canEditLastMessage(intToUser(userNumber));
+	public boolean canEditLastMessage(User user){
+		return currentConversation.canEditLastMessage(user);
 	}
 	
 	
 	//@pre validUserNumber(userNumber)
 	
-	public void editLastMessage(int useNumber, String msg){
-		currentConversation.editLastMessage(intToUser(useNumber), msg, factor);
+	public void editLastMessage(User user, String msg){
+		currentConversation.editLastMessage(user, msg, factor);
 	}
 	
 	public UserGroup getUsers(){
@@ -88,21 +88,14 @@ public class Chat {
 	}
 	
 	public boolean hasUser(User user){
-		return validUserNumber(user.getNumber());
+		return users.hasUser(user.getNumber());
 	}
-	
-	public boolean validUserNumber(int userNumber){
-		return users.hasUser(userNumber);
-	}
-	
 	
 	public static boolean validFactor(int factor){
 		return factor >= MIN_FACTOR && factor <= MAX_FACTOR;
 	}
-	
 
 	//@pre validUserNumber(userNumber)
-	
 	public User intToUser(int userNumber){
 		return users.getUser(userNumber);
 	}

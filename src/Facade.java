@@ -54,13 +54,13 @@ public class Facade {
 		Chat chat = chats.getChat(usersList.getSubGroup(userIds));
 		
 		if(!encrypted)
-			chat.addMsg(senderId, msg);
+			chat.addMsg(usersList.getUser(senderId), msg);
 		else
-			chat.addEncryptedMsg(senderId, msg);
+			chat.addEncryptedMsg(usersList.getUser(senderId), msg);
 	}
 	
 	public void editLastMessage(int[] userIds, int userCorrectorId, String msg){
-		chats.getChat(usersList.getSubGroup(userIds)).editLastMessage(userCorrectorId, msg);
+		chats.getChat(usersList.getSubGroup(userIds)).editLastMessage(usersList.getUser(userCorrectorId), msg);
 	}
 	
 	//@pre validUserNumber(userId)
@@ -81,7 +81,7 @@ public class Facade {
 		
 		while(chats.hasNext()){
 			chat = chats.next();
-			if(chat.validUserNumber(userId))
+			if(chat.hasUser(usersList.getUser(userId)))
 				contactedUsers = UserGroup.mergeGroups(contactedUsers, chat.getUsers());
 		}
 		
@@ -147,7 +147,7 @@ public class Facade {
 	
 	//@pre hasChat(userIds)
 	public boolean canEditLastMessage(int[] userIds, int userCorrectorId){
-		return chats.getChat(usersList.getSubGroup(userIds)).canEditLastMessage(userCorrectorId);
+		return chats.getChat(usersList.getSubGroup(userIds)).canEditLastMessage(usersList.getUser(userCorrectorId));
 	}
 	
 	private int getNextId(){

@@ -33,9 +33,9 @@ public class ChatsCollection {
 		Chat chat = userGroupToChat(userGroup);
 		
 		if(!encrypted)
-			chat.addMsg(user.getNumber(), msg);
+			chat.addMsg(user, msg);
 		else
-			chat.addEncryptedMsg(user.getNumber(), msg);
+			chat.addEncryptedMsg(user, msg);
 	}
 	
 	public boolean hasChat(UserGroup userGroup){
