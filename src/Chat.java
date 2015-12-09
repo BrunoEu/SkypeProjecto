@@ -87,6 +87,9 @@ public class Chat {
 		return currentConversation.getLastMsg();
 	}
 	
+	public boolean hasUser(User user){
+		return validUserNumber(user.getNumber());
+	}
 	
 	public boolean validUserNumber(int userNumber){
 		return users.hasUser(userNumber);

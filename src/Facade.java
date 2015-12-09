@@ -85,7 +85,8 @@ public class Facade {
 				contactedUsers = UserGroup.mergeGroups(contactedUsers, chat.getUsers());
 		}
 		
-		contactedUsers.removeUser(userId);
+		if(contactedUsers.getNumberUsers()>0)
+			contactedUsers.removeUser(userId);
 		
 		return contactedUsers;
 	}
@@ -110,6 +111,10 @@ public class Facade {
 	//@pre validUserNumbers(userIds)
 	public boolean hasChat(int[] userIds){
 		return chats.hasChat(usersList.getSubGroup(userIds));
+	}
+	
+	public boolean chatHasUser(int[] userIds, int user){
+		return chats.getChat(usersList.getSubGroup(userIds)).hasUser(usersList.getUser(user));
 	}
 	
 	public boolean validUserNumbers(int[] userIds){

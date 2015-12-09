@@ -80,6 +80,9 @@ public class Main {
 		if(facade.hasChat(userIds))
 			System.out.println("Chat existente.");
 		
+		else if(userIds[0]==userIds[1])
+			System.out.println("Utilizadores iguais.");
+		
 		else
 			facade.createChat(userIds, getFactor(in));
 	}
@@ -138,16 +141,20 @@ public class Main {
 	
 	private static void publishMsg(Facade facade, Scanner in, boolean encrypted)throws InputMismatchException{
 		int[] userIds = getUsersIds(facade, in);
-		int senderId = getId(facade, in);
 		
 		if(!facade.hasChat(userIds))
 			System.out.println("Conversa inexistente.");
 		
 		else{
-			facade.addMessage(userIds, senderId, getMsg(in), encrypted);
+			int senderId = getId(facade, in);
+			if(facade.chatHasUser(userIds, senderId)){
+				facade.addMessage(userIds, senderId, getMsg(in), encrypted);
+				System.out.print(facade.formatMsg(userIds, senderId, "Publicada"));
+			}
+			else
+				System.out.println("Utilizador "+senderId+" nao pertence ao chat.");	
 		}
 		
-		System.out.print(facade.formatMsg(userIds, senderId, "Publicada"));
 	}
 	
 	private static void processCorrectMsg(Facade facade, Scanner in)throws InputMismatchException{
@@ -172,15 +179,23 @@ public class Main {
 	}	
 	
 	private static void processCloseConversation(Facade facade, Scanner in)throws InputMismatchException{
-		facade.closeConversation(getUsersIds(facade, in));
-		System.out.println("Conversa terminada.");
+		int[] userIds = getUsersIds(facade, in);
+		
+		if(facade.hasChat(userIds)){
+			facade.closeConversation(userIds);
+			System.out.println("Conversa terminada.");
+		}
+		else
+			System.out.println("Conversa inexistente.");
 	}
 
 	
 	private static void processShowLog(Facade facade, Scanner in)throws InputMismatchException{
 		int[] userIds = getUsersIds(facade, in);
 		
-		if (facade.showLog(userIds).equals(facade.initializeLog(userIds)))
+		if(!facade.hasChat(userIds))
+			System.out.println("Conversa inexistente.");
+		else if (facade.showLog(userIds).equals(facade.initializeLog(userIds)))
 			System.out.println("Nao ha conversas anteriores");
 		else
 			System.out.print(facade.showLog(userIds));
@@ -222,7 +237,7 @@ public class Main {
 			userNumber = in.nextInt();
 			in.nextLine();
 			if (!facade.validUserNumber(userNumber))
-				System.out.println("O utilizador "+userNumber+" não existe. Dê por favor um identificador válido.");
+				System.out.println("O utilizador "+userNumber+" nao existe. De por favor um identificador valido.");
 		}while(!facade.validUserNumber(userNumber));
 		
 		return userNumber;
