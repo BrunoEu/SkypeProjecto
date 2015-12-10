@@ -57,7 +57,7 @@ public class Main {
 					case CORRECT_MSG: processCorrectMsg(facade, in); break;
 					case CLOSE_CHAT: processCloseConversation(facade, in); break;
 					case SHOW_LOG: processShowLog(facade, in); break;
-					case SAVE_FROM_FILE: processSaveToFile(facade); break;
+					//case SAVE_FROM_FILE: processSaveToFile(facade); break;
 					case LOAD_FROM_FILE: processLoadFromFile(facade); break;
 					case HELP: processHelp(); break;
 					case EXIT: break;

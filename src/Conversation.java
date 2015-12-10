@@ -20,6 +20,14 @@ public class Conversation {
 	
 	/*** construtor ***/
 	
+	public Conversation(int msgNumber, String conversation, String lastMsg, boolean lastMsgEncrypted, User lastUser){
+		this.msgNumber = msgNumber;
+		this.conversation = conversation;
+		this.lastMsg = lastMsg;
+		this.lastMsgEncrypted = lastMsgEncrypted;
+		this.lastUser = lastUser;
+	}
+	
 	public Conversation(){
 		reset();
 	}
@@ -129,6 +137,18 @@ public class Conversation {
 	
 	public String getLastMsg(){
 		return lastMsg;
+	}
+	
+	public String getConversation(){
+		return conversation;
+	}
+	
+	public boolean getLastMsgEnc(){
+		return lastMsgEncrypted;
+	}
+	
+	public User getLastUser(){
+		return lastUser;
 	}
 	
 	

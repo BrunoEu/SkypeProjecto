@@ -95,7 +95,11 @@ public class Facade {
 		
 		while(chats.hasNext()){
 			chat = chats.next();
+			int[] userIds= chat.getUsers().userGroupToArrayInt();
 			
+			chatsState = chatsState.concat(chat.getFactor()+"\n"+userIds[0]+"\n"+userIds[1]+"\n"+chat.getMsgNumber()+"\n"
+			+chat.getLastUser().getNumber()+"\n"+chat.getLastMsgEncrypted()+"\n"+chat.getConversation()+"\n"+chat.getLastMsg()+"\n"
+			+);
 		}
 		
 	}

@@ -17,17 +17,15 @@ public class Chat {
 
 	
 	/*** construtor ***/
-	// @pre validFactor(newFactor)
-	// Eliminar
-	public Chat(String name1, String name2, int id1, int id2, int newFactor){
-		users = new UserGroup();
-		users.addUser(new User(name1, id1));
-		users.addUser(new User(name2, id2));
+	
+	public Chat(UserGroup users, int newFactor, int msgNumber,
+			String conversation, String lastMsg, boolean lastMsgEncrypted, User lastUser){
+		this.users = users;
 		factor = newFactor;
-		log = initializeLog();
-		currentConversation = new Conversation();
+		currentConversation = new Conversation(msgNumber, conversation, lastMsg, lastMsgEncrypted, lastUser);
 	}
 	
+	// @pre validFactor(newFactor)
 	public Chat(UserGroup users, int newFactor){
 		this.users = users;
 		factor = newFactor;
@@ -87,6 +85,30 @@ public class Chat {
 		return currentConversation.getLastMsg();
 	}
 	
+	public int getFactor(){
+		return factor;
+	}
+	
+	public String getLog(){
+		return log;
+	}
+	
+	public int getMsgNumber(){
+		return currentConversation.getMsgNumber();
+	}
+	
+	public String getConversation(){
+		return currentConversation.getConversation();
+	}
+	
+	public boolean getLastMsgEncrypted(){
+		return currentConversation.getLastMsgEnc();
+	}
+	
+	public User getLastUser(){
+		return currentConversation.getLastUser();
+	}
+	
 	public boolean hasUser(User user){
 		return users.hasUser(user.getNumber());
 	}
@@ -95,12 +117,6 @@ public class Chat {
 		return factor >= MIN_FACTOR && factor <= MAX_FACTOR;
 	}
 
-	//@pre validUserNumber(userNumber)
-	public User intToUser(int userNumber){
-		return users.getUser(userNumber);
-	}
-	
-	// será necessário ?
 	public boolean userGroupEquals(UserGroup userGroup){
 		return(users.equals(userGroup));
 	}
@@ -129,6 +145,5 @@ public class Chat {
 	public String formatToLog(String msgs){
 		return log.concat("\n**** NOVA CONVERSA ****\n").concat(msgs);
 	}
-	
 	
 }
