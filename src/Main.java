@@ -1,3 +1,5 @@
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -5,6 +7,9 @@ public class Main {
 	
 	
 	/***************** constantes *****************/
+	
+	private static final String USERS_FILE = "Users.txt";
+	private static final String CHATS_FILE = "Chats.txt";
 	
 	private static final String CREATE_USER = "CNU";
 	private static final String NEW_CHAT = "INC";
@@ -16,6 +21,8 @@ public class Main {
 	private static final String CORRECT_MSG = "CMA";
 	private static final String CLOSE_CHAT = "ECP";
 	private static final String SHOW_LOG = "MCA";
+	private static final String SAVE_FROM_FILE = "GEA";
+	private static final String LOAD_FROM_FILE = "CAF";
 	private static final String HELP = "A";
 	private static final String EXIT = "S";
 	
@@ -50,13 +57,17 @@ public class Main {
 					case CORRECT_MSG: processCorrectMsg(facade, in); break;
 					case CLOSE_CHAT: processCloseConversation(facade, in); break;
 					case SHOW_LOG: processShowLog(facade, in); break;
+					case SAVE_FROM_FILE: processSaveToFile(facade); break;
+					case LOAD_FROM_FILE: processLoadFromFile(facade); break;
 					case HELP: processHelp(); break;
 					case EXIT: break;
 					default: System.out.println("Opcao inexistente.");
 				}
-			} catch(InputMismatchException exception){
+			} catch(InputMismatchException input){
 				System.out.println("ERRO: Input Invalido.");
 				in.nextLine();
+			} catch (FileNotFoundException file){
+				System.out.println("ERRO: Nome de Ficheiro Invalido. Por favor contacte o admnistrador.");
 			}
 		}while(!command.equals(EXIT));
 		
@@ -79,9 +90,6 @@ public class Main {
 		
 		if(facade.hasChat(userIds))
 			System.out.println("Chat existente.");
-		
-		else if(userIds[0]==userIds[1])
-			System.out.println("Utilizadores iguais.");
 		
 		else
 			facade.createChat(userIds, getFactor(in));
@@ -193,7 +201,6 @@ public class Main {
 			System.out.println("Conversa inexistente.");
 	}
 
-	
 	private static void processShowLog(Facade facade, Scanner in)throws InputMismatchException{
 		int[] userIds = getUsersIds(facade, in);
 		
@@ -204,7 +211,21 @@ public class Main {
 		else
 			System.out.print(facade.showLog(userIds));
 	}
-
+	
+	private static void processSaveToFile(Facade facade)throws InputMismatchException,
+	FileNotFoundException {
+		PrintWriter chatsPrinter = new PrintWriter(CHATS_FILE);
+		PrintWriter usersPrinter = new PrintWriter(USERS_FILE);
+		
+		usersPrinter.print(facade.getUsersState());
+		chatsPrinter.print(facade.getChatsState());
+		
+	}
+	
+	private static void processLoadFromFile(Facade facade)throws InputMismatchException,
+	FileNotFoundException {
+		
+	}
 	
 	private static void processHelp(){
 		System.out.println("\nCNU - Criar novo utilizador\n"+
@@ -234,7 +255,12 @@ public class Main {
 		int[] ids = new int[2];
 		
 		ids[0] = getId(facade, in, 1);
-		ids[1] = getId(facade, in, 2);
+		
+		do{	
+			ids[1] = getId(facade, in, 2);
+			if (ids[0]==ids[1])
+				System.out.println("Utilizadores iguais.");
+		}while(ids[0]==ids[1]);
 		
 		return ids;
 	}

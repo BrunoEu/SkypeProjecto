@@ -72,6 +72,34 @@ public class Facade {
 		return chats.getChat(usersList.getSubGroup(userIds)).getLastMsg();
 	}
 	
+	public String getUsersState(){
+		String usersState = "";
+		User user = null;
+		
+		usersList.initializeIterator();
+		
+		while(usersList.hasNext()){
+			user = usersList.next();
+			usersState = usersState.concat(user.getNumber()+"\n"+user.getName()+"\n");
+		}
+		
+		return usersState;
+		
+	}
+	
+	public String getChatsState(){
+		String chatsState = "";
+		Chat chat = null;
+		
+		chats.initializeIterator();
+		
+		while(chats.hasNext()){
+			chat = chats.next();
+			
+		}
+		
+	}
+	
 	//@pre validUserNumber(userId)
 	private UserGroup getContactedUserGroup(int userId){
 		UserGroup contactedUsers = new UserGroup();
