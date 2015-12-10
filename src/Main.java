@@ -94,7 +94,8 @@ public class Main {
 		else
 			facade.createChat(userIds, getFactor(in));
 	}
-	
+
+//	MUDAR PARA QUE A MAIN SO CHAME UM METODO DA FACHADA
 	private static void processShowContactedUsers(Facade facade, Scanner in){
 		int userId = getId(facade, in);
 		int[] contactedUsersIds = facade.showContactedIds(userId);
@@ -112,6 +113,7 @@ public class Main {
 		}
 	}
 	
+//	MUDAR PARA QUE A MAIN SO CHAME UM METODO DA FACHADA
 	private static void processShowAllUsers(Facade facade){
 		int[] usersIds = facade.showAllIds();
 		String[] usersNames = facade.showAllNames();
