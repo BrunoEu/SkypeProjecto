@@ -17,20 +17,8 @@ public class ChatsCollection {
 		chats[chatCounter++] = chat;
 	}
 	
-	//@pre hasChat(users)
-	public Chat getChat(UserGroup users){
-		Chat chat = null;
-		
-		for(int i = 0; i < chatCounter; i++){
-			if(chats[i].userGroupEquals(users))
-				chat = chats[i];
-		}
-		
-		return chat;
-	}
-	
 	public void publishMsg(UserGroup userGroup, User user, String msg, boolean encrypted){
-		Chat chat = userGroupToChat(userGroup);
+		Chat chat = getChat(userGroup);
 		
 		if(!encrypted)
 			chat.addMsg(user, msg);
@@ -41,28 +29,26 @@ public class ChatsCollection {
 	public boolean hasChat(UserGroup userGroup){
 		
 		for(int i = 0; i < chatCounter; i++){
-			if(chats[i].userGroupEquals(userGroup))
+			if(chats[i].getUsers().equals(userGroup))
 				return true;
 		}
 		
 		return false;
 	}
 	
-	//@pre hasChat(userGroup)
-	public Chat userGroupToChat(UserGroup userGroup){
-		Chat chat = null;	//A @pre garante que o metodo retornara sempre um chat valido
+	//@pre hasChat(users)
+	public Chat getChat(UserGroup users){
+		Chat chat = null;
 		
 		for(int i = 0; i < chatCounter; i++){
-			if(chats[i].userGroupEquals(userGroup))
+			if(chats[i].getUsers().equals(users))
 				chat = chats[i];
 		}
-		
 		return chat;
-		
 	}
 	
 	public void closeConversation(UserGroup userGroup){
-		userGroupToChat(userGroup).closeConversation();
+		getChat(userGroup).closeConversation();
 	}
 	
 	public void initializeIterator(){

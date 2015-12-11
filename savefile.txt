@@ -1,41 +1,66 @@
 *user
-rbuno
+Bruno
 1
 *user
-eduardo
+Eduardo
 2
 *user
-tobias
+tobisa
 3
+*user
+1
+4
+*user
+asdanjsdk
+5
 *chat
 1
 2
 2
-0
+2
+USER[1]MSG[1]: nova
 *end conversation
+USER[2]MSG[2]: ola
+
+*end last message
 false
-0
-Utilizador 1: rbuno
-Utilizador 2: eduardo
+2
+Utilizador 1: Bruno
+Utilizador 2: Eduardo
 
 **** NOVA CONVERSA ****
 USER[1]MSG[1]: cenas
-USER[2]MSG[2]: ola
-
-**** NOVA CONVERSA ****
-USER[1]MSG[1]: ola
-USER[2]MSG[2]: qnc
+USER[2]MSG[2]: Cenasagdjnjsd
+USER[1]MSG[3]: uwr?
 *end log
 *chat
 2
 3
-4
 2
-USER[2]MSG[1]: olaaaaa
+0
 *end conversation
-USER[2]MSG[2]: cenas
+*end last message
 false
+0
+Utilizador 2: Eduardo
+Utilizador 3: tobisa
+
+**** NOVA CONVERSA ****
+USER[2]MSG[1]: ola
+USER[3]MSG[2]: egpcu
+
+*end log
+*chat
+4
+5
 2
-Utilizador 2: eduardo
-Utilizador 3: tobias
+2
+USER[4]MSG[1]: allahuakbar
+*end conversation
+USER[5]MSG[2]: ejwrcoqu
+*end last message
+true
+5
+Utilizador 4: 1
+Utilizador 5: asdanjsdk
 *end log

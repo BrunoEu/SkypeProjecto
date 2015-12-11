@@ -261,8 +261,8 @@ public class Main {
 						   "LTU - Listar todos os utilizadores\n"+
 						   "ECP - Encerrar conversa em progresso\n"+
 						   "MCA - Mostrar conversas anteriores\n"+
-						   "GEA - Gravar estado da aplica�ao para ficheiro\n"+
-						   "CAF - Carregar aplicacao de ficheiro"+
+						   "GEA - Gravar estado da aplicacao para ficheiro\n"+
+						   "CAF - Carregar aplicacao de ficheiro\n"+
 						   "A - Ajuda\n"+
 						   "S - Sair");
 	}
@@ -305,7 +305,7 @@ public class Main {
 		msgNumber = fileReader.nextInt();
 		fileReader.nextLine();
 		conversation = readUntil(Facade.END_CONVERSATION_LABEL, fileReader);
-		lastMsg = fileReader.nextLine() + "\n";
+		lastMsg = readUntil(Facade.END_LAST_MESSAGE_LABEL, fileReader);
 		lastMsgEncrypted = fileReader.nextBoolean();
 		lastUserId = fileReader.nextInt();
 		fileReader.nextLine();

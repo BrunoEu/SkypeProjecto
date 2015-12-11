@@ -1,6 +1,7 @@
 
 public class Facade {
 
+	public static final String END_LAST_MESSAGE_LABEL = "*end last message";
 	public static final String USER_LABEL = "*user";
 	public static final String CHAT_LABEL = "*chat";
 	public static final String END_CONVERSATION_LABEL = "*end conversation";
@@ -103,6 +104,7 @@ public class Facade {
 										   chat.getConversation()+
 										   END_CONVERSATION_LABEL+"\n"+
 										   chat.getLastMsg()+
+										   END_LAST_MESSAGE_LABEL+"\n"+
 										   chat.getLastMsgEncrypted()+"\n"+
 										   chat.getLastUser().getNumber()+"\n"+
 										   chat.getLog()+
