@@ -1,6 +1,10 @@
 
 public class Facade {
 
+	public static final String USER_LABEL = "*user";
+	public static final String CHAT_LABEL = "*chat";
+	public static final String END_CONVERSATION_LABEL = "*end conversation";
+	public static final String END_LOG_LABEL = "*end log";
 	private ChatsCollection chats;
 	private UserGroup usersList;
 	private UserGroup contactedUsers;
@@ -39,29 +43,6 @@ public class Facade {
 	public String showChat(int[] userIds){
 		return chats.getChat(usersList.getSubGroup(userIds)).showChat();
 	}
-	 
-
-	//@pre validUserNumber(userId)
-	/*public int[] getContactedIds(int userId){
-		UserGroup contactedUsers = getContactedUserGroup(userId);
-
-		return contactedUsers.userGroupToArrayInt();
-	}*/
-
-	//@pre validUserNumber(userId)
-	/*public String[] getContactedNames(int userId){
-		UserGroup contactedUsers = getContactedUserGroup(userId);
-
-		return contactedUsers.userGroupToArrayName();
-	}*/
-
-	public String[] showAllNames(){
-		return usersList.userGroupToArrayName();
-	}
-
-	public int[] showAllIds(){
-		return usersList.userGroupToArrayInt();
-	}
 
 	//@pre validUserNumbers(userIds)
 	//@pre validUserNumber(senderId)
@@ -95,7 +76,7 @@ public class Facade {
 
 		while(usersList.hasNext()){
 			user = usersList.next();
-			usersState = usersState.concat("*user\n"+user.getName()+"\n"+user.getNumber()+"\n");
+			usersState = usersState.concat(USER_LABEL+"\n"+user.getName()+"\n"+user.getNumber()+"\n");
 		}
 
 		return usersState;
@@ -114,18 +95,18 @@ public class Facade {
 
 			users.initializeIterator();
 			
-			chatsState = chatsState.concat("*chat\n"+
+			chatsState = chatsState.concat(CHAT_LABEL+"\n"+
 										   users.next().getNumber()+"\n"+
 										   users.next().getNumber()+"\n"+
 										   chat.getFactor()+"\n"+
 										   chat.getMsgNumber()+"\n"+
 										   chat.getConversation()+
-										   "*end conversation\n"+
+										   END_CONVERSATION_LABEL+"\n"+
 										   chat.getLastMsg()+
 										   chat.getLastMsgEncrypted()+"\n"+
 										   chat.getLastUser().getNumber()+"\n"+
 										   chat.getLog()+
-										   "*end log\n");
+										   END_LOG_LABEL+"\n");
 		}
 		
 		return chatsState;

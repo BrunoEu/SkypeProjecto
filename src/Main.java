@@ -242,9 +242,9 @@ public class Main {
 		while(fileReader.hasNextLine()){
 			inp = fileReader.nextLine();
 			switch(inp){
-				case "*user": createUserFromFile(facade, fileReader); break;
-				case "*chat": createChatFromFile(facade, fileReader); break;
-				default: System.out.println("Contacte a administracao.");
+				case Facade.USER_LABEL: createUserFromFile(facade, fileReader); break;
+				case Facade.CHAT_LABEL: createChatFromFile(facade, fileReader); break;
+				default: System.out.println("ERRO. Contacte a administracao.");
 			}
 		}
 		
@@ -304,12 +304,12 @@ public class Main {
 		fileReader.nextLine();
 		msgNumber = fileReader.nextInt();
 		fileReader.nextLine();
-		conversation = readUntil("*end conversation", fileReader);
+		conversation = readUntil(Facade.END_CONVERSATION_LABEL, fileReader);
 		lastMsg = fileReader.nextLine() + "\n";
 		lastMsgEncrypted = fileReader.nextBoolean();
 		lastUserId = fileReader.nextInt();
 		fileReader.nextLine();
-		log = readUntil("*end log", fileReader);
+		log = readUntil(Facade.END_LOG_LABEL, fileReader);
 		
 		facade.importChat(users, newFactor, msgNumber, conversation, lastMsg, lastMsgEncrypted, lastUserId, log);
 	}

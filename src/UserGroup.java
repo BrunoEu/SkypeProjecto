@@ -7,8 +7,8 @@ public class UserGroup {
 	
 	private User[] group;
 	private int groupCounter;
-	
 	private int currentUser;
+	
 	
 	public UserGroup() {
 		group = new User[DEFAULT_SIZE];
@@ -24,19 +24,10 @@ public class UserGroup {
 	}
 	
 	//@pre hasUser(user)
-	//nao mantem ordem
 	public void removeUser(int userNumber){
 		group[getIndex(getUser(userNumber))] = group[--groupCounter];
 	}
 
-	public int getNumberUsers(){
-		return groupCounter;
-	}
-	
-	private boolean isFull(){
-		return groupCounter == group.length;
-	}
-	
 	private void resize(){
 		User[] newGroup = new User[group.length *  GROWTH_RATE];
 		
@@ -47,8 +38,18 @@ public class UserGroup {
 		group = newGroup;
 	}
 
-	private int getIndex(User user){
+	public boolean hasUser(int userNumber){
+		return getIndex(getUser(userNumber)) != INDEX_ERROR;
+	}
+	
+	//@pre: hasUser(userNumber) 
+	
+ 	private boolean isFull(){
+		return groupCounter == group.length;
+	}
 
+	private int getIndex(User user){
+	
 		int index = INDEX_ERROR;
 		boolean found = false;
 		
@@ -62,43 +63,17 @@ public class UserGroup {
 		return index;
 	}
 
-	/***Eliminar***/
-	/*private int getIndex(int userNumber){
-		int index = INDEX_ERROR;
-		boolean found = false;
-		
-		for (int i = 0; (i< groupCounter) && (!found); i++ ){
-			if (userNumber == group[i].getNumber()){
-				found = true;
-				index = i;
-			}
-		}
-		
-		return index;
-	}*/
+	//@pre: hasUsers(userNumbers)
+	/*
+	 * Recebe um array de numeros de utilizador e devolve um UserGroup com os users definidos
+	 * Usa isto para dar aos Chats
+	 */
 	
-	/***Eliminar***/
-	/*public boolean hasUser(User user){
-		return getIndex(user) != INDEX_ERROR;
-	}*/
+	public int getNumberUsers(){
+		return groupCounter;
+	}
 
-	public boolean hasUser(int userNumber) {
-		return getIndex(getUser(userNumber)) != INDEX_ERROR;
-	}
-	
-	//Rename hasUser ?
-	public boolean hasUsers(int[] userNumbers){
-		for(int i = 0; i < userNumbers.length; i++){
-			if(!hasUser(userNumbers[i])){
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	//@pre: hasUser(userNumber) 
-	
- 	public User getUser(int userNumber){
+	public User getUser(int userNumber){
 		User user = User.NOBODY;//para que nao de erro ao dizer que pode nao ser inicializada
 		boolean found = false;
 		
@@ -129,44 +104,6 @@ public class UserGroup {
 		return subUserGroup;
 	}
 	
-	public int[] userGroupToArrayInt(){
-		int[] users = new int[groupCounter];
-		
-		for (int i = 0; i < groupCounter; i++)
-			users[i] = group[i].getNumber();
-		
-		return users;
-	}
-	
-	public String[] userGroupToArrayName(){
-		String[] users = new String[groupCounter];
-		
-		for(int i = 0; i < groupCounter; i++)
-			users[i] = group[i].getName();
-		
-		return users;
-	}
-	
-	public static UserGroup mergeGroups(UserGroup userGroup1, UserGroup userGroup2){
-		UserGroup mergedUserGroup = new UserGroup();
-		
-		userGroup1.initializeIterator();
-		
-		while(userGroup1.hasNext())
-			mergedUserGroup.addUser(userGroup1.next());
-		
-		userGroup2.initializeIterator();
-		
-		while(userGroup2.hasNext()){
-			User user = userGroup2.next();
-			if(!mergedUserGroup.hasUser(user.getNumber()))
-				mergedUserGroup.addUser(user);
-		}
-		
-		return mergedUserGroup;
-		
-	}
-	
 	//Iterator
 	
 	public void initializeIterator(){
@@ -193,6 +130,26 @@ public class UserGroup {
 		}
 		
 		return false;
+	}
+
+	public static UserGroup mergeGroups(UserGroup userGroup1, UserGroup userGroup2){
+		UserGroup mergedUserGroup = new UserGroup();
+		
+		userGroup1.initializeIterator();
+		
+		while(userGroup1.hasNext())
+			mergedUserGroup.addUser(userGroup1.next());
+		
+		userGroup2.initializeIterator();
+		
+		while(userGroup2.hasNext()){
+			User user = userGroup2.next();
+			if(!mergedUserGroup.hasUser(user.getNumber()))
+				mergedUserGroup.addUser(user);
+		}
+		
+		return mergedUserGroup;
+		
 	}
 	
 	
