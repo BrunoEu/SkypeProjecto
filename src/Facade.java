@@ -6,6 +6,8 @@ public class Facade {
 	public static final String CHAT_LABEL = "*chat";
 	public static final String END_CONVERSATION_LABEL = "*end conversation";
 	public static final String END_LOG_LABEL = "*end log";
+	
+	
 	private ChatsCollection chats;
 	private UserGroup usersList;
 	private UserGroup contactedUsers;
@@ -202,6 +204,10 @@ public class Facade {
 	
 	public User userListNext(){
 		return usersList.next();
+	}
+	
+	public int getLastUserId(){
+		return usersList.getNumberUsers();
 	}
 	
 	private int getNextId(){
