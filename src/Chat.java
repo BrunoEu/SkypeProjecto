@@ -19,10 +19,12 @@ public class Chat {
 	/*** construtor ***/
 	
 	public Chat(UserGroup users, int newFactor, int msgNumber,
-			String conversation, String lastMsg, boolean lastMsgEncrypted, User lastUser){
+			String conversation, String lastMsg, boolean lastMsgEncrypted,
+			User lastUser, String log){
 		this.users = users;
 		factor = newFactor;
 		currentConversation = new Conversation(msgNumber, conversation, lastMsg, lastMsgEncrypted, lastUser);
+		this.log = log;
 	}
 	
 	// @pre validFactor(newFactor)

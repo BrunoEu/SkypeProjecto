@@ -70,7 +70,7 @@ public class ChatsCollection {
 	}
 	
 	public boolean hasNext(){
-		return ( currentChat >= 0) && (currentChat < chatCounter);
+		return (currentChat >= 0) && (currentChat < chatCounter);
 	}
 	
 	//@pre: hasNext()	

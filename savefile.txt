@@ -1,0 +1,39 @@
+*user
+rbuno
+1
+*user
+eduardo
+2
+*user
+tobias
+3
+*chat
+1
+2
+2
+2
+USER[1]MSG[1]: ola
+*end conversation
+USER[2]MSG[2]: uwr
+true
+2
+Utilizador 1: rbuno
+Utilizador 2: eduardo
+
+**** NOVA CONVERSA ****
+USER[1]MSG[1]: cenas
+USER[2]MSG[2]: ola
+*end log
+*chat
+2
+3
+4
+2
+USER[2]MSG[1]: olaaaaa
+*end conversation
+USER[2]MSG[2]: cenas
+false
+2
+Utilizador 2: eduardo
+Utilizador 3: tobias
+*end log

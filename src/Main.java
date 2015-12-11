@@ -1,16 +1,16 @@
+import java.awt.Container;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
-	
-	
+
+
 	/***************** constantes *****************/
-	
-	private static final String USERS_FILE = "Users.txt";
-	private static final String CHATS_FILE = "Chats.txt";
-	
+
+	private static final String SAVE_FILE = "savefile.txt";
+
 	private static final String CREATE_USER = "CNU";
 	private static final String NEW_CHAT = "INC";
 	private static final String SHOW_CONTACTED_USERS = "LUC";
@@ -25,24 +25,24 @@ public class Main {
 	private static final String LOAD_FROM_FILE = "CAF";
 	private static final String HELP = "A";
 	private static final String EXIT = "S";
-	
+
 	/*
 		Nota: o metodo trim() e chamado ao longo
 		da classe para retirar os espacos do inicio
 		e fim da String.
 	*/
-	
+
 	public static void main(String[] args) {
-		
+
 		Scanner in = new Scanner(System.in);
 
 		Facade facade = new Facade();
-		
+
 		String command;
-		
-		
+
+
 		processHelp();
-		
+
 		do{
 			command = processCommand(in);
 			try{
@@ -57,7 +57,7 @@ public class Main {
 					case CORRECT_MSG: processCorrectMsg(facade, in); break;
 					case CLOSE_CHAT: processCloseConversation(facade, in); break;
 					case SHOW_LOG: processShowLog(facade, in); break;
-					//case SAVE_FROM_FILE: processSaveToFile(facade); break;
+					case SAVE_FROM_FILE: processSaveToFile(facade); break;
 					case LOAD_FROM_FILE: processLoadFromFile(facade); break;
 					case HELP: processHelp(); break;
 					case EXIT: break;
@@ -70,9 +70,9 @@ public class Main {
 				System.out.println("ERRO: Nome de Ficheiro Invalido. Por favor contacte o admnistrador.");
 			}
 		}while(!command.equals(EXIT));
-		
+
 		System.out.println("Aplicacao terminada. Ate a proxima.");
-	
+
 		in.close();
 	}
 
@@ -80,17 +80,17 @@ public class Main {
 		System.out.print("> ");
 		return in.nextLine().toUpperCase().trim();
 	}
-	
+
 	private static void processCreateUser(Facade facade, Scanner in){
 		facade.creatUser(getUsername(facade, in));
 	}
-	
+
 	private static void processNewChat(Facade facade, Scanner in)throws InputMismatchException{
 		int[] userIds = getUsersIds(facade, in);
-		
+
 		if(facade.hasChat(userIds))
 			System.out.println("Chat existente.");
-		
+
 		else
 			facade.createChat(userIds, getFactor(in));
 	}
@@ -98,67 +98,76 @@ public class Main {
 //	MUDAR PARA QUE A MAIN SO CHAME UM METODO DA FACHADA
 	private static void processShowContactedUsers(Facade facade, Scanner in){
 		int userId = getId(facade, in);
-		int[] contactedUsersIds = facade.showContactedIds(userId);
-		String[] contactedUsersNames = facade.showContactedNames(userId);
+		String contacted = "";
 		
-		if(contactedUsersIds.length == 0)
+		facade.initializeContactedIterator(userId);
+
+		while(facade.contactedUsersHasNext()){
+			User user = facade.contactedUsersNext();
+			
+			contacted = contacted.concat(user.getName()+" ");
+			contacted = contacted.concat(user.getNumber()+", ");
+		}
+		
+		if(contacted.isEmpty())
 			System.out.println("Nao ha utilizadores contactados.");
-		
+
 		else{
 			System.out.println("Utilizadores contactados por "+facade.getName(userId)+" ("+userId+"): ");
-			
-			for (int i = 0; i < contactedUsersIds.length; i++)
-				System.out.print(contactedUsersNames[i]+" "+contactedUsersIds[i]+", ");
-			System.out.println();
+			System.out.println(contacted);
 		}
+		
 	}
-	
+
 //	MUDAR PARA QUE A MAIN SO CHAME UM METODO DA FACHADA
 	private static void processShowAllUsers(Facade facade){
-		int[] usersIds = facade.showAllIds();
-		String[] usersNames = facade.showAllNames();
+		String allUsers = "";
 		
-		if(usersIds.length == 0)
-			System.out.println("Nao ha utilizadores.");
-		
-		else{
-		
-			System.out.println("Utilizadores: ");
-		
-			for(int i = 0; i < usersIds.length; i++)
-				System.out.print(usersNames[i]+" "+usersIds[i]+", ");
-			System.out.println();
+		facade.userListInitializeIterator();
+
+		while(facade.userListHasNext()){
+			User user = facade.userListNext();
+
+			allUsers = allUsers.concat(user.getName()+" ");
+			allUsers = allUsers.concat(user.getNumber()+", ");
 		}
-	
+
+		if(allUsers.isEmpty())
+			System.out.println("Nao ha utilizadores.");
+
+		else{
+			System.out.println("Utilizadores:\n"+allUsers);
+		}
+
 	}
-	
+
 	private static void processShowChat(Facade facade, Scanner in)throws InputMismatchException{
 		int[] userIds = getUsersIds(facade, in);
-		
+
 		if(facade.showChat(userIds).isEmpty())
 			System.out.println("Conversa Vazia.");
-		
+
 		else if(!facade.hasChat(userIds))
 			System.out.println("Conversa inexistente");
-		
+
 		else
 			System.out.print(facade.showChat(userIds));
 	}
-	
+
 	private static void processPlainMsg(Facade facade, Scanner in)throws InputMismatchException{
 		publishMsg(facade, in, false);
-	}	
-	
+	}
+
 	private static void processEncryptedMsg(Facade facade, Scanner in)throws InputMismatchException{
 		publishMsg(facade, in, true);
-	}	
-	
+	}
+
 	private static void publishMsg(Facade facade, Scanner in, boolean encrypted)throws InputMismatchException{
 		int[] userIds = getUsersIds(facade, in);
-		
+
 		if(!facade.hasChat(userIds))
 			System.out.println("Conversa inexistente.");
-		
+
 		else{
 			int senderId = getId(facade, in);
 			if(facade.chatHasUser(userIds, senderId)){
@@ -166,20 +175,20 @@ public class Main {
 				System.out.print(facade.formatMsg(userIds, senderId, "Publicada"));
 			}
 			else
-				System.out.println("Utilizador "+senderId+" nao pertence ao chat.");	
+				System.out.println("Utilizador "+senderId+" nao pertence ao chat.");
 		}
-		
+
 	}
-	
+
 	private static void processCorrectMsg(Facade facade, Scanner in)throws InputMismatchException{
 		int[] userIds = getUsersIds(facade, in);
-		
+
 		if(!facade.hasChat(userIds))
 			System.out.println("Conversa inexistente.");
-		
+
 		else if(facade.showChat(userIds).isEmpty())
 			System.out.println("Conversa Vazia.");
-		
+
 		else{
 			int senderId = getId(facade, in);
 			if (facade.canEditLastMessage(userIds, senderId)){
@@ -190,11 +199,11 @@ public class Main {
 				System.out.println("Utilizador " + senderId + " nao e autor da mensagem mais recente.");
 			}
 		}
-	}	
-	
+	}
+
 	private static void processCloseConversation(Facade facade, Scanner in)throws InputMismatchException{
 		int[] userIds = getUsersIds(facade, in);
-		
+
 		if(facade.hasChat(userIds)){
 			facade.closeConversation(userIds);
 			System.out.println("Conversa terminada.");
@@ -205,7 +214,7 @@ public class Main {
 
 	private static void processShowLog(Facade facade, Scanner in)throws InputMismatchException{
 		int[] userIds = getUsersIds(facade, in);
-		
+
 		if(!facade.hasChat(userIds))
 			System.out.println("Conversa inexistente.");
 		else if (facade.showLog(userIds).equals(facade.initializeLog(userIds)))
@@ -213,22 +222,22 @@ public class Main {
 		else
 			System.out.print(facade.showLog(userIds));
 	}
-	
+
 	private static void processSaveToFile(Facade facade)throws InputMismatchException,
 	FileNotFoundException {
-		PrintWriter chatsPrinter = new PrintWriter(CHATS_FILE);
-		PrintWriter usersPrinter = new PrintWriter(USERS_FILE);
-		
-		usersPrinter.print(facade.getUsersState());
-		chatsPrinter.print(facade.getChatsState());
-		
+		PrintWriter saveFilePrinter = new PrintWriter(SAVE_FILE);
+
+		saveFilePrinter.print(facade.exportUsers());
+		saveFilePrinter.print(facade.exportChats());
+
+		saveFilePrinter.close();
 	}
-	
+
 	private static void processLoadFromFile(Facade facade)throws InputMismatchException,
 	FileNotFoundException {
 		
 	}
-	
+
 	private static void processHelp(){
 		System.out.println("\nCNU - Criar novo utilizador\n"+
 						   "INC - Iniciar nova conversa\n"+
@@ -240,36 +249,54 @@ public class Main {
 						   "LTU - Listar todos os utilizadores\n"+
 						   "ECP - Encerrar conversa em progresso\n"+
 						   "MCA - Mostrar conversas anteriores\n"+
-						   "GEA - Gravar estado da aplicaçao para ficheiro\n"+
+						   "GEA - Gravar estado da aplicaï¿½ao para ficheiro\n"+
 						   "CAF - Carregar aplicacao de ficheiro"+
 						   "A - Ajuda\n"+
 						   "S - Sair");
 	}
+
+	private static String readUntil(String untilMsg, Scanner fileReader){
+		String result = "";
+		String line = "";
+				
+		do{
+			line = fileReader.nextLine();
+			if(!line.equals(untilMsg))
+				result += line;
+		}while(!line.equals(untilMsg));
+		
+		return result;	
+		
+	}
 	
-	
+	private static void createUserFromFile(Facade facade, Scanner fileReader){
+		facade.importUser(fileReader.nextLine(), fileReader.nextInt());
+		fileReader.nextLine();
+	}
+
 	private static String getMsg(Scanner in){
 		System.out.print("Mensagem: ");
 		String msg = in.nextLine();
 		return msg;
 	}
-	
+
 	private static int[] getUsersIds(Facade facade, Scanner in)throws InputMismatchException{
 		int[] ids = new int[2];
-		
+
 		ids[0] = getId(facade, in, 1);
-		
-		do{	
+
+		do{
 			ids[1] = getId(facade, in, 2);
 			if (ids[0]==ids[1])
 				System.out.println("Utilizadores iguais.");
 		}while(ids[0]==ids[1]);
-		
+
 		return ids;
 	}
-	
+
 	private static int getId(Facade facade, Scanner in, int number)throws InputMismatchException{
 		int userNumber;
-		
+
 		do{
 			System.out.print("Id "+number+": ");
 			userNumber = in.nextInt();
@@ -277,13 +304,13 @@ public class Main {
 			if (!facade.validUserNumber(userNumber))
 				System.out.println("O utilizador "+userNumber+" nao existe. De por favor um identificador valido.");
 		}while(!facade.validUserNumber(userNumber));
-		
+
 		return userNumber;
 	}
-	
+
 	private static int getId(Facade facade, Scanner in)throws InputMismatchException{
 		int userNumber;
-		
+
 		do{
 			System.out.print("Id: ");
 			userNumber = in.nextInt();
@@ -291,27 +318,27 @@ public class Main {
 			if (!facade.validUserNumber(userNumber))
 				System.out.println("O utilizador "+userNumber+" nao existe. De por favor um identificador vÃ¡lido.");
 		}while(!facade.validUserNumber(userNumber));
-		
+
 		return userNumber;
 	}
-	
+
 	private static String getUsername(Facade facade, Scanner in){
 		String name;
-		
+
 		do{
 		System.out.print("Nome do Utilizador: ");
 		name = in.nextLine();
 		if(facade.nameTaken(name))
 			System.out.println("Nome em utilizacao. Escolha um novo nome.");
 		}while(facade.nameTaken(name));
-			
+
 		return name;
 	}
-	
-	
+
+
 	private static int getFactor(Scanner in)throws InputMismatchException{
 		int factor;
-		
+
 		do{
 			System.out.print("Insira um factor de translacao: ");
 			factor = in.nextInt();
@@ -319,8 +346,8 @@ public class Main {
 			if (!Facade.validFactor(factor))
 				System.out.println("Factor invalido. [1, 26]");
 		}while(!Facade.validFactor(factor));
-		
+
 		return factor;
 	}
-	
+
 }
