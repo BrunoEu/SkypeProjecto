@@ -6,8 +6,7 @@ public class Facade {
 	private UserGroup contactedUsers;
 
 	public Facade(){
-		chats = new ChatsCollection();
-		usersList = new UserGroup();
+		reset();
 	}
 
 	public void creatUser(String name){
@@ -17,13 +16,23 @@ public class Facade {
 	public void importUser(String name, int id){
 		usersList.addUser(new User(name, id));
 	}
+	
+	public void importChat(int[] userIds, int newFactor, int msgNumber,
+			String conversation, String lastMsg, boolean lastMsgEncrypted,
+			int lastUserId, String log){
+		UserGroup users = usersList.getSubGroup(userIds);
+		User lastUser = usersList.getUser(lastUserId);
+		
+		chats.addChat(new Chat(users, newFactor, msgNumber, conversation, lastMsg, lastMsgEncrypted, lastUser, log));
+		
+	}
 
 	//@pre validUserNumbers(userIds)
 	//@pre validFactor(factor)
 	//garantir que o chat não existe
 
 	public void createChat(int[] userIds, int factor){
-		chats.addChat(usersList.getSubGroup(userIds), factor);
+		chats.addChat(new Chat(usersList.getSubGroup(userIds), factor));
 	}
 
 	//@pre garantir que o chat existe
@@ -231,7 +240,9 @@ public class Facade {
 	}
 	
 	public void reset(){
-		
+		usersList = new UserGroup();
+		chats = new ChatsCollection();
+		contactedUsers = new UserGroup();
 	}
 	
 }

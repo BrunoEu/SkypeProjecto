@@ -13,8 +13,8 @@ public class ChatsCollection {
 		chatCounter = 0;
 	}
 	
-	public void addChat(UserGroup users, int newFactor){
-		chats[chatCounter++] = new Chat(users, newFactor);
+	public void addChat(Chat chat){
+		chats[chatCounter++] = chat;
 	}
 	
 	//@pre hasChat(users)

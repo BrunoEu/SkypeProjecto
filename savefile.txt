@@ -11,18 +11,20 @@ tobias
 1
 2
 2
-2
-USER[1]MSG[1]: ola
+0
 *end conversation
-USER[2]MSG[2]: uwr
-true
-2
+false
+0
 Utilizador 1: rbuno
 Utilizador 2: eduardo
 
 **** NOVA CONVERSA ****
 USER[1]MSG[1]: cenas
 USER[2]MSG[2]: ola
+
+**** NOVA CONVERSA ****
+USER[1]MSG[1]: ola
+USER[2]MSG[2]: qnc
 *end log
 *chat
 2

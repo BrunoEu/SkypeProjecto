@@ -1,5 +1,5 @@
-import java.awt.Container;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -85,7 +85,7 @@ public class Main {
 		facade.creatUser(getUsername(facade, in));
 	}
 
-	private static void processNewChat(Facade facade, Scanner in)throws InputMismatchException{
+	private static void processNewChat(Facade facade, Scanner in){
 		int[] userIds = getUsersIds(facade, in);
 
 		if(facade.hasChat(userIds))
@@ -141,7 +141,7 @@ public class Main {
 
 	}
 
-	private static void processShowChat(Facade facade, Scanner in)throws InputMismatchException{
+	private static void processShowChat(Facade facade, Scanner in){
 		int[] userIds = getUsersIds(facade, in);
 
 		if(facade.showChat(userIds).isEmpty())
@@ -154,15 +154,15 @@ public class Main {
 			System.out.print(facade.showChat(userIds));
 	}
 
-	private static void processPlainMsg(Facade facade, Scanner in)throws InputMismatchException{
+	private static void processPlainMsg(Facade facade, Scanner in){
 		publishMsg(facade, in, false);
 	}
 
-	private static void processEncryptedMsg(Facade facade, Scanner in)throws InputMismatchException{
+	private static void processEncryptedMsg(Facade facade, Scanner in){
 		publishMsg(facade, in, true);
 	}
 
-	private static void publishMsg(Facade facade, Scanner in, boolean encrypted)throws InputMismatchException{
+	private static void publishMsg(Facade facade, Scanner in, boolean encrypted){
 		int[] userIds = getUsersIds(facade, in);
 
 		if(!facade.hasChat(userIds))
@@ -180,7 +180,7 @@ public class Main {
 
 	}
 
-	private static void processCorrectMsg(Facade facade, Scanner in)throws InputMismatchException{
+	private static void processCorrectMsg(Facade facade, Scanner in){
 		int[] userIds = getUsersIds(facade, in);
 
 		if(!facade.hasChat(userIds))
@@ -201,7 +201,7 @@ public class Main {
 		}
 	}
 
-	private static void processCloseConversation(Facade facade, Scanner in)throws InputMismatchException{
+	private static void processCloseConversation(Facade facade, Scanner in){
 		int[] userIds = getUsersIds(facade, in);
 
 		if(facade.hasChat(userIds)){
@@ -212,7 +212,7 @@ public class Main {
 			System.out.println("Conversa inexistente.");
 	}
 
-	private static void processShowLog(Facade facade, Scanner in)throws InputMismatchException{
+	private static void processShowLog(Facade facade, Scanner in){
 		int[] userIds = getUsersIds(facade, in);
 
 		if(!facade.hasChat(userIds))
@@ -223,8 +223,7 @@ public class Main {
 			System.out.print(facade.showLog(userIds));
 	}
 
-	private static void processSaveToFile(Facade facade)throws InputMismatchException,
-	FileNotFoundException {
+	private static void processSaveToFile(Facade facade)throws FileNotFoundException{
 		PrintWriter saveFilePrinter = new PrintWriter(SAVE_FILE);
 
 		saveFilePrinter.print(facade.exportUsers());
@@ -233,8 +232,21 @@ public class Main {
 		saveFilePrinter.close();
 	}
 
-	private static void processLoadFromFile(Facade facade)throws InputMismatchException,
-	FileNotFoundException {
+	private static void processLoadFromFile(Facade facade)throws FileNotFoundException{
+		FileReader reader = new FileReader(SAVE_FILE);
+		Scanner fileReader = new Scanner(reader);
+		String inp;
+		
+		facade.reset();
+		
+		while(fileReader.hasNextLine()){
+			inp = fileReader.nextLine();
+			switch(inp){
+				case "*user": createUserFromFile(facade, fileReader); break;
+				case "*chat": createChatFromFile(facade, fileReader); break;
+				default: System.out.println("Contacte a administracao.");
+			}
+		}
 		
 	}
 
@@ -262,7 +274,7 @@ public class Main {
 		do{
 			line = fileReader.nextLine();
 			if(!line.equals(untilMsg))
-				result += line;
+				result += line + "\n";
 		}while(!line.equals(untilMsg));
 		
 		return result;	
@@ -273,6 +285,34 @@ public class Main {
 		facade.importUser(fileReader.nextLine(), fileReader.nextInt());
 		fileReader.nextLine();
 	}
+	
+	private static void createChatFromFile(Facade facade, Scanner fileReader){
+		int[] users = new int[2];
+		int newFactor;
+		int msgNumber;
+		String conversation = "";
+		String lastMsg = "";
+		boolean lastMsgEncrypted;
+		int lastUserId;
+		String log = "";
+		
+		users[0] = fileReader.nextInt();
+		fileReader.nextLine();
+		users[1] = fileReader.nextInt();
+		fileReader.nextLine();
+		newFactor = fileReader.nextInt();
+		fileReader.nextLine();
+		msgNumber = fileReader.nextInt();
+		fileReader.nextLine();
+		conversation = readUntil("*end conversation", fileReader);
+		lastMsg = fileReader.nextLine() + "\n";
+		lastMsgEncrypted = fileReader.nextBoolean();
+		lastUserId = fileReader.nextInt();
+		fileReader.nextLine();
+		log = readUntil("*end log", fileReader);
+		
+		facade.importChat(users, newFactor, msgNumber, conversation, lastMsg, lastMsgEncrypted, lastUserId, log);
+	}
 
 	private static String getMsg(Scanner in){
 		System.out.print("Mensagem: ");
@@ -280,7 +320,7 @@ public class Main {
 		return msg;
 	}
 
-	private static int[] getUsersIds(Facade facade, Scanner in)throws InputMismatchException{
+	private static int[] getUsersIds(Facade facade, Scanner in){
 		int[] ids = new int[2];
 
 		ids[0] = getId(facade, in, 1);
@@ -294,7 +334,7 @@ public class Main {
 		return ids;
 	}
 
-	private static int getId(Facade facade, Scanner in, int number)throws InputMismatchException{
+	private static int getId(Facade facade, Scanner in, int number){
 		int userNumber;
 
 		do{
@@ -308,7 +348,7 @@ public class Main {
 		return userNumber;
 	}
 
-	private static int getId(Facade facade, Scanner in)throws InputMismatchException{
+	private static int getId(Facade facade, Scanner in){
 		int userNumber;
 
 		do{
@@ -336,7 +376,7 @@ public class Main {
 	}
 
 
-	private static int getFactor(Scanner in)throws InputMismatchException{
+	private static int getFactor(Scanner in){
 		int factor;
 
 		do{
