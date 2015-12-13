@@ -21,7 +21,7 @@ public class Facade {
 	}
 	
 	//@pre validFactor(factor)
-	//@pre validUserNumber(userIds[i])
+	//@pre validId(userIds[i])
 	//Verifica que todos os users sao validos
 	public void createChat(int[] userIds, int factor){
 		chats.addChat(new Chat(usersList.getSubGroup(userIds), factor));
@@ -98,8 +98,8 @@ public class Facade {
 		return chats.getChat(usersList.getSubGroup(userIds)).canEditLastMessage(usersList.getUser(userCorrectorId));
 	}
 
-	public boolean validUserNumber(int userNumber){
-		return usersList.hasUser(usersList.getUser(userNumber));
+	public boolean validUserId(int userId){
+		return usersList.hasUser(usersList.getUser(userId));
 	}
 
 	public static boolean validFactor(int factor){
@@ -110,7 +110,7 @@ public class Facade {
 		return usersList.getNumberUsers();
 	}
 
-	//@pre validUserNumber(userId)
+	//@pre validUserId(userId)
 	public String getName(int userId){
 		return usersList.getUser(userId).getName();
 	}
@@ -120,7 +120,7 @@ public class Facade {
 		return chats.getChat(usersList.getSubGroup(userIds)).getLastMsg();
 	}
 
-	//@pre validUserNumber(userId)
+	//@pre validUserId(userId)
 	private UserGroup getContactedUserGroup(int userId){
 		UserGroup contactedUsers = new UserGroup();
 		Chat chat = null;
