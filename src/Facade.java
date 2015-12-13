@@ -20,32 +20,20 @@ public class Facade {
 		usersList.addUser(new User(name, getNextId()));
 	}
 	
-	//@pre validUserNumber(userIds[i])
-	//Verfi
 	//@pre validFactor(factor)
+	//@pre validUserNumber(userIds[i])
+	//Verifica que todos os users sao validos
 	public void createChat(int[] userIds, int factor){
 		chats.addChat(new Chat(usersList.getSubGroup(userIds), factor));
 	}
-
-	//@pre validUserNumbers(userIds)
-	//@pre validFactor(factor)
-	//garantir que o chat não existe
 	
-	//@pre garantir que o chat existe
+	//@pre hasChat(userIds)
 	public String showChat(int[] userIds){
 		return chats.getChat(usersList.getSubGroup(userIds)).showChat();
 	}
 
-	
-
-	
-
-	//@pre validUserNumbers(userIds)
-	//@pre validFactor(factor)
-	//garantir que o chat não existe
-
-	//@pre validUserNumbers(userIds)
-	//@pre validUserNumber(senderId)
+	//@pre hasChat(userIds)
+	//@pre chatHasUser(senderId)
 	public void addMessage(int[] userIds, int senderId, String msg, boolean encrypted){
 		Chat chat = chats.getChat(usersList.getSubGroup(userIds));
 
@@ -55,32 +43,39 @@ public class Facade {
 			chat.addEncryptedMsg(usersList.getUser(senderId), msg);
 	}
 
+	//@pre hasChat(userIds)
+	//@pre chatHasUser(userCorrectorId)
 	public void editLastMessage(int[] userIds, int userCorrectorId, String msg){
 		chats.getChat(usersList.getSubGroup(userIds)).editLastMessage(usersList.getUser(userCorrectorId), msg);
 	}
 
+	//@pre hasChat(userIds)
+	//@pre chatHasUser(senderId)
 	public String formatMsg(int[] userIds, int senderId, String msg){
 		return chats.getChat(usersList.getSubGroup(userIds)).formatMessage(usersList.getUser(senderId), msg);
 	}
 
-	//@pre validUserNumbers(userIds)
+	//@pre hasChat(userIds)
 	public void closeConversation(int[] userIds){
 		chats.getChat((usersList.getSubGroup(userIds))).closeConversation();
 	}
-
+	
+	//@pre hasChat(userIds)
 	public String initializeLog(int[] userIds){
 		return chats.getChat(usersList.getSubGroup(userIds)).initializeLog();
 	}
 
+	//@pre hasChat(userIds)
 	public String showLog(int[] userIds){
 		return chats.getChat(usersList.getSubGroup(userIds)).showLog();
 	}
 
-	//@pre validUserNumbers(userIds)
+	//@pre hasChat(userIds)
 	public boolean hasChat(int[] userIds){
 		return chats.hasChat(usersList.getSubGroup(userIds));
 	}
 
+	//@pre hasChat(userIds)
 	public boolean chatHasUser(int[] userIds, int user){
 		return chats.getChat(usersList.getSubGroup(userIds)).hasUser(usersList.getUser(user));
 	}
@@ -98,17 +93,10 @@ public class Facade {
 	}
 
 	//@pre hasChat(userIds)
+	//@pre chatHasUser(userCorrectorId)
 	public boolean canEditLastMessage(int[] userIds, int userCorrectorId){
 		return chats.getChat(usersList.getSubGroup(userIds)).canEditLastMessage(usersList.getUser(userCorrectorId));
 	}
-
-	/*public boolean validUserNumbers(int[] userIds){
-		for(int i = 0; i < userIds.length; i++){
-			if(!validUserNumber(userIds[i]))
-				return false;
-		}
-		return true;
-	}*/
 
 	public boolean validUserNumber(int userNumber){
 		return usersList.hasUser(usersList.getUser(userNumber));
@@ -127,6 +115,7 @@ public class Facade {
 		return usersList.getUser(userId).getName();
 	}
 
+	//@pre hasChat(userIds)
 	public String getLastMsg(int[] userIds){
 		return chats.getChat(usersList.getSubGroup(userIds)).getLastMsg();
 	}
@@ -226,7 +215,8 @@ public class Facade {
 	public boolean userListHasNext(){
 		return usersList.hasNext();
 	}
-
+	
+	//@pre userListHasNext()
 	public User userListNext(){
 		return usersList.next();
 	}
@@ -241,6 +231,7 @@ public class Facade {
 		return contactedUsers.hasNext();
 	}
 	
+	//@pre contactedUsersHasNext()
 	public User contactedUsersNext(){
 		return contactedUsers.next();
 	}

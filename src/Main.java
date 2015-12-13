@@ -7,10 +7,26 @@ import java.util.Scanner;
 public class Main {
 
 
+	
+
 	/***************** constantes *****************/
 
+	
+	private static final String HELP_STRING = "\nCNU - Criar novo utilizador\n"+
+						   "INC - Iniciar nova conversa\n"+
+						   "VCP - Ver a conversa em progresso\n"+
+						   "PNM - Publicar nova mensagem\n"+
+						   "PME - Publicar mensagem encriptada\n"+
+						   "CMA - Corrigir mensagem anterior\n"+
+						   "LUC - Listar utilizadores contactados\n"+
+						   "LTU - Listar todos os utilizadores\n"+
+						   "ECP - Encerrar conversa em progresso\n"+
+						   "MCA - Mostrar conversas anteriores\n"+
+						   "GEA - Gravar estado da aplicacao para ficheiro\n"+
+						   "CAF - Carregar aplicacao de ficheiro\n"+
+						   "A - Ajuda\n"+
+						   "S - Sair";
 	private static final String SAVE_FILE = "savefile.txt";
-
 	private static final String CREATE_USER = "CNU";
 	private static final String NEW_CHAT = "INC";
 	private static final String SHOW_CONTACTED_USERS = "LUC";
@@ -96,7 +112,6 @@ public class Main {
 			facade.createChat(userIds, getFactor(in));
 	}
 
-//	MUDAR PARA QUE A MAIN SO CHAME UM METODO DA FACHADA
 	private static void processShowContactedUsers(Facade facade, Scanner in){
 		int userId = getId(facade, in);
 		String contacted = "";
@@ -120,7 +135,6 @@ public class Main {
 		
 	}
 
-//	MUDAR PARA QUE A MAIN SO CHAME UM METODO DA FACHADA
 	private static void processShowAllUsers(Facade facade){
 		String allUsers = "";
 		
@@ -253,20 +267,7 @@ public class Main {
 	}
 
 	private static void processHelp(){
-		System.out.println("\nCNU - Criar novo utilizador\n"+
-						   "INC - Iniciar nova conversa\n"+
-						   "VCP - Ver a conversa em progresso\n"+
-						   "PNM - Publicar nova mensagem\n"+
-						   "PME - Publicar mensagem encriptada\n"+
-						   "CMA - Corrigir mensagem anterior\n"+
-						   "LUC - Listar utilizadores contactados\n"+
-						   "LTU - Listar todos os utilizadores\n"+
-						   "ECP - Encerrar conversa em progresso\n"+
-						   "MCA - Mostrar conversas anteriores\n"+
-						   "GEA - Gravar estado da aplicacao para ficheiro\n"+
-						   "CAF - Carregar aplicacao de ficheiro\n"+
-						   "A - Ajuda\n"+
-						   "S - Sair");
+		System.out.println(HELP_STRING);
 	}
 
 	private static String readUntil(String untilMsg, Scanner fileReader){
