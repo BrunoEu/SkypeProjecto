@@ -4,14 +4,14 @@ public class User {
 	
 	/*** varaveis de instancia ***/
 	private String userName;
-	private int userNumber;
+	private int userId;
 	
 	
 	/*** construtor ***/
 	
 	public User(String name, int number){
 		userName = name;
-		userNumber = number;
+		userId = number;
 	}
 	
 	
@@ -21,7 +21,7 @@ public class User {
 	
 	
 	public int getNumber(){
-		return userNumber;
+		return userId;
 	}
 	
 	public boolean equals(User other){
