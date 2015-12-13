@@ -24,8 +24,8 @@ public class UserGroup {
 	}
 	
 	//@pre hasUser(user)
-	public void removeUser(int userNumber){
-		group[getIndex(getUser(userNumber))] = group[--groupCounter];
+	public void removeUser(User user){
+		group[getIndex(user)] = group[--groupCounter];
 	}
 
 	private void resize(){
@@ -38,11 +38,9 @@ public class UserGroup {
 		group = newGroup;
 	}
 
-	public boolean hasUser(int userNumber){
-		return getIndex(getUser(userNumber)) != INDEX_ERROR;
+	public boolean hasUser(User user){
+		return getIndex(user) != INDEX_ERROR;
 	}
-	
-	//@pre: hasUser(userNumber) 
 	
  	private boolean isFull(){
 		return groupCounter == group.length;
@@ -62,12 +60,6 @@ public class UserGroup {
 		
 		return index;
 	}
-
-	//@pre: hasUsers(userNumbers)
-	/*
-	 * Recebe um array de numeros de utilizador e devolve um UserGroup com os users definidos
-	 * Usa isto para dar aos Chats
-	 */
 	
 	public int getNumberUsers(){
 		return groupCounter;
@@ -87,12 +79,9 @@ public class UserGroup {
 		return user;
 	}
 	
- 	//@pre: hasUsers(userNumbers)
-	/*
-	 * Recebe um array de numeros de utilizador e devolve um UserGroup com os users definidos
-	 * Usa isto para dar aos Chats
-	 */
-	
+	//@pre hasUser(userNumbers[i]) 
+	//Verifica que todos os utilizadores
+	//do vector existem
 	public UserGroup getSubGroup(int[] userNumbers){
 		
 		UserGroup subUserGroup = new UserGroup();
@@ -114,8 +103,7 @@ public class UserGroup {
 		return ( currentUser >= 0) && (currentUser < groupCounter);
 	}
 	
-	//@pre: hasNext()
-	
+	//@pre hasNext()
 	public User next(){
 		return group[currentUser++];
 	}
@@ -124,7 +112,7 @@ public class UserGroup {
 		
 		if(this.getNumberUsers() == groupToCompare.getNumberUsers()){
 			for(int i = 0; i < groupCounter; i++)
-				if(!groupToCompare.hasUser(group[i].getNumber()))
+				if(!groupToCompare.hasUser(group[i]))
 					return false;
 			return true;
 		}
@@ -144,7 +132,7 @@ public class UserGroup {
 		
 		while(userGroup2.hasNext()){
 			User user = userGroup2.next();
-			if(!mergedUserGroup.hasUser(user.getNumber()))
+			if(!mergedUserGroup.hasUser(user))
 				mergedUserGroup.addUser(user);
 		}
 		

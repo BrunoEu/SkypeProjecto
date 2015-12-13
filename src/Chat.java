@@ -24,6 +24,7 @@ public class Chat {
 	
 	/*** construtor ***/
 	
+	// @pre validFactor(newFactor)
 	public Chat(UserGroup users, int factor, int msgNumber,
 			String conversation, String lastMsg, boolean lastMsgEncrypted,
 			User lastUser, String log){
@@ -42,7 +43,7 @@ public class Chat {
 		this.users = users;
 		factor = newFactor;
 		log = initializeLog();
-		reset();
+		clearConversation();
 	}
 	
 	public String showChat(){
@@ -55,8 +56,7 @@ public class Chat {
 	}
 	
 	
-	//@pre validUserNumber(userNumber)
-	
+	//@pre hasUser(user)
 	public void addMsg(User user,String msg){
 		msgNumber++;
 		lastUser = user;
@@ -66,14 +66,13 @@ public class Chat {
 	}
 	
 	
-	//@pre validUserNumber(userNumber) && factor > 0
-	
+	//@pre hasUser(user)
 	public void addEncryptedMsg(User user, String msg){
 		addMsg(user, encryptMsg(msg, factor));
 		lastMsgEncrypted = true;
 	}
 	
-	//@pre validUserNumber(userNumber)
+	//@pre hasUser(user)
 	public boolean canEditLastMessage(User user){
 		return lastUser.getNumber() == user.getNumber();
 	}
@@ -89,10 +88,10 @@ public class Chat {
 	public void closeConversation(){
 		String conversation = showChat();
 		log = formatToLog(conversation);
-		reset();
+		clearConversation();
 	}
 
-	public String formatMessage(User user,String message){
+	public String formatMessage(User user, String message){
 		return "USER[" + user.getNumber() + "]MSG[" + getMsgNumber() +"]: " + message +"\n";
 	}
 	
@@ -129,12 +128,8 @@ public class Chat {
 	}
 	
 	public boolean hasUser(User user){
-		return users.hasUser(user.getNumber());
+		return users.hasUser(user);
 	}
-	
-	/*public boolean userGroupEquals(UserGroup userGroup){
-		return(users.equals(userGroup));
-	}*/
 	
 	public String initializeLog(){
 		String result = "";
@@ -153,7 +148,7 @@ public class Chat {
 		return log.concat("\n**** NOVA CONVERSA ****\n").concat(msgs);
 	}
 	
-	public void reset (){
+	public void clearConversation(){
 		lastMsg = "";
 		lastMsgEncrypted = false;
 		lastUser = User.NOBODY;

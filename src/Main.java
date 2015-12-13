@@ -64,7 +64,6 @@ public class Main {
 					default: System.out.println("Opcao inexistente.");
 				}
 			} catch(InputMismatchException input){
-				System.out.println("ERRO: Input Invalido.");
 				in.nextLine();
 			} catch (FileNotFoundException file){
 				System.out.println("ERRO: Nome de Ficheiro Invalido. Por favor contacte o admnistrador.");
@@ -146,11 +145,11 @@ public class Main {
 	private static void processShowChat(Facade facade, Scanner in){
 		int[] userIds = getUsersIds(facade, in);
 
-		if(facade.showChat(userIds).isEmpty())
-			System.out.println("Conversa Vazia.");
-
-		else if(!facade.hasChat(userIds))
-			System.out.println("Conversa inexistente");
+		if(!facade.hasChat(userIds))
+			System.out.println("Conversa inexistente.");
+		
+		else if(facade.showChat(userIds).isEmpty())
+			System.out.println("Conversa Vazia.");		
 
 		else
 			System.out.print(facade.showChat(userIds));
@@ -192,12 +191,8 @@ public class Main {
 			System.out.println("Conversa Vazia.");
 
 		else{
-			int senderId;
-			try{
-				senderId = getId(facade, in);
-			}catch(InputMismatchException e){
-				System.out.println("");
-			}
+			int senderId = getId(facade, in);
+			
 			if (facade.canEditLastMessage(userIds, senderId)){
 				facade.editLastMessage(userIds, senderId, getMsg(in));
 				System.out.print("Mensagem Corrigida:\n"+facade.getLastMsg(userIds));
@@ -327,7 +322,7 @@ public class Main {
 		return msg;
 	}
 
-	private static int[] getUsersIds(Facade facade, Scanner in)throws InputMismatchException{
+	private static int[] getUsersIds(Facade facade, Scanner in)/*throws InputMismatchException*/{
 		int[] ids = new int[2];
 
 		ids[0] = getId(facade, in, 1);
@@ -341,7 +336,7 @@ public class Main {
 		return ids;
 	}
 
-	private static int getId(Facade facade, Scanner in, int number)throws InputMismatchException{
+	private static int getId(Facade facade, Scanner in, int number)/*throws InputMismatchException*/{
 		int userNumber;
 
 		do{
@@ -355,7 +350,7 @@ public class Main {
 		return userNumber;
 	}
 
-	private static int getId(Facade facade, Scanner in)throws InputMismatchException{
+	private static int getId(Facade facade, Scanner in)/*throws InputMismatchException*/{
 		int userNumber;
 
 		do{
@@ -383,7 +378,7 @@ public class Main {
 	}
 
 
-	private static int getFactor(Scanner in)throws InputMismatchException{
+	private static int getFactor(Scanner in)/*throws InputMismatchException*/{
 		int factor;
 
 		do{

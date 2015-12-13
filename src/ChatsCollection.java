@@ -2,6 +2,7 @@
 public class ChatsCollection {
 	
 	private static final int DEFAULT_SIZE = 5;
+	private static final int GROWTH_RATE = 2;
 	
 	private Chat[] chats;
 	private int chatCounter;
@@ -14,16 +15,9 @@ public class ChatsCollection {
 	}
 	
 	public void addChat(Chat chat){
+		if(isFull())
+			resize();
 		chats[chatCounter++] = chat;
-	}
-	
-	public void publishMsg(UserGroup userGroup, User user, String msg, boolean encrypted){
-		Chat chat = getChat(userGroup);
-		
-		if(!encrypted)
-			chat.addMsg(user, msg);
-		else
-			chat.addEncryptedMsg(user, msg);
 	}
 	
 	public boolean hasChat(UserGroup userGroup){
@@ -47,8 +41,18 @@ public class ChatsCollection {
 		return chat;
 	}
 	
-	public void closeConversation(UserGroup userGroup){
-		getChat(userGroup).closeConversation();
+	private boolean isFull(){
+		return chatCounter == chats.length;
+	}
+	
+	private void resize(){
+		Chat[] newChatCollection= new Chat[chats.length *  GROWTH_RATE];
+		
+		for(int i = 0; i < chatCounter; i++){
+			newChatCollection[i] = chats[i];
+		}
+		
+		chats = newChatCollection;
 	}
 	
 	public void initializeIterator(){
