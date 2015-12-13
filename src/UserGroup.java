@@ -65,12 +65,12 @@ public class UserGroup {
 		return groupCounter;
 	}
 
-	public User getUser(int userNumber){
+	public User getUser(int userId){
 		User user = User.NOBODY;//para que nao de erro ao dizer que pode nao ser inicializada
 		boolean found = false;
 		
 		for (int i = 0;(i< groupCounter) && (!found); i++ ){
-			if (userNumber == group[i].getNumber()){
+			if (userId == group[i].getNumber()){
 				found = true;
 				user = group[i];
 			}
@@ -79,15 +79,15 @@ public class UserGroup {
 		return user;
 	}
 	
-	//@pre hasUser(userNumbers[i]) 
+	//@pre hasUser(userIds[i]) 
 	//Verifica que todos os utilizadores
 	//do vector existem
-	public UserGroup getSubGroup(int[] userNumbers){
+	public UserGroup getSubGroup(int[] userIds){
 		
 		UserGroup subUserGroup = new UserGroup();
 		
-		for(int i = 0; i < userNumbers.length; i++ ){
-			subUserGroup.addUser(getUser(userNumbers[i]));
+		for(int i = 0; i < userIds.length; i++ ){
+			subUserGroup.addUser(getUser(userIds[i]));
 		}
 			
 		return subUserGroup;
