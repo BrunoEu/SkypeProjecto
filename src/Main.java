@@ -190,7 +190,7 @@ public class Main {
 				System.out.print(facade.formatMsg(userIds, senderId, "Publicada"));
 			}
 			else
-				System.out.println("Utilizador "+senderId+" nao pertence ao chat.");
+				System.out.println("Utilizador " + senderId + " nao pertence ao chat.");
 		}
 
 	}
@@ -338,31 +338,31 @@ public class Main {
 	}
 
 	private static int getId(Facade facade, Scanner in, int number)/*throws InputMismatchException*/{
-		int userNumber;
+		int userId;
 
 		do{
 			System.out.print("Id "+number+": ");
-			userNumber = in.nextInt();
+			userId = in.nextInt();
 			in.nextLine();
-			if (!facade.validUserNumber(userNumber))
-				System.out.println("O utilizador "+userNumber+" nao existe. De por favor um identificador valido.");
-		}while(!facade.validUserNumber(userNumber));
+			if (!facade.validUserId(userId))
+				System.out.println("O utilizador "+userId+" nao existe. De por favor um identificador valido.");
+		}while(!facade.validUserId(userId));
 
-		return userNumber;
+		return userId;
 	}
 
 	private static int getId(Facade facade, Scanner in)/*throws InputMismatchException*/{
-		int userNumber;
+		int userID;
 
 		do{
 			System.out.print("Id: ");
-			userNumber = in.nextInt();
+			userID = in.nextInt();
 			in.nextLine();
-			if (!facade.validUserNumber(userNumber))
-				System.out.println("O utilizador "+userNumber+" nao existe. De por favor um identificador válido.");
-		}while(!facade.validUserNumber(userNumber));
+			if (!facade.validUserId(userID))
+				System.out.println("O utilizador " + userID + " nao existe. De por favor um identificador valido.");
+		}while(!facade.validUserId(userID));
 
-		return userNumber;
+		return userID;
 	}
 
 	private static String getUsername(Facade facade, Scanner in){
